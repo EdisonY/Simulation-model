@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="307rectangle" unicode="&#59325;" d="M0 768m64 0l896 0q64 0 64-64l0-640q0-64-64-64l-896 0q-64 0-64 64l0 640q0 64 64 64Z"  horiz-adv-x="1024" />
+
+    
+    <glyph glyph-name="325suspend" unicode="&#59330;" d="M96 896h224v-1024H96zM704 896h224v-1024h-224z"  horiz-adv-x="1024" />
+
+    
+    <glyph glyph-name="324play" unicode="&#59332;" d="M863.758825 445.109142L230.59294 886.406577C182.625827 911.989038 125.065292 880.010962 125.065292 825.648235v-882.594871c0-54.362728 57.560535-89.53861 105.527648-60.758343L863.758825 323.592457c47.967113 25.58246 47.967113 95.934225 0 121.516685z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>
