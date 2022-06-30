@@ -1,6 +1,6 @@
 <template>
     <div class="wirenetwork next">
-        <div class="left_new">
+        <div class="left_new" style="display:none;">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>操作</span>
@@ -26,6 +26,7 @@
                 </div>
             </el-card>
         </div>
+        
         <svg id="subway" xmlns="http://www.w3.org/2000/svg" version="1.1"></svg>
     </div>
 </template>
@@ -55,8 +56,17 @@ export default {
             tmpId: 'subway',
             fullload:true
         })
+
         tctSubway.listener('loaded', function() {
             // tctSubway.showLine(self.value);
+
+
+            tctSubway.stopNormail(tctSubway.getPosition('西直门'),1)
+            tctSubway.stopNormail(tctSubway.getPosition('平安里'),0)
+            tctSubway.stopNormail(tctSubway.getPosition('雍和宫'),2)
+            tctSubway.drewAlarm()
+
+
             tctSubway.loadRateMultiply(tctSubway.getPosition('西直门'),tctSubway.getPosition('积水潭'),Number((Math.random(1)*100).toFixed(2)))
             tctSubway.loadRateMultiply(tctSubway.getPosition('积水潭'),tctSubway.getPosition('鼓楼大街'),Number((Math.random(1)*100).toFixed(2)))
             tctSubway.loadRateMultiply(tctSubway.getPosition('鼓楼大街'),tctSubway.getPosition('安定门'),Number((Math.random(1)*100).toFixed(2)))
@@ -67,6 +77,8 @@ export default {
             tctSubway.loadRateMultiply(tctSubway.getPosition('朝阳门'),tctSubway.getPosition('建国门'),Number((Math.random(1)*100).toFixed(2)))
             tctSubway.loadRateMultiply(tctSubway.getPosition('建国门'),tctSubway.getPosition('北京站'),Number((Math.random(1)*100).toFixed(2)))
             tctSubway.loadRateMultiply(tctSubway.getPosition('北京站'),tctSubway.getPosition('崇文门'),Number((Math.random(1)*100).toFixed(2)))
+
+            // tctSubway.addFlyLine(tctSubway.getPosition('西直门'),[tctSubway.getPosition('积水潭'),tctSubway.getPosition('东四十条')],1)
         })
     },
     methods:{
@@ -75,7 +87,7 @@ export default {
 }
 </script>
 <style scoped>
-.wirenetwork{padding: 10px;}
+.wirenetwork{padding: 10px;background:#000}
 #subway{width: 100%;height:calc(100vh - 76px);}
 
 .wirenetwork .left_new{flex:0 0 400px;position: absolute;left:0;top: 10px;}
