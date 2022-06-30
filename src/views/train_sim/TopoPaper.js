@@ -209,6 +209,7 @@ let TopoPaper = joint.dia.Paper.extend({
     drawTrain(realData) {
         let cells = this.model.getCells();
         let bsV = realData;
+        this.clearTrain();
         if (bsV.bsTrainData && bsV.bsTrainData.length > 0) {
             bsV.bsTrainData.forEach(bst => {
                 let linkModel = cells.find(c => {
