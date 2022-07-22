@@ -94,3 +94,9 @@ rect,text{cursor: pointer;}
 .fault .el-form-item__label{color: #fff;}
 
 .el-radio__label{color: #000;}
+
+.train1{transform:rotate(180deg) translate(0,-3px);}
+.train{transform: translate(0,-7px);}
+
+.train.fixgap{transform: translate(0,-3px);}
+.train1.fixgap{transform:rotate(180deg) translate(0,-7px);}
