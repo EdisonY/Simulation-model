@@ -194,6 +194,16 @@ export const constantRoutes = [
             component: () => import('@/views/wirenetwork'),
             meta: { title: '线网仿真',type: true }
         },{
+            path: 'linepassenger',
+            name: '线网客流设置',
+            component: () => import('@/views/linepassenger'),
+            meta: { title: '线网客流设置',type: true }
+        },{
+            path: 'wireset',
+            name: '线网运行图设置',
+            component: () => import('@/views/wireset'),
+            meta: { title: '线网运行图设置',type: true }
+        },{
             path: 'networkindicators',
             name: '线网指标查看',
             component: () => import('@/views/networkindicators'),

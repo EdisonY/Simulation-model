@@ -64,7 +64,87 @@ export default {
             console.log("unload");
             saveAppData();
         });
-
+        localStorage.setItem(
+            "tmpRoute",
+            JSON.stringify([
+                {
+                    value: 0,
+                    label: "北新桥 - T2航站楼",
+                    startStation: 2105,
+                    endStation: 2104,
+                },
+                {
+                    value: 1,
+                    label: "T2航站楼 - 北新桥",
+                    startStation: 2104,
+                    endStation: 2105,
+                },
+            ])
+        );
+        localStorage.setItem(
+            "stations",
+            JSON.stringify([
+                {
+                    stationId: 2101,
+                    stationName: "东直门",
+                    nextId: 2102,
+                    major: true,
+                },
+                {
+                    stationId: 2102,
+                    stationName: "三元桥",
+                    nextId: 2103,
+                    major: true,
+                },
+                {
+                    stationId: 2103,
+                    stationName: "T3航站楼",
+                    nextId: 2104,
+                    major: false,
+                },
+                {
+                    stationId: 2104,
+                    stationName: "T2航站楼",
+                    nextId: 0,
+                    major: false,
+                },
+                {
+                    stationId: 2105,
+                    stationName: "北新桥",
+                    nextId: 2101,
+                    major: false,
+                },
+            ])
+        );
+        localStorage.setItem(
+            "routeconfig",
+            JSON.stringify([
+                {
+                    configId: 1,
+                    routes: [
+                        {
+                            crossRouteId: 1,
+                            lineWayId: 37,
+                            direction: "上行",
+                            startStation: 2105,
+                            endStation: 2104,
+                            skipStations: [2101, 2102, 2103, 2104, 2105, 0],
+                            trainTypes: ["4L"],
+                        },
+                        {
+                            crossRouteId: 1,
+                            lineWayId: 65526,
+                            direction: "下行",
+                            startStation: 2104,
+                            endStation: 2105,
+                            skipStations: [2104, 2102, 2101, 2105, 0],
+                            trainTypes: ["4L"],
+                        },
+                    ],
+                    ratios: ["1:1"],
+                },
+            ])
+        );
         initWebSocket();
     },
     methods: {

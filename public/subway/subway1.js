@@ -450,8 +450,15 @@
                 $('#lineName').hide()
             }
         },
+        codeStation(code){
+            for (let index = 0; index < StationList.length; index++) {
+                if(code == StationList[index].Code){
+                    return this.getPosition(StationList[index].name)
+                }
+            }
+        },
 
-        /* 新增临时demo */
+        /* 新增临时demo开始 */
         stopNormail:function(from,state){
 
             $('#normal').hide()
@@ -484,8 +491,9 @@
             
 
         },
-        drewRunning:function(from,to,delay){
-            Num++
+        drewRunning:function(from,to,trainId,Percent,arrive){
+            if(Percent == 100) return false
+            console.log(from,to,trainId,Percent,arrive);
             var fromtoArray = []
             var direction = ''
             var path = ''
@@ -493,6 +501,7 @@
             var fId = ''
             var tId = ''
             var fixGap = false
+            var per = Percent / 100
 
             //获取起止站ID
             for (let index = 0; index < from.line.length; index++) {
@@ -550,20 +559,34 @@
                 first = false
             }
 
-            
-            this._generate('path',{'id':'trainPath' + Num,'stroke-width':0,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',d:path},'alarm')
+            // this._generate('path',{'id':'trainPath' + Num,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'#fff',d:path},'alarm')
 
-            this._generate('image',{id:'train' + Num,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':fixGap ? 'train fixgap' : 'train'},'alarm')
-            this._generate('animateMotion',{dur:"100s",repeatCount:"indefinite",rotate:"auto",id:'animat' + Num,calcMode:"linear",begin:delay ? delay + 's' : ''},'train' + Num)
-            var dom = document.createElementNS('http://www.w3.org/2000/svg','mpath')
-            dom.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#trainPath" + Num);
-            document.getElementById('animat' + Num).appendChild(dom);
+            //判断此列车是否已经存在，存在即更新并重置，不存即在新增
+            if($('#' + trainId).length > 0){
+                var element = $('#' + trainId + 'Y').get(0)
+                element.setAttributeNS(null,"dur",arrive + "s");
+                element.setAttributeNS(null,"keyPoints","0;" + per + ";1");
+                element.beginElement();
+            }else{
+                this._generate('image',{id:trainId,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':fixGap ? 'train fixgap' : 'train'},'alarm')
+                this._generate('animateMotion',{
+                    id:trainId + 'Y',
+                    dur:arrive + "s",
+                    // fill:"freeze", //结束后冻结车辆图标
+                    keyPoints:"0;" + per + ";1",
+                    keyTimes:"0;0.00001;1",
+                    rotate:"auto",
+                    calcMode:"linear",
+                    restart:"always",
+                    path:path}
+                ,trainId) 
+            }
+            // svg指当前svg DOM元素
+            // 暂停
+            // svg.pauseAnimations();
 
-            this._generate('image',{id:'train' + Num + 1,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':fixGap ? 'train1 fixgap' : 'train1'},'alarm')
-            this._generate('animateMotion',{dur:"100s",repeatCount:"indefinite",rotate:"auto",id:'animat' + Num + 1,keyPoints:'1;0',keyTimes:'0;1',calcMode:"linear",begin:delay ? delay + 's' : ''},'train' + Num + 1)
-            var dom = document.createElementNS('http://www.w3.org/2000/svg','mpath')
-            dom.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#trainPath" + Num);
-            document.getElementById('animat' + Num + 1).appendChild(dom);
+            // 重启动
+            // svg.unpauseAnimations()
         },
 
 
@@ -572,11 +595,7 @@
 
 
 
-        /* 新增临时demo */
-
-
-
-        
+        /* 新增临时demo结束 */
         clearFlyLine:function(){
             $('#background,#select,#fly0,#fly1').remove()
         },

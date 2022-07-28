@@ -42,7 +42,7 @@
                             </el-option>
                         </el-select>
                     </div>
-                    <div class="table-line" style="padding-bottom:10px">
+                    <!-- <div class="table-line" style="padding-bottom:10px">
                         <el-table border
                             :data="tableData"
                             style="width: 100%;"
@@ -95,12 +95,6 @@
                                         v-if="edit"></el-input>
                                 </template>
                             </el-table-column>
-                            <!-- <el-table-column prop="dir1" align="center" label="上行方向" min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.dir1}}</span>
-                                    <el-input v-model="scope.row.dir1" v-if="edit"></el-input>
-                                </template>
-                            </el-table-column> -->
                             <el-table-column prop="trainRunNum0"
                                 align="center"
                                 label="下行列车开行数量"
@@ -131,12 +125,6 @@
                                         v-if="edit"></el-input>
                                 </template>
                             </el-table-column>
-                            <!-- <el-table-column prop="dir0" align="center" label="下行方向" min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.dir0}}</span>
-                                    <el-input v-model="scope.row.dir0" v-if="edit"></el-input>
-                                </template>
-                            </el-table-column> -->
                             <el-table-column align="center"
                                 label="操作"
                                 min-width="120"
@@ -149,6 +137,45 @@
                                 </template>
                             </el-table-column>
                         </el-table>
+                    </div> -->
+                    <div class="table-line drawTable" style="padding-bottom:10px">
+                        <table class="selfTable">
+                            <tr class="thead">
+                                <th colspan="2" style="width:100px">起止时间</th>
+                                <th>交路方式</th>
+                                <th>跳停车站</th>
+                                <th>编组信息</th>
+                                <th>开行对数</th>
+                            </tr>
+                            <tbody v-for="item in tableData4" :key="item.label">
+                                <tr v-for="(items,index) in item.crossRouteList">
+                                    <td style="width:100px" v-if="index == 0 && item.crossRouteList.length > 1" :colspan="item.crossRouteList.length > 1 ? item.crossRouteList.length : 0" :rowspan="item.crossRouteList.length">{{formatTime(item.startTime)}} - {{formatTime(item.endTime)}}</td>
+                                    <td>
+                                        <el-select v-model="items.tmpRout" placeholder="请选择">
+                                            <el-option
+                                                v-for="item in tmpRoute"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </td>
+                                    <td>
+                                        <el-select v-model="items.stopOrNotList1" placeholder="请选择">
+                                            <el-option
+                                                v-for="items in stations"
+                                                :key="items.stationId"
+                                                :label="items.stationName"
+                                                :value="items.stationId">
+                                            </el-option>
+                                        </el-select>
+                                    </td>
+                                    <td>{{items.trainTypeGroup}}</td>
+                                    <td>{{items.onLineTrainCount}}</td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
                     </div>
                     <div class="btn-line-2">
                         <el-button type="primary"
@@ -462,6 +489,206 @@ export default {
                     chexing:'6b'
                 },
             ],
+            tableData4: [{
+                "startTime": 25200,
+                "endTime": 32400,
+                "crossRouteCount": 2,
+                "crossRouteList": [{
+                    "crossRouteId": 1,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 37,
+                    "tmpRout":0,
+                    "startStationId": 2101,
+                    "endStationId": 2103,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2103,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": false
+                    }],
+                    "stopOrNotList1":2104
+                }, {
+                    "crossRouteId": 2,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 65526,
+                    "tmpRout":1,
+                    "startStationId": 2104,
+                    "endStationId": 2101,
+                    "onLineTrainCount": 10,
+                    "stopOrNotList": [{
+                        "stationId": 2103,
+                        "stopOrNot": false
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }],
+                    "stopOrNotList1":2103
+                }]
+            }, {
+                "startTime": 32400,
+                "endTime": 61200,
+                "crossRouteCount": 2,
+                "crossRouteList": [{
+                    "crossRouteId": 1,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 11,
+                    "tmpRout":0,
+                    "startStationId": 2101,
+                    "endStationId": 2103,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2103,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": false
+                    }],
+                    "stopOrNotList1":2104
+                }, {
+                    "crossRouteId": 2,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 65526,
+                    "tmpRout":1,
+                    "startStationId": 2104,
+                    "endStationId": 2101,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2103,
+                        "stopOrNot": false
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }],
+                    "stopOrNotList1":2103
+                }]
+            }, {
+                "startTime": 61200,
+                "endTime": 68400,
+                "crossRouteCount": 2,
+                "crossRouteList": [{
+                    "crossRouteId": 1,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 37,
+                    "tmpRout":0,
+                    "startStationId": 2101,
+                    "endStationId": 2103,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2103,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": false
+                    }],
+                    "stopOrNotList1":2104
+                }, {
+                    "crossRouteId": 2,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 65526,
+                    "tmpRout":1,
+                    "startStationId": 2104,
+                    "endStationId": 2101,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2103,
+                        "stopOrNot": false
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }],
+                    "stopOrNotList1":2103
+                }]
+            }, {
+                "startTime": 68400,
+                "endTime": 79200,
+                "crossRouteCount": 2,
+                "crossRouteList": [{
+                    "crossRouteId": 1,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 37,
+                    "tmpRout":0,
+                    "startStationId": 2101,
+                    "endStationId": 2103,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2103,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": false
+                    }],
+                    "stopOrNotList1":2104
+                }, {
+                    "crossRouteId": 2,
+                    "trainTypeGroup": "4A",
+                    "lineWayId": 65526,
+                    "tmpRout":1 ,
+                    "startStationId": 2104,
+                    "endStationId": 2101,
+                    "onLineTrainCount": 20,
+                    "stopOrNotList": [{
+                        "stationId": 2103,
+                        "stopOrNot": false
+                    }, {
+                        "stationId": 2104,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2102,
+                        "stopOrNot": true
+                    }, {
+                        "stationId": 2101,
+                        "stopOrNot": true
+                    }],
+                    "stopOrNotList1":2103
+                }]
+            }],
+            tmp:[],
+            stations:JSON.parse(localStorage.getItem('stations')),
+            tmpRoute:JSON.parse(localStorage.getItem('tmpRoute')),
         };
     },
     components: {
@@ -515,6 +742,18 @@ export default {
         // this.getData();
     },
     methods: {
+        formatTime(time) {
+            let hour = parseInt(time / 3600)
+                .toString()
+                .padStart(2, "0");
+            let minute = parseInt((time % 3600) / 60)
+                .toString()
+                .padStart(2, "0");
+            let second = parseInt(time % 60)
+                .toString()
+                .padStart(2, "0");
+            return `${hour}:${minute}:${second}`;
+        },
         getRungrapClick(params) {
             console.log(params);
         },
@@ -924,4 +1163,11 @@ export default {
     z-index: 100;
     /* left: -50px; */
 }
+
+.selfTable{width: 660px;border-left: 1px solid #ebeef5;border-bottom: 1px solid #ebeef5;border-spacing: 0;color: #606266;background: #fff;}
+.selfTable tr{line-height: 40px;}
+.selfTable tr:hover,.selfTable .thead{background-color: #f5f7fa;}
+.selfTable tr td,.selfTable tr th{border-right: 1px solid #ebeef5;border-top: 1px solid #ebeef5;text-align: center;position: relative;}
+
+.drawTable{overflow-x:auto;}
 </style>

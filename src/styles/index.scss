@@ -95,8 +95,12 @@ rect,text{cursor: pointer;}
 
 .el-radio__label{color: #000;}
 
-.train1{transform:rotate(180deg) translate(0,-3px);}
-.train{transform: translate(0,-7px);}
+.train1{transform:rotate(180deg) translate(-7.5px,-3px);}
+.train{transform: translate(-7.5px,-7px);}
 
-.train.fixgap{transform: translate(0,-3px);}
-.train1.fixgap{transform:rotate(180deg) translate(0,-7px);}
+.train.fixgap{transform: translate(-7.5px,-3px);}
+.train1.fixgap{transform:rotate(180deg) translate(-7.5px,-7px);}
+
+.wireset .nobg .el-card__body{display: flex;}
+.wireset .el-table th.is-leaf{background: #2a579f;color: #fff;}
+
