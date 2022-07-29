@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import rungrap from "./lib_common_new";
+import rungrap from "./lib_common_actual";
 import {getStations} from '@/utils/station';
 
 // import DiagramReal from "../../../components/DiagramRealLocal.vue";

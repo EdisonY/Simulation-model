@@ -180,7 +180,7 @@
         </div>
 
         <div class="tooltip"
-            v-if="rungrapData.multiply" style="display:none">
+            v-if="rungrapData.multiply">
             <el-radio v-model="loadRateMode"
                 :label='true'
                 style="margin:0 10px 0 10px"
@@ -217,16 +217,17 @@
                 @click="importRungraph">导入</el-button>
             <el-button size="mini"
                 type='primary'
-                @click="startStop">{{isRunning?'结束':'开始'}}</el-button>
+                @click="startStop">{{isRunning?'结束':'开始'}}</el-button> -->
             <el-button size="mini"
                 type='primary'
-                @click="drawAllData">铺画</el-button>
-            <el-button size="mini"
+                @click="drawAllData">刷新</el-button>
+            <!-- <el-button size="mini"
                 type='danger'
                 @click="clearChartData">清除</el-button> -->
         </div>
         <el-dialog title="区段信息"
             :visible.sync="dialogVisible"
+            style="display:none;"
             width="30%">
             <ul>
                 <li>车次号：{{clickData.seriesId}}</li>

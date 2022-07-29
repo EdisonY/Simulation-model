@@ -35,8 +35,10 @@
             </el-table-column>
         </el-table>
         <p class="text_r">
-            <el-button type="success" size="small">导入</el-button>
-            <el-button type="warning" size="small">导出</el-button>
+            <el-button type="success" size="small">上传</el-button>
+            <el-button type="warning" size="small">下载</el-button>
+            <el-button type="primary" size="small">设置为当前客流</el-button>
+            
         </p>
         <!-- <el-row>
             <el-col :span="10">

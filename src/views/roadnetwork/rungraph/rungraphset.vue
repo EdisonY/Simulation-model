@@ -5,8 +5,8 @@
         <div class="left-panel">
             <el-tabs type="border-card" style="margin:10px 0 0 10px">
                 <el-tab-pane label="选择运行图">
-                    <el-button type="primary" size="small">上传</el-button>
-                    <el-button type="success" size="small">启动</el-button>
+                    <el-button type="primary" size="small" @click="importRungraph">上传</el-button>
+                    <el-button type="success" size="small" @click="startStop">启动</el-button>
                     <br/>
                     <br/>
                     <el-table
@@ -23,7 +23,7 @@
                         <el-table-column prop="data"
                             label="操作">
                             <template slot-scope="scope">
-                                <el-button type="primary" size="mini">打开</el-button>
+                                <el-button type="primary" size="mini" @click="drawAllData">打开</el-button>
                                 <el-button type="danger" size="mini">删除</el-button>
                             </template>
                         </el-table-column>
@@ -1140,6 +1140,16 @@ export default {
                 // this.$router.go(0);
                 location.reload();
             }
+        },
+        //运行图内置功能外移至父组件
+        importRungraph(){
+            this.$refs.grap.importRungraph()
+        },
+        startStop(){
+            this.$refs.grap.startStop()
+        },
+        drawAllData(){
+            this.$refs.grap.drawAllData()
         },
     },
     beforeDestroy() {
