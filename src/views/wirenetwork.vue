@@ -677,7 +677,7 @@ export default {
                     }
                     realtimeNum++
                     if(realtimeNum < RealTime.length){
-                        realtimeOut = setTimeout(getDateSim,1000)
+                        realtimeOut = setTimeout(getDateSim,30000)
                     }else{
                         console.log('结束仿真');
                     }
