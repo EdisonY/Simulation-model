@@ -60,6 +60,11 @@ export const constantRoutes = [
     //     ]
     // },
     {
+        path: '/subway',
+        component: () => import('@/views/subway'),
+        hidden: true
+    },
+    {
         path: '/index',
         component: Layout,
         redirect: '/basedata',
@@ -356,15 +361,15 @@ const router = createRouter()
 import { saveAppData } from "@/utils/appCache";
 router.beforeEach((to, from, next) => {
     saveAppData();
-    if (to.path != '/login') {
-        let token = Cookies.get('tct_token');
-        if (!token) {
-            next({
-                path: '/login'
-            });
-            return;
-        }
-    }
+    // if (to.path != '/login') {
+    //     let token = Cookies.get('tct_token');
+    //     if (!token) {
+    //         next({
+    //             path: '/login'
+    //         });
+    //         return;
+    //     }
+    // }
     next()
 })
 

@@ -24,6 +24,7 @@
         "eslint-plugin-html": "^6.0.1",
         "file-saver": "^2.0.5",
         "fs": "0.0.1-security",
+        "heatmap.js": "^2.0.5",
         "html2canvas": "^1.0.0-rc.7",
         "jointjs": "^3.3.1",
         "js-cookie": "2.2.0",

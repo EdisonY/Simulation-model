@@ -1,6 +1,6 @@
 ;(function(global, undefined) {
     "use strict"
-    var _global,panZoom,state,time,func = [],arrowHref = 'http://172.51.216.62:41005/subway/arrow.png',turnHref= 'http://172.51.216.62:41005/subway/turn.png',Num = 0;
+    var _global,panZoom,state,time,func,hot = [],arrowHref = 'http://172.51.216.62:41005/subway/arrow.png',turnHref= 'http://172.51.216.62:41005/subway/turn.png',Num = 0;
 
     function loadJS( url, callback ){
         var script = document.createElement('script'),
@@ -42,25 +42,25 @@
             var _self = this
             this.__proto__.id = opt.tmpId
             this._generate('g',{'id':'subwayMain'},opt.tmpId)
-            if(opt.fullload) {
-                this.__proto__.showfull = true
-                var btn = "<div class='btn'><p><span class='sub sub1'>舒适</span><span class='sub sub2'>较舒适</span><span class='sub sub3'>轻度拥挤</span><span class='sub sub4'>拥挤</span><span class='parent'>满载率</span></p></div>"
-                $('#' + opt.tmpId).after(btn)
-                $('.parent').on('click',function(){
-                    $('.btn').stop().animate({
-                        width:$('.btn').width() == 87 ? 415 : 87
-                    },300,function(){
-                        _self.clearFlyLine()
-                        if($('.btn').width() == 87){
-                            $('#normal').show()
-                            $('#fullLoad').hide()
-                        }else{
-                            $('#normal').hide()
-                            $('#fullLoad').show()
-                        }    
-                    })
-                })
-            }
+            // if(opt.fullload) {
+            this.__proto__.showfull = true
+            var btn = "<div class='fullLoadBtn'><span class='sub sub1'>舒适</span><span class='sub sub2'>较舒适</span><span class='sub sub3'>轻度拥挤</span><span class='sub sub4'>拥挤</span></div>"
+            $('#' + opt.tmpId).after(btn)
+            // $('.parent').on('click',function(){
+            //     $('.btn').stop().animate({
+            //         width:$('.btn').width() == 87 ? 415 : 87
+            //     },300,function(){
+            //         _self.clearFlyLine()
+            //         if($('.btn').width() == 87){
+            //             $('#normal').show()
+            //             $('#fullLoad').hide()
+            //         }else{
+            //             $('#normal').hide()
+            //             $('#fullLoad').show()
+            //         }    
+            //     })
+            // })
+            // }
             $.ajax({
                 // url: "beijing.xml",
                 url: "http://172.51.216.62:41005/subway/beijing.xml",
@@ -80,6 +80,8 @@
                     _self._generate('g',{'id':'stationPoint'},'subwayMain')
                     _self._generate('g',{'id':'stationName'},'subwayMain')
                     _self._generate('g',{'id':'arrow'},'subwayMain')
+                    _self._generate('g',{'id':'HeatMap'},'subwayMain')
+                    _self._generate('g',{'id':'Passengerflow'},'subwayMain')
                     _self._getLine()
                 }
             });
@@ -121,18 +123,17 @@
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/birde.png','width':80,'height':40,'x':940,'y':480},'image')
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/jump.png','width':60,'height':40,'x':225,'y':770},'image')
 
-            panZoom = svgPanZoom('#subway',{zoomEnabled: true,dblClickZoomEnabled:false,minZoom:.4,maxZoom:4,fit:false});
-            // panZoom.pan({x: -950 + window.innerWidth/2, y: -770 + window.innerHeight/2});
-            panZoom.pan({x:-window.innerWidth/4,y:-window.innerHeight/2})
+            panZoom = svgPanZoom('#subway',{zoomEnabled: true,dblClickZoomEnabled:false,minZoom:.8,maxZoom:4,fit:false});
+            panZoom.pan({x:($('.Line').width() - 1860) / 2,y:($('.wirenetwork').height() - 1500) / 2})
             panZoom.zoom(1)
             console.log(panZoom);
             
         },
         _drewLine:function(parent,data,index,next){
-            this._generate('line',{'id':data[index].attributes.acc.value,'x1':data[index].attributes.x.value,'y1':data[index].attributes.y.value,'x2':data[next].attributes.x.value,'y2':data[next].attributes.y.value,'stroke':parent.lc.nodeValue.replace("0x", "#"),'stroke-width':5,'stroke-linejoin':'round','stroke-linecap':'round','lineId':Number(parent.lcode.value)},'normal')
+            this._generate('line',{'id':data[index].attributes.acc.value,'x1':data[index].attributes.x.value,'y1':data[index].attributes.y.value,'x2':data[next].attributes.x.value,'y2':data[next].attributes.y.value,'stroke':parent.lc.nodeValue.replace("0x", "#"),'stroke-width':5,'stroke-linejoin':'round','stroke-linecap':'round','lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value)},'normal')
         },
         _drewCurve:function(parent,data,index,next) {
-            this._generate('path',{'id':data[index].attributes.acc.value,'d':'M' + data[index].attributes.x.value + ' ' + data[index].attributes.y.value + ' Q' +  data[index].attributes.arc.value.replace(":", " ") + ' ' + data[next].attributes.x.value + ' ' + data[next].attributes.y.value,'stroke':parent.lc.nodeValue.replace("0x", "#"),'stroke-width':5,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none','lineId':Number(parent.lcode.value)},'normal')
+            this._generate('path',{'id':data[index].attributes.acc.value,'d':'M' + data[index].attributes.x.value + ' ' + data[index].attributes.y.value + ' Q' +  data[index].attributes.arc.value.replace(":", " ") + ' ' + data[next].attributes.x.value + ' ' + data[next].attributes.y.value,'stroke':parent.lc.nodeValue.replace("0x", "#"),'stroke-width':5,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none','lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value)},'normal')
         },
         _drewStation:function(data){
             var self = this
@@ -141,7 +142,7 @@
             _state = _state[0].split(',')
             for (let index = 0; index < _arry.length; index++) {
                 var str = _arry[index].split(',')
-                self._generate('rect',{'lineId':Number(data.lcode.nodeValue),'fill':data.lc.nodeValue.replace("0x", "#"),'width':str[2],'height':str[3],'x':str[0],'y':str[1]},'lineName')
+                self._generate('rect',{'lineId':Number(data.lcode.nodeValue),'class':'cluster','fill':data.lc.nodeValue.replace("0x", "#"),'width':str[2],'height':str[3],'x':str[0],'y':str[1]},'lineName')
                 if (Number(data.lcode.nodeValue) <= 57)
                     if(_state[index] != '大兴')
                         state = "地铁" + _state[index] + "号线";
@@ -156,19 +157,19 @@
                     else
                         state = "地铁"+_state[index]+"线";
                 }
-                self._generate('text',{'lineId':Number(data.lcode.nodeValue),'fill':'#ccc','font-family':'微软雅黑','font-size':12,'text-anchor':'middle','x':Number(str[0]) + 35,'y':Number(str[1]) + 14,'sdata':state,'lb':data.lb.value,'lbx':data.lbx.value,'lby':data.lby.value,'type':'line'},'lineName',state)
+                self._generate('text',{'lineId':Number(data.lcode.nodeValue),'class':'cluster','fill':'#ccc','font-family':'微软雅黑','font-size':12,'text-anchor':'middle','x':Number(str[0]) + 35,'y':Number(str[1]) + 14,'sdata':state,'lb':data.lb.value,'lbx':data.lbx.value,'lby':data.lby.value,'type':'line'},'lineName',state)
 
             }
         },
         _drewStationPoint:function(parent,data){
             if(data.ex.value == 'true'){
-                this._generate('image',{'id':data.acc.value,'href':turnHref,'width':8,'height':8,'x':data.dx ? Number(data.x.value) - 4 + Number(data.dx.value) : Number(data.x.value) - 4,'y':data.dy ? Number(data.y.value) - 4 + Number(data.dy.value) : Number(data.y.value) - 4,'sdata':data.lb.value,'type':'station','lineId':Number(parent.lcode.value),'sort':parent.sort.value},'stationPoint')
+                this._generate('image',{'id':data.acc.value,'href':turnHref,'width':8,'height':8,'x':data.dx ? Number(data.x.value) - 4 + Number(data.dx.value) : Number(data.x.value) - 4,'y':data.dy ? Number(data.y.value) - 4 + Number(data.dy.value) : Number(data.y.value) - 4,'sdata':data.lb.value,'type':'station','lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value),'sort':parent.sort.value},'stationPoint')
             }else{
-                this._generate('circle',{'id':data.acc.value,'fill':'white','r':2,'stroke':'black','stroke-width':1,'cx':Number(data.x.value),'cy':Number(data.y.value),'sdata':data.lb.value,'type':'station','lineId':Number(parent.lcode.value),'sort':parent.sort.value},'stationPoint')
+                this._generate('circle',{'id':data.acc.value,'fill':'white','r':2,'stroke':'black','stroke-width':1,'cx':Number(data.x.value),'cy':Number(data.y.value),'sdata':data.lb.value,'type':'station','lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value),'sort':parent.sort.value},'stationPoint')
             }
         },
         _drewStationName:function(parent,data){
-            this._generate('text',{'id':data.acc.value,'ex':String(data.ex.value),'se':data.se ? String(data.se.value) : '','font-family':'微软雅黑','x':Number(data.x.value) + Number(data.rx.value),'y':Number(data.y.value) + Number(data.ry.value) + 15,'fill':'#ccc','font-size':12,'lineId':Number(parent.lcode.value)},'stationName',data.lb.value)
+            this._generate('text',{'id':data.acc.value,'ex':String(data.ex.value),'se':data.se ? String(data.se.value) : '','font-family':'微软雅黑','x':Number(data.x.value) + Number(data.rx.value),'y':Number(data.y.value) + Number(data.ry.value) + 15,'fill':'#ccc','font-size':12,'lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value)},'stationName',data.lb.value)
         },
         _drewFullLoad:function(parent,data,index,next){
             var self = this
@@ -185,11 +186,11 @@
                 var arr = data[index].attributes.arc.value.split(',')[0].split(':')
                 var urc = data[index].attributes.uoarc.value.split(',')[0].split(':')
                 var drc = data[index].attributes.doarc.value.split(',')[0].split(':')
-                this._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none'},data[index].attributes.acc.value + 'full')
-                this._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none'},data[index].attributes.acc.value + 'full')
+                this._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
             }else{
-                this._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},data[index].attributes.acc.value + 'full')
-                this._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},data[index].attributes.acc.value + 'full')
+                this._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
             }
             for (let i = index + 1; i < data.length; i++) {
                 if(data[i].attributes.acc.value == ''){
@@ -203,12 +204,12 @@
                         var arr = data[i].attributes.arc.value.split(',')[0].split(':')
                         var urc = data[i].attributes.uoarc.value.split(',')[0].split(':')
                         var drc = data[i].attributes.doarc.value.split(',')[0].split(':')
-                        self._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none'},data[index].attributes.acc.value + 'full')
-                        self._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none'},data[index].attributes.acc.value + 'full')
+                        self._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        self._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
         
                     }else{
-                        self._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},data[index].attributes.acc.value + 'full')
-                        self._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},data[index].attributes.acc.value + 'full')
+                        self._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        self._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
                     }
                 }else{
                     break
@@ -457,43 +458,84 @@
                 }
             }
         },
+        openFullLoad(res){
+            if(res){
+                $('#normal').hide()
+                $('#fullLoad,.wirenetwork .fullLoadBtn').show()
+                
+            }else{
+                $('#normal').show()
+                $('#fullLoad,.wirenetwork .fullLoadBtn').hide()
+            }
+        },
+        showLess(){
+            //减少图像辅助内容显示
+            this.stationName(3)
+            this.lineName(false)
+        },
+        showNormal(){
+            //图像辅助内容全部显示
+            this.stationName(1)
+            this.lineName(true)
+        },
 
         /* 新增临时demo开始 */
         stopNormail:function(from,state){
-
-            $('#normal').hide()
-            var fx = Number(from.x) - 3
-            var fy = Number(from.y) - 3
+            var cname = ''
+            var fx = from.line.length > 1 ? from.x - 3 : from.x
+            var fy = from.line.length > 1 ? from.y - 3 : from.y
             var num = Math.floor(Math.random()*1000);
-            var color = ['#028101','red','#fff']
-            this._generate('g',{'id':'fly' + num},'subwayMain')
+            var color = ['#56fcf0','#facb10','#f56911','#f42419']
+            for (let index = 0; index < from.line.length; index++) {
+                cname += from.line[index].lineId + ' ';
+            }
+            this._generate('g',{'id':'fly' + num,'class':'cluster ' + cname},'Passengerflow')
             for (let index = 0; index < 3; index++) {
-                this._generate('circle',{'id':'flyto' + num + index,'cx':fx,'cy':fy,'stroke':color[state],'stroke-width':2.5,'fill-opacity':'0'},'fly' + num)
-                // this._generate('image',{'id':'flyto' + num + index,'href':'http://172.51.216.62:41005/subway/1.png','width':15,'height':15,'x':973,'y':687},'fly' + num)
+                this._generate('circle',{'id':'flyto' + num + index,'cx':fx,'cy':fy,'stroke':color[state],'stroke-width':4.5,'fill-opacity':'0'},'fly' + num)
                 if(index > 0){
-                    this._generate('animate',{'attributeName':'r','begin':'ani1.begin + ' + index*0.7 + 's','from':4,'to':20,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
+                    this._generate('animate',{'attributeName':'r','begin':'ani1.begin + ' + index*0.7 + 's','from':4,'to':30,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
                     this._generate('animate',{'attributeName':'opacity','begin':'ani1.begin + ' + index*0.7 + 's','from':1,'to':0,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
                 }else{
-                    this._generate('animate',{'attributeName':'r','id':'ani1','begin':0,'from':4,'to':20,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
+                    this._generate('animate',{'attributeName':'r','id':'ani1','begin':0,'from':4,'to':30,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
                     this._generate('animate',{'attributeName':'opacity','begin':0,'from':1,'to':0,'dur':'3s','repeatCount':'indefinite'},'flyto' + num + index)
                 }
             }
-
         },
-        drewAlarm:function(){
-            /*---------------------*/
-            // this._generate('image',{'href':'http://172.51.216.62:41005/subway/1.png','width':15,'height':15,'x':973,'y':687},'alarm')
-            // this._generate('image',{'href':'http://172.51.216.62:41005/subway/2.png','width':15,'height':15,'x':905,'y':687},'alarm')
-            // this._generate('image',{'href':'http://172.51.216.62:41005/subway/3.png','width':15,'height':15,'x':942,'y':649},'alarm')
-            // this._generate('image',{'href':'http://172.51.216.62:41005/subway/train.png','width':15,'height':15,id:'train'},'alarm')
-            /*---------------------*/            
-            // this._generate('circle',{r:5,fill:'red',id:'train'},'alarm')
-            
+        drewAlarm:function(from,state){
+            var cname = ''
+            for (let index = 0; index < from.line.length; index++) {
+                cname += from.line[index].lineId + ' ';
+            }
+            this._generate('image',{'href':'http://172.51.216.62:41005/subway/' + state + '.png','width':30,'height':30,'x':from.x - 15,'y':from.y - 34,'class':'cluster ' + cname},'Passengerflow')
+        },
+        drewHeatmap:function(position,value){
 
+            if(position.id == undefined) return false;
+
+            const base = Number((value * 100).toFixed(2))
+
+            console.log(position);
+            
+            this._generate('g',{id:position.id + 'Hot'},'HeatMap')
+            this._generate('defs',{id:position.id + 'defs'},position.id + 'Hot')
+            this._generate('radialGradient',{id:position.id + 'grad1',cx:"50%",cy:"50%",r:base + "%",fx:"50%",fy:"50%"},position.id + 'defs')
+
+            this._generate('stop',{offset:"0%",style:"stop-color:rgb(255 0 0);stop-opacity:0.3"},position.id + 'grad1')
+            this._generate('stop',{offset:base + "%",style:"stop-color:rgb(255 254 0);stop-opacity:0.2"},position.id + 'grad1')
+            this._generate('stop',{offset:((100 - base) / 2 + base) + "%",style:"stop-color:rgb(9 255 0);stop-opacity:0.6"},position.id + 'grad1')
+            this._generate('stop',{offset:"100%",style:"stop-color:rgb(0 201 255);stop-opacity:0.8"},position.id + 'grad1')
+
+            this._generate('filter',{id:position.id + "f1",x:"0",y:"0",filterUnits:'userSpaceOnUse'},position.id + 'defs')
+            this._generate('feGaussianBlur',{in:"StrokePaint",stdDeviation:"20"},position.id + 'f1')
+            this._generate('circle',{id:position.id + "circle",cx:position.x >= 80 ? position.x : 80,cy:position.y,r:value * 80,fill:"url(#" + position.id + "grad1)",filter:"url(#" + position.id + "f1)"},position.id + 'Hot')
+            if(position.x <= 80){
+                $('#' + position.id + "circle").css({
+                    transform : 'translate(' + ( - (80 - position.x) ) + 'px' + ',0)'
+                })
+            }
         },
         drewRunning:function(from,to,trainId,Percent,arrive){
             if(Percent == 100) return false
-            console.log(from,to,trainId,Percent,arrive);
             var fromtoArray = []
             var direction = ''
             var path = ''
@@ -845,6 +887,7 @@
             })
             setInfo(tmp)
             function setInfo(i){
+                if(i.length <= 0) return false;
                 cb = {
                     x:i[0].attributes.cx ? Number(i[0].attributes.cx.value) : Number(i[0].attributes.x.value),
                     y:i[0].attributes.cy ? Number(i[0].attributes.cy.value) : Number(i[0].attributes.y.value),
