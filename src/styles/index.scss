@@ -13,6 +13,11 @@ body {
   font-size: 14px;
 }
 
+@font-face { 
+    font-family: 'lcdd'; 
+    src: url('../../public/subway/FX-LED.ttf');
+}
+
 label {
   font-weight: 700;
 }

@@ -98,6 +98,7 @@
                 <li><span><img src="http://172.51.216.62:41005/subway/3.png" /></span>CUC减缓售票速度</li>
             </ul>
         </div>
+        <div class="time">{{time}}</div>
     </div>
 </template>
 
@@ -499,6 +500,8 @@ var mock = {
     }
     ]
 }
+var realtimeOut = null
+var realtimeNum = 0
 export default {
     name: 'wirenetwork',
     data () {
@@ -521,7 +524,8 @@ export default {
                 fullload:false,
                 passenger:false,
                 realtime:false,
-            }
+            },
+            time:''
         }
     },
     created () {
@@ -532,6 +536,21 @@ export default {
             tmpId: 'subway',
             fullload:false
         })
+
+        var formatDate = function (date) {  
+            var h = date.getHours();
+            h=h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            var second=date.getSeconds();
+            second=second < 10 ? ('0' + second) : second;
+            return h + ':' + minute + ':' + second;
+        };
+        setInterval(() => {
+            this.time = formatDate(new Date())
+        },1000);
+
+        console.log(RealTime);
 
         tctSubway.listener('loaded', function() {
             // tctSubway.showLine(self.value);
@@ -544,6 +563,8 @@ export default {
             // tctSubway.stopNormail(tctSubway.getPosition('西直门'),1)
             // tctSubway.stopNormail(tctSubway.getPosition('平安里'),0)
             // tctSubway.stopNormail(tctSubway.getPosition('雍和宫'),2)
+
+            tctSubway._generate('circle',{cx:'1142',cy:'792',r:'2',fill:"white"},'subwayMain')
 
             tctSubway.openFullLoad(false)
 
@@ -628,31 +649,42 @@ export default {
             for (let index = 0; index < this.checkboxGroup.length; index++) {
                 $('#subway .cluster.' + this.checkboxGroup[index]).show()
             }
-
-            $('#HeatMap').empty()
-            $('.heatmap').hide()
-            this.hotMap = false
+            // $('#HeatMap').empty()
+            // $('.heatmap').hide()
+            // this.hotMap = false
         },
         realtimeSimulation(){
             this.clearAll()
+            realtimeNum = 0
             if(this.realtime){
-
                 tctSubway.openFullLoad(true)
                 tctSubway.showLess()
+                $('.time').show()
                 $('.wirenetwork .fullLoadBtn').hide()
                 this.fullload = false
 
                 $('#fullLoad').css('opacity','0.4')
 
-                for (let index = 0; index < mock.trainInfoList.length; index++) {
-                    tctSubway.drewRunning(
-                        tctSubway.codeStation(mock.trainInfoList[index].sectionCode.split('-')[0]),
-                        tctSubway.codeStation(mock.trainInfoList[index].sectionCode.split('-')[1]),
-                        mock.trainInfoList[index].ciCode,
-                        mock.trainInfoList[index].sectionPercent,
-                        mock.trainInfoList[index].arriveSeconds
-                    )
+                function getDateSim(){
+                    for (let index = 0; index < RealTime[realtimeNum].trainInfoList.length; index++) {
+                        tctSubway.drewRunning(
+                            tctSubway.codeStation(RealTime[realtimeNum].trainInfoList[index].sectionCode.split('-')[0]),
+                            tctSubway.codeStation(RealTime[realtimeNum].trainInfoList[index].sectionCode.split('-')[1]),
+                            RealTime[realtimeNum].trainInfoList[index].ciCode,
+                            RealTime[realtimeNum].trainInfoList[index].sectionPercent,
+                            RealTime[realtimeNum].trainInfoList[index].arriveSeconds
+                        )
+                    }
+                    realtimeNum++
+                    if(realtimeNum < RealTime.length){
+                        realtimeOut = setTimeout(getDateSim,1000)
+                    }else{
+                        console.log('结束仿真');
+                    }
                 }
+                getDateSim()                
+            }else{
+                clearTimeout(realtimeOut)
             }
         },
         clearAll(){
@@ -687,19 +719,23 @@ export default {
                 }
             }
 
-            //热力
             $('#HeatMap').empty()
             $('.heatmap').hide()
-            //站控
+
             $('#normal').css('opacity','1')
             $('#Passengerflow').empty()
             $('.passenger').hide()
-            //实时
+
             $('#fullLoad').css('opacity','1')
             $('#alarm').empty()
-            //满载
+            
+            $('.time').hide()
+            
             tctSubway.openFullLoad(false)
             tctSubway.showNormal()
+
+            clearTimeout(realtimeOut)
+            
         }
     }
 }
@@ -732,4 +768,6 @@ export default {
 
 .cluster{margin: 10px 0 0 0;}
 .cluster label{margin: 0 0 10px 0;color: #fff;}
+
+.time{position: fixed;right: 20px;top:80px;z-index: 3;color:#fff;font-size:40px;border:2px solid #fff;padding:0 10px;border-radius: 2px;width: 176px;text-align: center;font-family: 'lcdd';height: 50px;line-height: 46px;display: none;background: #000;}
 </style>

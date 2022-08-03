@@ -57,7 +57,7 @@ var StationList = [
     {
         lname : '10',
         Code : '1012',
-        name : ' 复兴门',
+        name : '复兴门',
     },
     {
         lname : '10',
@@ -807,7 +807,7 @@ var StationList = [
     {
         lname : '60',
         Code : '6033',
-        name : '苹果园南路',
+        name : '杨庄',
     },
     {
         lname : '60',

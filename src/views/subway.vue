@@ -628,10 +628,9 @@ export default {
             for (let index = 0; index < this.checkboxGroup.length; index++) {
                 $('#subway .cluster.' + this.checkboxGroup[index]).show()
             }
-
-            $('#HeatMap').empty()
-            $('.heatmap').hide()
-            this.hotMap = false
+            // $('#HeatMap').empty()
+            // $('.heatmap').hide()
+            // this.hotMap = false
         },
         realtimeSimulation(){
             this.clearAll()
@@ -656,7 +655,6 @@ export default {
             }
         },
         clearAll(){
-            // console.log(this.hotMap,this.fullload,this.passenger,this.realtime)
             var num = 0
             var self = this
             for (const key in this.tmp) {
@@ -688,10 +686,6 @@ export default {
                 }
             }
 
-            
-
-            console.log(num,this.tmp);
-
             //热力
             $('#HeatMap').empty()
             $('.heatmap').hide()
@@ -713,7 +707,7 @@ export default {
 .wirenetwork{padding: 10px;background:#000;height:calc(100vh - 50px);overflow: hidden;}
 /* #subway{width: 100%;height:calc(100vh - 76px);} */
 #subway{width: 3000px;height:3000px;}
-.subway{height:100vh}
+.subway{height: 100vh;}
 #ddd{width: 200px;height: 200px;position: fixed;right: 0;top: 0;}
 
 .wirenetwork .left_new{flex:0 0 400px;position: absolute;left:0;top: 10px;z-index: 3;}

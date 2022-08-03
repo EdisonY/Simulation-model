@@ -123,7 +123,7 @@
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/birde.png','width':80,'height':40,'x':940,'y':480},'image')
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/jump.png','width':60,'height':40,'x':225,'y':770},'image')
 
-            panZoom = svgPanZoom('#subway',{zoomEnabled: true,dblClickZoomEnabled:false,minZoom:.8,maxZoom:4,fit:false});
+            panZoom = svgPanZoom('#subway',{zoomEnabled: true,dblClickZoomEnabled:false,minZoom:.3,maxZoom:4,fit:false});
             panZoom.pan({x:($('.Line').width() - 1860) / 2,y:($('.wirenetwork').height() - 1500) / 2})
             panZoom.zoom(1)
             console.log(panZoom);
@@ -445,13 +445,12 @@
             }
         },
         lineName(data){
-            if(data){
-                $('#lineName').show()
-            }else{
-                $('#lineName').hide()
-            }
+
+            data ? $('#lineName').show() : $('#lineName').hide()
+        
         },
         codeStation(code){
+            //站点名称对应StationList表
             for (let index = 0; index < StationList.length; index++) {
                 if(code == StationList[index].Code){
                     return this.getPosition(StationList[index].name)
@@ -459,10 +458,10 @@
             }
         },
         openFullLoad(res){
+            //打开满载率图层
             if(res){
                 $('#normal').hide()
                 $('#fullLoad,.wirenetwork .fullLoadBtn').show()
-                
             }else{
                 $('#normal').show()
                 $('#fullLoad,.wirenetwork .fullLoadBtn').hide()
@@ -481,6 +480,7 @@
 
         /* 新增临时demo开始 */
         stopNormail:function(from,state){
+            //绘制站点客流信息
             var cname = ''
             var fx = from.line.length > 1 ? from.x - 3 : from.x
             var fy = from.line.length > 1 ? from.y - 3 : from.y
@@ -502,6 +502,7 @@
             }
         },
         drewAlarm:function(from,state){
+            //绘制站点管控信息
             var cname = ''
             for (let index = 0; index < from.line.length; index++) {
                 cname += from.line[index].lineId + ' ';
@@ -509,14 +510,16 @@
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/' + state + '.png','width':30,'height':30,'x':from.x - 15,'y':from.y - 34,'class':'cluster ' + cname},'Passengerflow')
         },
         drewHeatmap:function(position,value){
-
+            //绘制热力图
             if(position.id == undefined) return false;
-
+            let cname = ''
             const base = Number((value * 100).toFixed(2))
 
-            console.log(position);
-            
-            this._generate('g',{id:position.id + 'Hot'},'HeatMap')
+            for (let index = 0; index < position.line.length; index++) {
+                cname += position.line[index].lineId + ' ';
+            }
+
+            this._generate('g',{id:position.id + 'Hot','class':'cluster ' + cname},'HeatMap')
             this._generate('defs',{id:position.id + 'defs'},position.id + 'Hot')
             this._generate('radialGradient',{id:position.id + 'grad1',cx:"50%",cy:"50%",r:base + "%",fx:"50%",fy:"50%"},position.id + 'defs')
 
@@ -544,6 +547,8 @@
             var tId = ''
             var fixGap = false
             var per = Percent / 100
+
+            console.log(from,to,trainId,Percent,arrive);
 
             //获取起止站ID
             for (let index = 0; index < from.line.length; index++) {
@@ -608,27 +613,31 @@
                 var element = $('#' + trainId + 'Y').get(0)
                 element.setAttributeNS(null,"dur",arrive + "s");
                 element.setAttributeNS(null,"keyPoints","0;" + per + ";1");
-                element.beginElement();
+                element.setAttributeNS(null,"path",path);
             }else{
-                this._generate('image',{id:trainId,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':fixGap ? 'train fixgap' : 'train'},'alarm')
+                this._generate('image',{id:trainId,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':direction == 'down' ? 'train fixgap' : 'train'},'alarm')
                 this._generate('animateMotion',{
                     id:trainId + 'Y',
                     dur:arrive + "s",
                     // fill:"freeze", //结束后冻结车辆图标
                     keyPoints:"0;" + per + ";1",
-                    keyTimes:"0;0.00001;1",
+                    keyTimes:"0;0.0001;1",
                     rotate:"auto",
                     calcMode:"linear",
+                    begin:"indefinite",
                     restart:"always",
                     path:path}
                 ,trainId) 
             }
+            var element = $('#' + trainId + 'Y').get(0);
+            element.beginElement();
+
             // svg指当前svg DOM元素
             // 暂停
             // svg.pauseAnimations();
 
             // 重启动
-            // svg.unpauseAnimations()
+            // $('#subway').unpauseAnimations()
         },
 
 
