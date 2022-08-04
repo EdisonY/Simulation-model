@@ -115,3 +115,10 @@ rect,text{cursor: pointer;}
 .fullLoadBtn .sub2{background:#f1d44b}
 .fullLoadBtn .sub3{background:#de8c17}
 .fullLoadBtn .sub4{background:#d0000f}
+
+.wirenetElement {padding: 10px 0 0 0;}
+.wirenetElement .el-date-editor--timerange.el-input__inner{width: 160px;padding: 3px 6px;}
+.wirenetElement .el-date-editor .el-range__icon,.wirenetElement .el-date-editor .el-range__close-icon{display: none;}
+.wirenetElement .el-date-editor .el-range-separator{width: auto;}
+.wirenetElement .el-select{width: 56px;}
+.wirenetElement .el-input--suffix .el-input__inner{padding: 0 15px 0 10px;}

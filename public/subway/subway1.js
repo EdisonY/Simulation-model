@@ -619,7 +619,7 @@
                 this._generate('animateMotion',{
                     id:trainId + 'Y',
                     dur:arrive + "s",
-                    // fill:"freeze", //结束后冻结车辆图标
+                    fill:"freeze", //结束后冻结车辆图标
                     keyPoints:"0;" + per + ";1",
                     keyTimes:"0;0.0001;1",
                     rotate:"auto",
@@ -630,6 +630,9 @@
                 ,trainId) 
             }
             var element = $('#' + trainId + 'Y').get(0);
+            element.addEventListener('endEvent', () => {
+                alert('something');
+            })
             element.beginElement();
 
             // svg指当前svg DOM元素

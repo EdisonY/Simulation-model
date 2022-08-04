@@ -44,6 +44,38 @@
                 </el-switch>
                 <br/>
                 <br/>
+                历史回放
+                <el-switch
+                    v-model="historyrealtime"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    @change="historySimulation">
+                </el-switch>
+                <div class="wirenetElement" v-if="historyrealtime">
+                    <el-time-picker
+                        is-range
+                        arrow-control
+                        v-model="value2"
+                        :clearable=false
+                        range-separator="至"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        width="200px"
+                        placeholder="选择时间范围">
+                    </el-time-picker>
+                    <el-select v-model="value" placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <br/>
+                    <el-button type="success" plain size="small" class="qidong" disabled>启动</el-button>
+                </div>
+                <br/>
+                <br/>
                 集群：
                 <div class="cluster">
                     <el-checkbox-group v-model="checkboxGroup" size="mini" @change="clusterWatch()">
@@ -518,6 +550,7 @@ export default {
             fullload:false,
             passenger:false,
             realtime:false,
+            historyrealtime:false,
             checkboxGroup:[],
             tmp:{
                 hotMap:false,
@@ -525,7 +558,23 @@ export default {
                 passenger:false,
                 realtime:false,
             },
-            time:''
+            time:'',
+            value2:[new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+            options: [{
+                value: '1',
+                label: '1 X'
+                },{
+                value: '2',
+                label: '2 X'
+                },{
+                value: '4',
+                label: '4 X'
+                },{
+                value: '8',
+                label: '8 X'
+                }, 
+            ],
+            value:'1'
         }
     },
     created () {
@@ -649,16 +698,16 @@ export default {
             for (let index = 0; index < this.checkboxGroup.length; index++) {
                 $('#subway .cluster.' + this.checkboxGroup[index]).show()
             }
-            // $('#HeatMap').empty()
-            // $('.heatmap').hide()
-            // this.hotMap = false
+        },
+        historySimulation(){
+
         },
         realtimeSimulation(){
             this.clearAll()
             realtimeNum = 0
             if(this.realtime){
                 tctSubway.openFullLoad(true)
-                tctSubway.showLess()
+                // tctSubway.showLess()
                 $('.time').show()
                 $('.wirenetwork .fullLoadBtn').hide()
                 this.fullload = false
@@ -770,4 +819,6 @@ export default {
 .cluster label{margin: 0 0 10px 0;color: #fff;}
 
 .time{position: fixed;right: 20px;top:80px;z-index: 3;color:#fff;font-size:40px;border:2px solid #fff;padding:0 10px;border-radius: 2px;width: 176px;text-align: center;font-family: 'lcdd';height: 50px;line-height: 46px;display: none;background: #000;}
+
+.qidong{margin-top: 10px;}
 </style>
