@@ -34,15 +34,15 @@ module.exports = {
             errors: true
         },
         disableHostCheck: true,
-        // proxy:{
-        //     '/api': {
-        //         target: "http://39.105.230.230:8080/",
-        //         changeOrigin: true,
-        //         pathRewrite: {
-        //             '^/api': '/'
-        //         }
-        //     } 
-        // },
+        proxy:{
+            '/api': {
+                target: "http://172.51.215.195/",
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/'
+                }
+            } 
+        },
     },
     configureWebpack: {
         // provide the app's title in webpack's name field, so that

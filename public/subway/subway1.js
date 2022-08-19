@@ -1,6 +1,6 @@
 ;(function(global, undefined) {
     "use strict"
-    var _global,panZoom,state,time,func,hot = [],arrowHref = 'http://172.51.216.62:41005/subway/arrow.png',turnHref= 'http://172.51.216.62:41005/subway/turn.png',Num = 0;
+    var _global,panZoom,state,time,func,hot = [],arrowHref = 'http://172.51.216.62:41005/subway/arrow.png',turnHref= 'http://172.51.216.62:41005/subway/turn.png',Num = 0,stationPath = [];
 
     function loadJS( url, callback ){
         var script = document.createElement('script'),
@@ -63,7 +63,7 @@
             // }
             $.ajax({
                 // url: "beijing.xml",
-                url: "http://172.51.216.62:41005/subway/beijing.xml",
+                url: "http://172.51.216.62:41005/subway/beijing.xml?" + Math.floor(Math.random()*1000),
                 dataType: 'xml',
                 type: 'GET',
                 timeout: 5000,
@@ -121,7 +121,7 @@
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/airport.png','width':40,'height':40,'x':1510,'y':355},'image')
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/airport.png','width':40,'height':40,'x':1000,'y':1228},'image')
             this._generate('image',{'href':'http://172.51.216.62:41005/subway/birde.png','width':80,'height':40,'x':940,'y':480},'image')
-            this._generate('image',{'href':'http://172.51.216.62:41005/subway/jump.png','width':60,'height':40,'x':225,'y':770},'image')
+            this._generate('image',{'href':'http://172.51.216.62:41005/subway/jump.png','width':45,'height':40,'x':248,'y':770},'image')
 
             panZoom = svgPanZoom('#subway',{zoomEnabled: true,dblClickZoomEnabled:false,minZoom:.3,maxZoom:4,fit:false});
             panZoom.pan({x:($('.Line').width() - 1860) / 2,y:($('.wirenetwork').height() - 1500) / 2})
@@ -144,7 +144,7 @@
                 var str = _arry[index].split(',')
                 self._generate('rect',{'lineId':Number(data.lcode.nodeValue),'class':'cluster','fill':data.lc.nodeValue.replace("0x", "#"),'width':str[2],'height':str[3],'x':str[0],'y':str[1]},'lineName')
                 if (Number(data.lcode.nodeValue) <= 57)
-                    if(_state[index] != '大兴')
+                    if(_state[index] != '大兴' && _state[index] != '八通')
                         state = "地铁" + _state[index] + "号线";
                     else{
                         state = "地铁" + _state[index] + "线";
@@ -162,6 +162,9 @@
             }
         },
         _drewStationPoint:function(parent,data){
+            if(data.show){
+                return
+            }
             if(data.ex.value == 'true'){
                 this._generate('image',{'id':data.acc.value,'href':turnHref,'width':8,'height':8,'x':data.dx ? Number(data.x.value) - 4 + Number(data.dx.value) : Number(data.x.value) - 4,'y':data.dy ? Number(data.y.value) - 4 + Number(data.dy.value) : Number(data.y.value) - 4,'sdata':data.lb.value,'type':'station','lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value),'sort':parent.sort.value},'stationPoint')
             }else{
@@ -169,7 +172,9 @@
             }
         },
         _drewStationName:function(parent,data){
-            this._generate('text',{'id':data.acc.value,'ex':String(data.ex.value),'se':data.se ? String(data.se.value) : '','font-family':'微软雅黑','x':Number(data.x.value) + Number(data.rx.value),'y':Number(data.y.value) + Number(data.ry.value) + 15,'fill':'#ccc','font-size':12,'lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value)},'stationName',data.lb.value)
+            if(data.show == undefined){
+                this._generate('text',{'id':data.acc.value,'ex':String(data.ex.value),'se':data.se ? String(data.se.value) : '','font-family':'微软雅黑','x':Number(data.x.value) + Number(data.rx.value),'y':Number(data.y.value) + Number(data.ry.value) + 15,'fill':'#ccc','font-size':12,'lineId':Number(parent.lcode.value),'class':'cluster ' + Number(parent.lcode.value)},'stationName',data.lb.value)
+            }
         },
         _drewFullLoad:function(parent,data,index,next){
             var self = this
@@ -179,18 +184,58 @@
             var _uoy = Number(data[index].attributes.uoy.value)
             var _dox = Number(data[index].attributes.dox.value)
             var _doy = Number(data[index].attributes.doy.value)
+            var alr = false
             var dom = document.createElementNS('http://www.w3.org/2000/svg','g')
             dom.setAttribute('id',data[index].attributes.acc.value + 'full')
+            dom.setAttribute('class','cluster ' + Number(parent.lcode.value))
+
+            for (let index = 0; index < stationPath.length; index++) {
+                if(stationPath[index].line == Number(parent.lcode.value)){
+                    alr = true
+                }
+            }
+
+            if(!alr){
+                stationPath.push(
+                    {
+                        line:Number(parent.lcode.value),
+                        station:[]
+                    }
+                )
+            }
+
             document.getElementById('fullLoad').appendChild(dom);
             if(data[index].attributes.arc != undefined){
                 var arr = data[index].attributes.arc.value.split(',')[0].split(':')
                 var urc = data[index].attributes.uoarc.value.split(',')[0].split(':')
                 var drc = data[index].attributes.doarc.value.split(',')[0].split(':')
-                this._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
-                this._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('path',{'sId':data[index].attributes.acc.value,'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('path',{'sId':data[index].attributes.acc.value,'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+
+                stationPath[stationPath.length - 1].station.push({
+                    'sId':data[index].attributes.acc.value,
+                    'id':'up',
+                    'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                },{
+                    'sId':data[index].attributes.acc.value,
+                    'id':'down',
+                    'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value))
+                })
+
             }else{
-                this._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
-                this._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('line',{'sId':data[index].attributes.acc.value,'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                this._generate('line',{'sId':data[index].attributes.acc.value,'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value),'y2':Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+
+                stationPath[stationPath.length - 1].station.push({
+                    'sId':data[index].attributes.acc.value,
+                    'id':'up',
+                    'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                },{
+                    'sId':data[index].attributes.acc.value,
+                    'id':'down',
+                    'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),
+                })
+
             }
             for (let i = index + 1; i < data.length; i++) {
                 if(data[i].attributes.acc.value == ''){
@@ -204,12 +249,33 @@
                         var arr = data[i].attributes.arc.value.split(',')[0].split(':')
                         var urc = data[i].attributes.uoarc.value.split(',')[0].split(':')
                         var drc = data[i].attributes.doarc.value.split(',')[0].split(':')
-                        self._generate('path',{'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
-                        self._generate('path',{'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
-        
+                        self._generate('path',{'sId':data[index].attributes.acc.value,'id':'up','d':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        self._generate('path',{'sId':data[index].attributes.acc.value,'id':'down','d':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value)) + ' ' + (Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value)),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'none',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        
+                        stationPath[stationPath.length - 1].station.push({
+                            'sId':data[index].attributes.acc.value,
+                            'id':'up',
+                            'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                        },{
+                            'sId':data[index].attributes.acc.value,
+                            'id':'down',
+                            'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value))
+                        })
+
                     }else{
-                        self._generate('line',{'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
-                        self._generate('line',{'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        self._generate('line',{'sId':data[index].attributes.acc.value,'id':'up','x1':_x + 2 * _uox,'y1':_y + 2 * _uoy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.uox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.uoy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+                        self._generate('line',{'sId':data[index].attributes.acc.value,'id':'down','x1':_x + 2 * _dox,'y1':_y + 2 * _doy,'x2':Number(data[i + 1].attributes.x.value) + 2 * Number(data[i + 1].attributes.dox.value),'y2':Number(data[i + 1].attributes.y.value) + 2 * Number(data[i + 1].attributes.doy.value),'stroke':'#79be85','stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round',lineId:Number(parent.lcode.value),class:'cluster ' + Number(parent.lcode.value)},data[index].attributes.acc.value + 'full')
+
+                        stationPath[stationPath.length - 1].station.push({
+                            'sId':data[index].attributes.acc.value,
+                            'id':'up',
+                            'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                        },{
+                            'sId':data[index].attributes.acc.value,
+                            'id':'down',
+                            'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),
+                        })
+
                     }
                 }else{
                     break
@@ -347,6 +413,35 @@
                 }
             }, animationStepTime);
         },
+        _getBetweenPath:function(from,to,direction,fId,tId,lineId){
+            var path = ''
+            var position = false
+
+            console.log(stationPath);
+
+            
+            for (let index = 0; index < stationPath.length; index++) {
+                if(stationPath[index].line == lineId){
+                    for (let i = 0; i < stationPath[index].station.length; i++) {
+                        if(stationPath[index].station[i].sId == fId){
+                            position = true
+                        }else if(stationPath[index].station[i].sId == tId){
+                            position = false
+                        }
+
+                        if(position){
+                            if(direction == 1 && stationPath[index].station[i].id == 'up'){
+                                path += stationPath[index].station[i].d
+                            }else if(direction == 2 && stationPath[index].station[i].id == 'down'){
+                                path += stationPath[index].station[i].d
+                            }
+                        }
+                    }
+                }
+            }
+
+            return path;
+        },
         addFlyLine:function(from,to,config){
             var self = this
             var fx = Number(from.x)
@@ -445,9 +540,7 @@
             }
         },
         lineName(data){
-
             data ? $('#lineName').show() : $('#lineName').hide()
-        
         },
         codeStation(code){
             //站点名称对应StationList表
@@ -469,13 +562,18 @@
         },
         showLess(){
             //减少图像辅助内容显示
-            this.stationName(3)
-            this.lineName(false)
+            if($('.clusterTrue').length == 0){
+                this.stationName(3)
+                this.lineName(false)
+            }
         },
         showNormal(){
             //图像辅助内容全部显示
-            this.stationName(1)
-            this.lineName(true)
+            if($('.clusterTrue').length == 0){
+                this.stationName(1)
+                this.lineName(true)
+            }
+
         },
 
         /* 新增临时demo开始 */
@@ -537,18 +635,26 @@
                 })
             }
         },
-        drewRunning:function(from,to,trainId,Percent,arrive){
-            if(Percent == 100) return false
+        drewRunning:function(from,to,trainId,Percent,arrive,direction){
+            if(Percent == 100 || from == undefined || to == undefined || from.id == undefined || to.id == undefined) return;           
+
+            var cname = ''
             var fromtoArray = []
-            var direction = ''
             var path = ''
             var first = true
             var fId = ''
             var tId = ''
             var fixGap = false
+            var lineId = ''
             var per = Percent / 100
 
             console.log(from,to,trainId,Percent,arrive);
+            console.time('总时长');
+
+            //获取线路id
+            for (let index = 0; index < to.line.length; index++) {
+                cname += to.line[index].lineId + ' ';
+            }
 
             //获取起止站ID
             for (let index = 0; index < from.line.length; index++) {
@@ -556,6 +662,7 @@
                     if(from.line[index].lineId == to.line[indext].lineId){
                         fId = from.line[index].id
                         tId = to.line[indext].id
+                        lineId = from.line[index].lineId
                         if(from.line[index].lineId == 74 || from.line[index].lineId == 9){
                             fixGap = true
                         }
@@ -563,59 +670,25 @@
                 }
             }
 
-            //判断上下行
-            if(fId < tId){
-                for (let index = fId; index < tId; index++) {
-                    fromtoArray.push(index)
-                    direction = 'up'
-                }
-            }else{
-                for (let index = fId; index > tId; index--) {
-                    fromtoArray.push(index)
-                    direction = 'down'
-                }
+            if(lineId == '') {
+                return false;
             }
-           
+
             //获取起止站间所有站间
-            $('#subwayMain #fullLoad').children().each(function(e,i){
-                for (let index = 0; index < fromtoArray.length; index++) {
-                    if(i.attributes.id && i.attributes.id.value == fromtoArray[index] + 'full'){
-                        for (let index = 0; index < i.childNodes.length; index++) {
-                            if(i.childNodes[index].id == 'down' && direction == 'down'){
-                                clonePath(i.childNodes[index])
-                            }else if(i.childNodes[index].id == 'up' && direction == 'up'){
-                                clonePath(i.childNodes[index])
-                            }
-                        }
-                    }
-                }
-            })
-
-            //拼接站间path
-            function clonePath(ele){
-                if(ele.attributes.x2){
-                    if(first){
-                        path += 'M' + Number(ele.attributes.x1.value) + ' '
-                        path += Number(ele.attributes.y1.value) + ' '
-                    }
-                    path += 'L' + Number(ele.attributes.x2.value) + ' '
-                    path += Number(ele.attributes.y2.value) + ' '
-                }else{
-                    path += ele.attributes.d.value + ' '
-                }
-                first = false
-            }
-
-            // this._generate('path',{'id':'trainPath' + Num,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','fill':'#fff',d:path},'alarm')
+            console.time('获取起止站间所有站间');
+            
+            console.log(path);
+            console.timeEnd('获取起止站间所有站间');
 
             //判断此列车是否已经存在，存在即更新并重置，不存即在新增
-            if($('#' + trainId).length > 0){
+            console.time('画车');
+            if($('#' + trainId + 'realtime').length > 0){
                 var element = $('#' + trainId + 'Y').get(0)
                 element.setAttributeNS(null,"dur",arrive + "s");
                 element.setAttributeNS(null,"keyPoints","0;" + per + ";1");
-                element.setAttributeNS(null,"path",path);
+                element.setAttributeNS(null,"path",this._getBetweenPath(from,to,direction,fId,tId,lineId));
             }else{
-                this._generate('image',{id:trainId,'href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':direction == 'down' ? 'train fixgap' : 'train'},'alarm')
+                this._generate('image',{id:trainId + 'realtime','href':'http://172.51.216.62:41005/subway/type1.png','width':15,'height':15,'class':direction == 'down' ? 'cluster train fixgap ' + cname : 'cluster train ' + cname},'alarm')
                 this._generate('animateMotion',{
                     id:trainId + 'Y',
                     dur:arrive + "s",
@@ -626,21 +699,24 @@
                     calcMode:"linear",
                     begin:"indefinite",
                     restart:"always",
-                    path:path}
-                ,trainId) 
+                    path:this._getBetweenPath(from,to,direction,fId,tId,lineId)}
+                ,trainId + 'realtime') 
             }
+            console.time('画车');
             var element = $('#' + trainId + 'Y').get(0);
             element.addEventListener('endEvent', () => {
-                alert('something');
+                // alert('something');
             })
             element.beginElement();
-
-            // svg指当前svg DOM元素
-            // 暂停
-            // svg.pauseAnimations();
-
-            // 重启动
-            // $('#subway').unpauseAnimations()
+            console.timeEnd('总时长')
+        },
+        pause:function(){
+            var svg = document.getElementById("subway");
+            svg.pauseAnimations();
+        },
+        unpause:function(){
+            var svg = document.getElementById("subway");
+            svg.unpauseAnimations();
         },
 
 
@@ -888,7 +964,7 @@
             var tmp = []
             var ax = parseFloat($('#subwayMain').css('transform').substring(7).split(',')[4])
             var ay = parseFloat($('#subwayMain').css('transform').substring(7).split(',')[5])
-            $('#subwayMain g').children().each(function(e,i){
+            $('#subwayMain #stationPoint').children().each(function(e,i){
                 if(i.attributes.type && i.attributes.type.value == 'station'){
                     if(i.attributes.id && i.attributes.id.value === id){
                         tmp.push(i)

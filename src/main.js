@@ -14,6 +14,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import api from './utils/request';
+
 import * as ws from './utils/ws'
 
 import '@/icons' // icon
@@ -30,11 +32,12 @@ require('echarts/lib/chart/line');
 require('echarts/lib/chart/pie');
 require('echarts/lib/chart/gauge');
 
-
+Vue.use(api);
 Vue.use(Cookies)
 
 Vue.prototype.Cookies = Cookies
 Vue.prototype.ws = ws;
+Vue.prototype.$api = api;
 Vue.prototype.$echarts = echarts;
 
 
