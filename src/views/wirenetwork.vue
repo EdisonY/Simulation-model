@@ -245,7 +245,7 @@ export default {
 
             tctSubway.openFullLoad(false)
 
-            console.log(tctSubway.getPosition('草桥'));
+            // console.log(tctSubway.getPosition('草桥'));
          
             // tctSubway.loadRateMultiply(tctSubway.getPosition('西直门'),tctSubway.getPosition('鼓楼大街'),Number((Math.random(1)*100).toFixed(2)))
             // tctSubway.loadRateMultiply(tctSubway.getPosition('积水潭'),tctSubway.getPosition('鼓楼大街'),Number((Math.random(1)*100).toFixed(2)))
@@ -311,16 +311,18 @@ export default {
                 tctSubway.openFullLoad(true)
                 tctSubway.showLess()
 
-                tctSubway.loadRateMultiply(tctSubway.getPosition('西直门'),tctSubway.getPosition('鼓楼大街'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('积水潭'),tctSubway.getPosition('鼓楼大街'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('鼓楼大街'),tctSubway.getPosition('安定门'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('安定门'),tctSubway.getPosition('雍和宫'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('雍和宫'),tctSubway.getPosition('东直门'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('东直门'),tctSubway.getPosition('东四十条'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('东四十条'),tctSubway.getPosition('朝阳门'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('朝阳门'),tctSubway.getPosition('建国门'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('建国门'),tctSubway.getPosition('北京站'),Number((Math.random(1)*100).toFixed(2)))
-                tctSubway.loadRateMultiply(tctSubway.getPosition('北京站'),tctSubway.getPosition('崇文门'),Number((Math.random(1)*100).toFixed(2)))
+                this.$api.get('/api/ntms/query/train/' + this.realtimeFormat()).then(res => { 
+                    for (let index = 0; index < res.trains.length; index++) {
+                        if(res.trains[index].position.split('-').length > 1){
+                            tctSubway.loadRateMultiply(
+                                tctSubway.codeStation(res.trains[index].position.split('-')[0]),
+                                tctSubway.codeStation(res.trains[index].position.split('-')[1]),
+                                res.trains[index].loadRate,                                
+                            )
+                        }
+                    }
+                })
+
 
             }
         },
@@ -432,28 +434,28 @@ export default {
                     self.$api.get('/api/ntms/query/train/' + self.realtimeFormat()).then(res => { 
                         for (let index = 0; index < res.trains.length; index++) {
                             if(res.trains[index].position.split('-').length > 1){
+                                
+
+                                //测试截取片段
+                                if(tmpNumber > 0) return false
+                                //测试截取片段
                                 console.log(res.trains[index]);
                                 tctSubway.drewRunning(
                                     tctSubway.codeStation(res.trains[index].position.split('-')[0]),
                                     tctSubway.codeStation(res.trains[index].position.split('-')[1]),
                                     res.trains[index].tripNo,
-                                    res.trains[index].loadRate,
+                                    res.trains[index].locRate,
                                     res.trains[index].arriveSeconds,
                                     res.trains[index].direction,                                    
                                 )
-
-                                //测试截取片段
                                 tmpNumber++
-                                // if(tmpNumber > 5) return false
-                                //测试截取片段
-
                             }
                         }
                     })
 
                     realtimeNum++
                     if(realtimeNum < RealTime.length){
-                        realtimeOut = setTimeout(getDateSim,30000)
+                        // realtimeOut = setTimeout(getDateSim,30000)
                     }else{
                         console.log('结束仿真');
                     }

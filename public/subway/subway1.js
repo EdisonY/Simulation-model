@@ -215,11 +215,11 @@
                 stationPath[stationPath.length - 1].station.push({
                     'sId':data[index].attributes.acc.value,
                     'id':'up',
-                    'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                    'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
                 },{
                     'sId':data[index].attributes.acc.value,
                     'id':'down',
-                    'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value))
+                    'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy)
                 })
 
             }else{
@@ -229,11 +229,12 @@
                 stationPath[stationPath.length - 1].station.push({
                     'sId':data[index].attributes.acc.value,
                     'id':'up',
-                    'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                    'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
                 },{
                     'sId':data[index].attributes.acc.value,
                     'id':'down',
-                    'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),
+                    'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' L' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
+                    
                 })
 
             }
@@ -255,11 +256,11 @@
                         stationPath[stationPath.length - 1].station.push({
                             'sId':data[index].attributes.acc.value,
                             'id':'up',
-                            'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                            'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
                         },{
                             'sId':data[index].attributes.acc.value,
                             'id':'down',
-                            'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value))
+                            'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy)
                         })
 
                     }else{
@@ -269,11 +270,12 @@
                         stationPath[stationPath.length - 1].station.push({
                             'sId':data[index].attributes.acc.value,
                             'id':'up',
-                            'd':'M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                            'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
                         },{
                             'sId':data[index].attributes.acc.value,
                             'id':'down',
-                            'd':'M' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)),
+                            'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' L' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
+                            
                         })
 
                     }
@@ -417,30 +419,48 @@
             var path = ''
             var position = false
 
-            console.log(stationPath);
+            console.log(fId,tId);
+            //2是1号线古城到四惠东方向，1是相反，上下行我说不好
 
-            
             for (let index = 0; index < stationPath.length; index++) {
                 if(stationPath[index].line == lineId){
-                    for (let i = 0; i < stationPath[index].station.length; i++) {
-                        if(stationPath[index].station[i].sId == fId){
-                            position = true
-                        }else if(stationPath[index].station[i].sId == tId){
-                            position = false
+
+                    if(direction == 1){
+
+                        for (let i = stationPath[index].station.length - 1; i >= 0; i--) {
+                            
+                            if(stationPath[index].station[i].sId == tId){
+                                position = true
+                            }else if(stationPath[index].station[i].sId == fId){
+                                position = false
+                            }
+
+                            if(position){
+                                if(stationPath[index].station[i].id == 'up'){
+                                    path += stationPath[index].station[i].d
+                                }
+                            }
                         }
 
-                        if(position){
-                            if(direction == 1 && stationPath[index].station[i].id == 'up'){
-                                path += stationPath[index].station[i].d
-                            }else if(direction == 2 && stationPath[index].station[i].id == 'down'){
-                                path += stationPath[index].station[i].d
+                    }else{
+                        for (let i = 0; i < stationPath[index].station.length; i++) {
+                            if(stationPath[index].station[i].sId == fId){
+                                position = true
+                            }else if(stationPath[index].station[i].sId == tId){
+                                position = false
+                            }
+
+                            if(position){
+                                if(stationPath[index].station[i].id == 'down'){
+                                    path += stationPath[index].station[i].d
+                                }
                             }
                         }
                     }
                 }
             }
-
-            return path;
+            return path
+            
         },
         addFlyLine:function(from,to,config){
             var self = this
@@ -621,14 +641,14 @@
             this._generate('defs',{id:position.id + 'defs'},position.id + 'Hot')
             this._generate('radialGradient',{id:position.id + 'grad1',cx:"50%",cy:"50%",r:base + "%",fx:"50%",fy:"50%"},position.id + 'defs')
 
-            this._generate('stop',{offset:"0%",style:"stop-color:rgb(255 0 0);stop-opacity:0.3"},position.id + 'grad1')
-            this._generate('stop',{offset:base + "%",style:"stop-color:rgb(255 254 0);stop-opacity:0.2"},position.id + 'grad1')
-            this._generate('stop',{offset:((100 - base) / 2 + base) + "%",style:"stop-color:rgb(9 255 0);stop-opacity:0.6"},position.id + 'grad1')
+            this._generate('stop',{offset:"0%",style:"stop-color:rgb(255 0 0);stop-opacity:1"},position.id + 'grad1')
+            this._generate('stop',{offset:base + "%",style:"stop-color:rgb(255 254 0);stop-opacity:1"},position.id + 'grad1')
+            this._generate('stop',{offset:((100 - base) / 2 + base) + "%",style:"stop-color:rgb(9 255 0);stop-opacity:1"},position.id + 'grad1')
             this._generate('stop',{offset:"100%",style:"stop-color:rgb(0 201 255);stop-opacity:0.8"},position.id + 'grad1')
 
             this._generate('filter',{id:position.id + "f1",x:"0",y:"0",filterUnits:'userSpaceOnUse'},position.id + 'defs')
-            this._generate('feGaussianBlur',{in:"StrokePaint",stdDeviation:"20"},position.id + 'f1')
-            this._generate('circle',{id:position.id + "circle",cx:position.x >= 80 ? position.x : 80,cy:position.y,r:value * 80,fill:"url(#" + position.id + "grad1)",filter:"url(#" + position.id + "f1)"},position.id + 'Hot')
+            this._generate('feGaussianBlur',{in:"StrokePaint",stdDeviation:"5"},position.id + 'f1')
+            this._generate('circle',{id:position.id + "circle",cx:position.x >= 80 ? position.x : 80,cy:position.y,r:value * 20,fill:"url(#" + position.id + "grad1)",filter:"url(#" + position.id + "f1)"},position.id + 'Hot')
             if(position.x <= 80){
                 $('#' + position.id + "circle").css({
                     transform : 'translate(' + ( - (80 - position.x) ) + 'px' + ',0)'
@@ -649,7 +669,6 @@
             var per = Percent / 100
 
             console.log(from,to,trainId,Percent,arrive);
-            console.time('总时长');
 
             //获取线路id
             for (let index = 0; index < to.line.length; index++) {
@@ -674,14 +693,11 @@
                 return false;
             }
 
-            //获取起止站间所有站间
-            console.time('获取起止站间所有站间');
-            
-            console.log(path);
-            console.timeEnd('获取起止站间所有站间');
+            console.log('Line ID: ' + lineId);
+            console.log(stationPath);
+            console.log('PATH: ' + this._getBetweenPath(from,to,direction,fId,tId,lineId));
 
             //判断此列车是否已经存在，存在即更新并重置，不存即在新增
-            console.time('画车');
             if($('#' + trainId + 'realtime').length > 0){
                 var element = $('#' + trainId + 'Y').get(0)
                 element.setAttributeNS(null,"dur",arrive + "s");
@@ -702,13 +718,12 @@
                     path:this._getBetweenPath(from,to,direction,fId,tId,lineId)}
                 ,trainId + 'realtime') 
             }
-            console.time('画车');
             var element = $('#' + trainId + 'Y').get(0);
             element.addEventListener('endEvent', () => {
                 // alert('something');
             })
             element.beginElement();
-            console.timeEnd('总时长')
+            console.log('-------------------------------------------------');
         },
         pause:function(){
             var svg = document.getElementById("subway");
@@ -730,17 +745,13 @@
             $('#background,#select,#fly0,#fly1').remove()
         },
         loadRateMultiply:function(from,to,num){
+            if(from == undefined || to == undefined || from.line == undefined || to.line == undefined) return;  
+            console.log(from,to,num);
+
             var self = this
-            if(this.__proto__.showfull){
-                if($('.btn').width() == 87){
-                    $('.parent').click()
-                    showMultiply()
-                }else{
-                    showMultiply()
-                }
-            }else{
-                alert('请先开启客流开关！')
-            }
+
+            showMultiply()
+
             function getColor(num) {
                 if(num >= 0 && num <= 25){
                     return '#79be85'
@@ -751,7 +762,11 @@
                 }else if(num > 75){
                     return '#d0000f'
                 }
+
             }
+
+            console.log(from,to,num);
+
             function showMultiply(){
                 var id,next;
                 for (let index = 0; index < from.line.length; index++) {
@@ -792,7 +807,6 @@
                                     break;
                                 }
                             }else{
-                                console.log(from.line[index],to.line[i]);
                                 if(from.line[index].id > to.line[i].id){
                                     next = true
                                     id = to.line[i].id
