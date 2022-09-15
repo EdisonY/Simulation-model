@@ -1,48 +1,34 @@
 <template>
-    <div class="dashboard-container edittable">
-        <!-- <el-button @click="drewPlan()" style="position:absolute;z-index:99999">默认按钮</el-button> -->
-        <!-- <rungrap ref="grap" :rungrapData="rungrapData" /> -->
-        <div class="left-panel">
-            <el-tabs type="border-card" style="margin:10px 0 0 10px">
-                <el-tab-pane label="选择运行图">
-                    <el-button type="primary" size="small" @click="importRungraph">上传</el-button>
-                    <el-button type="success" size="small" @click="startStop">启动</el-button>
-                    <br/>
-                    <br/>
-                    <el-table
-                    :data="tableData3"
-                    style="width: 100%">
-                        <el-table-column
-                            prop="date"
-                            label="名称">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="备注">
-                        </el-table-column>
-                        <el-table-column prop="data"
-                            label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="primary" size="mini" @click="drawAllData">打开</el-button>
-                                <el-button type="danger" size="mini">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="输入开行方案">
-                    
-                    <div class="select-line" style="padding-bottom:10px">
-                        <el-select v-model="departureStationValue"
-                            placeholder="请选择"
-                            size="small">
-                            <el-option v-for="item in departureStationOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </div>
-                    <!-- <div class="table-line" style="padding-bottom:10px">
+  <div class="dashboard-container edittable">
+    <!-- <el-button @click="drewPlan()" style="position:absolute;z-index:99999">默认按钮</el-button> -->
+    <!-- <rungrap ref="grap" :rungrapData="rungrapData" /> -->
+    <div class="left-panel">
+      <el-tabs type="border-card" style="margin: 10px 0 0 10px">
+        <el-tab-pane label="选择运行图">
+          <el-button type="primary" size="small" @click="importRungraph">上传</el-button>
+          <el-button type="success" size="small" @click="startStop">启动</el-button>
+          <br />
+          <br />
+          <el-table :data="tableData3" style="width: 100%">
+            <el-table-column prop="date" label="图号"> </el-table-column>
+            <el-table-column prop="name" label="备注"> </el-table-column>
+            <el-table-column prop="data" label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="drawAllData"
+                  >打开</el-button
+                >
+                <el-button type="danger" size="mini">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="输入开行方案">
+          <div class="select-line" style="padding-bottom: 10px">
+            图号：<el-input placeholder="图号" size="mini" type="value" v-model="graphID">
+            </el-input>
+            备注：<el-input placeholder="备注" size="mini" v-model="address"> </el-input>
+          </div>
+          <!-- <div class="table-line" style="padding-bottom:10px">
                         <el-table border
                             :data="tableData"
                             style="width: 100%;"
@@ -138,57 +124,103 @@
                             </el-table-column>
                         </el-table>
                     </div> -->
-                    <div class="table-line drawTable" style="padding-bottom:10px">
-                        <table class="selfTable">
-                            <tr class="thead">
-                                <th colspan="2" style="width:100px">起止时间</th>
-                                <th>交路方式</th>
-                                <th>跳停车站</th>
-                                <th>编组信息</th>
-                                <th>开行对数</th>
-                            </tr>
-                            <tbody v-for="item in tableData4" :key="item.label">
-                                <tr v-for="(items,index) in item.crossRouteList">
-                                    <td style="width:100px" v-if="index == 0 && item.crossRouteList.length > 1" :colspan="item.crossRouteList.length > 1 ? item.crossRouteList.length : 0" :rowspan="item.crossRouteList.length">{{formatTime(item.startTime)}} - {{formatTime(item.endTime)}}</td>
-                                    <td>
-                                        <el-select v-model="items.tmpRout" placeholder="请选择">
-                                            <el-option
-                                                v-for="item in tmpRoute"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value">
-                                            </el-option>
-                                        </el-select>
-                                    </td>
-                                    <td>
-                                        <el-select v-model="items.stopOrNotList1" placeholder="请选择">
-                                            <el-option
-                                                v-for="items in stations"
-                                                :key="items.stationId"
-                                                :label="items.stationName"
-                                                :value="items.stationId">
-                                            </el-option>
-                                        </el-select>
-                                    </td>
-                                    <td>{{items.trainTypeGroup}}</td>
-                                    <td>{{items.onLineTrainCount}}</td>
-                                </tr>
-                            </tbody>
-                            
-                        </table>
-                    </div>
-                    <div class="btn-line-2">
-                        <el-button type="primary"
-                            size="small"
-                            @click="addTable()">添加条数</el-button>
-                        <el-button type="success"
-                            size="small"
-                            @click="resetRungrap()">铺画</el-button>
-                    </div>
-
-                    
-                </el-tab-pane>
-                <el-tab-pane label="修改运行图">
+          <div class="table-line drawTable" style="padding-bottom: 10px">
+            <table class="selfTable">
+              <tr class="thead">
+                <th colspan="2" style="width: fit-content">起止时间</th>
+                <th>交路方式</th>
+                <th>跳停车站</th>
+                <th>编组信息</th>
+                <th>开行对数</th>
+                <th>操作</th>
+              </tr>
+              <tbody v-for="(item, index1) in tableData4" :key="item.label">
+                <tr v-for="(items, index) in item.crossRouteList">
+                  <td
+                    style="width: 100px"
+                    v-if="index == 0 && item.crossRouteList.length >= 1"
+                    :colspan="
+                      item.crossRouteList.length > 1 ? item.crossRouteList.length : 2
+                    "
+                    :rowspan="item.crossRouteList.length"
+                  >
+                    <el-time-picker
+                      style="width: fit-content"
+                      v-model="item.startTime"
+                      placeholder="起始时间"
+                    >
+                    </el-time-picker>
+                    <el-time-picker
+                      style="width: fit-content"
+                      v-model="item.endTime"
+                      placeholder="结束时间"
+                    >
+                    </el-time-picker>
+                    <!-- {{ formatTime(item.startTime) }} - {{ formatTime(item.endTime) }} -->
+                  </td>
+                  <td>
+                    <el-select v-model="items.tmpRout" placeholder="请选择">
+                      <el-option
+                        v-for="item in tmpRoute"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </td>
+                  <td>
+                    <el-select
+                      v-model="items.stopOrNotList1"
+                      placeholder="请选择"
+                      multiple
+                    >
+                      <el-option
+                        v-for="items in stations"
+                        :key="items.stationId"
+                        :label="items.stationName"
+                        :value="items.stationId"
+                      >
+                      </el-option>
+                    </el-select>
+                  </td>
+                  <td>
+                    <el-input v-model="items.trainTypeGroup" style="width: 60px">
+                    </el-input>
+                  </td>
+                  <td>
+                    <el-input v-model="items.onLineTrainCount" style="width: 60px">
+                    </el-input>
+                  </td>
+                  <td>
+                    <el-button
+                      v-if="deleteData"
+                      type="danger"
+                      icon="el-icon-delete"
+                      @click="deleteTableData(index1, index)"
+                      size="mini"
+                      style="width: fit-content"
+                    ></el-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="btn-line-2">
+            <el-checkbox
+              v-model="runGraphOrPassengerGraph"
+              style="color: white; display: block; margin:5px 0;"
+              >只评估客流</el-checkbox
+            >
+            <el-button type="primary" size="small" @click="addTable()"
+              >添加条数</el-button
+            >
+            <el-button type="success" size="small" @click="resetRungrap()"
+              >铺画</el-button
+            >
+          </div>
+        </el-tab-pane>
+        <!-- <el-tab-pane label="修改运行图">
                     <ul>
                         <li>表号：001</li>
                         <li>车次号：1231</li>
@@ -224,29 +256,29 @@
                         <el-button type="danger" size="small">删除车次</el-button>
                         <el-button type="primary" size="small">新建车次</el-button>
                     </p>
-                </el-tab-pane>
-            </el-tabs>
-            <el-card class="box-card" style="margin:10px 0 0 10px">
-                <div slot="header" class="clearfix">
-                    <span>消息</span>
-                </div>
-                <div style="text-align:left">
-                    <ul>
-                        <li>打开运行图成功。。。。</li>
-                        <li>运行图名称：北京轨道交通验方线</li>
-                        <li>00:00:00 xx 发生紧急制动</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                    </ul>
-                </div>
-            </el-card>
-            <!-- <div class="waring-panel"
+                </el-tab-pane> -->
+      </el-tabs>
+      <el-card class="box-card" style="margin: 10px 0 0 10px">
+        <div slot="header" class="clearfix">
+          <span>消息</span>
+        </div>
+        <div style="text-align: left">
+          <ul>
+            <li>打开运行图成功。。。。</li>
+            <li>运行图名称：北京轨道交通验方线</li>
+            <li>00:00:00 xx 发生紧急制动</li>
+            <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
+            <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
+            <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
+          </ul>
+        </div>
+      </el-card>
+      <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
                 <p v-for="(msg,index) in warningList" :key="index">{{msg}}</p>
             </div> -->
-        </div>
-        <!-- <DiagramReal :first="first"
+    </div>
+    <!-- <DiagramReal :first="first"
                 :maxTime="currentTime"
                 :forcastTime="forcastTime"
                 :stations="stations"
@@ -258,926 +290,1011 @@
                 :autoMode="autoMode"
                 :diagramName="lineName +` 实际运行图`"
                 style="height:calc(100vh - 50px);width:calc(100% - 400px)" /> -->
-        <rungrap ref="grap" :rungrapData="rungrapData" />
-    </div>
+    <rungrap ref="grap" :rungrapData="rungrapData" />
+  </div>
 </template>
 
 <script>
 import rungrap from "./lib_common_new";
-import {getStations} from '@/utils/station';
+import { getStations } from "@/utils/station";
 
 // import DiagramReal from "../../../components/DiagramRealLocal.vue";
 // import testData from "../../../components/testData";
 import testStations from "../../../components/stations";
 
 export default {
-    name: "Rungrap",
-    data() {
-        return {
-            lineName: "北京燕房线",
-            currentTime: new Date().toLocaleString(),
-            startTime: 0,
-            endTime: 1020,
-            diagramConfig: {
-                stationHeight: 50,
-                bottomBlockHeight: 30,
-                topBlockHeight: 100,
-                sideWidth: 100,
+  name: "Rungrap",
+  data() {
+    return {
+      runGraphOrPassengerGraph: 1, //客流方式
+      graphID: "",
+      address: "",
+      lineName: "北京燕房线",
+      currentTime: new Date().toLocaleString(),
+      startTime: 0,
+      endTime: 1020,
+      diagramConfig: {
+        stationHeight: 50,
+        bottomBlockHeight: 30,
+        topBlockHeight: 100,
+        sideWidth: 100,
+      },
+      edit: false,
+      deleteData: true,
+      first: true,
+      stations: testStations,
+      planData: null,
+      realData: null,
+      forecastData: null,
+      solutions: ["方案一", "方案二", "方案三", "方案四", "方案五"],
+      listServeAndTrip: [
+        {
+          serve: 112,
+          trip: 1123,
+        },
+        {
+          serve: 112,
+          trip: 1123,
+        },
+        {
+          serve: 112,
+          trip: 1123,
+        },
+        {
+          serve: 112,
+          trip: 1123,
+        },
+        {
+          serve: 112,
+          trip: 1123,
+        },
+      ],
+      listRealMsg: [
+        {
+          msg: "你好",
+          type: "info",
+        },
+        {
+          msg: "你好",
+          type: "error",
+        },
+        {
+          msg: "你好",
+          type: "warning",
+        },
+      ],
+      tableData3: [
+        {
+          date: "PR2205",
+          name: "王小虎",
+        },
+        {
+          date: "TS2205",
+          name: "张三",
+        },
+        {
+          date: "PR2002",
+          name: "王小虎",
+        },
+        {
+          date: "TS2002",
+          name: "作者",
+        },
+      ],
+      tableData1: [
+        {
+          date: "科技园",
+          name: "13:00:00",
+          address: "13:02:00",
+          shi: "否",
+        },
+        {
+          date: "科技园",
+          name: "13:00:00",
+          address: "13:02:00",
+          shi: "否",
+        },
+      ],
+      options: [
+        {
+          value: "选项5",
+          label: "交路AB",
+        },
+      ],
+      value: "选项5",
+      tableData2: [
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+        {
+          number: "012231",
+          stationName: "新宫车辆段",
+          arrive: "5:10:20",
+          depart: "5:13:24",
+          stationTrack: "T0932",
+        },
+      ],
+      departureStationOptions: [
+        {
+          value: "1",
+          label: "车站1",
+        },
+        {
+          value: "2",
+          label: "车站2",
+        },
+      ],
+      departureStationValue: "1",
+      tableData: [
+        {
+          startTime: "05:00:00",
+          endTime: "06:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "06:00:00",
+          endTime: "07:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "07:00:00",
+          endTime: "08:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "08:00:00",
+          endTime: "09:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "09:00:00",
+          endTime: "10:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "10:00:00",
+          endTime: "11:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+        {
+          startTime: "11:00:00",
+          endTime: "12:00:00",
+          trainRunNum1: 10,
+          runLevel1: 1,
+          dir1: 80,
+          trainRunNum0: 10,
+          runLevel0: 1,
+          dir0: 170,
+          chexing: "6b",
+        },
+      ],
+      tableData4: [
+        {
+          startTime: 25200,
+          endTime: 32400,
+          crossRouteCount: 2,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "4A",
+              lineWayId: 37,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
             },
-            edit:false,
-            deleteData:true,
-            first: true,
-            stations: testStations,
-            planData: null,
-            realData: null,
-            forecastData: null,
-            solutions: ["方案一", "方案二", "方案三", "方案四", "方案五"],
-            listServeAndTrip: [
+            {
+              crossRouteId: 2,
+              trainTypeGroup: "4A",
+              lineWayId: 65526,
+              tmpRout: 1,
+              startStationId: 2104,
+              endStationId: 2101,
+              onLineTrainCount: 10,
+              stopOrNotList: [
                 {
-                    serve: 112,
-                    trip: 1123,
+                  stationId: 2103,
+                  stopOrNot: false,
                 },
                 {
-                    serve: 112,
-                    trip: 1123,
+                  stationId: 2104,
+                  stopOrNot: true,
                 },
                 {
-                    serve: 112,
-                    trip: 1123,
+                  stationId: 2102,
+                  stopOrNot: true,
                 },
                 {
-                    serve: 112,
-                    trip: 1123,
+                  stationId: 2101,
+                  stopOrNot: true,
                 },
-                {
-                    serve: 112,
-                    trip: 1123,
-                },
-            ],
-            listRealMsg:[{
-                msg:"你好",
-                type:"info"
-            },{
-                msg:"你好",
-                type:"error"
-            },{
-                msg:"你好",
-                type:"warning"
-            }],
-            tableData3: [{
-                date: '工作日',
-                name: '王小虎',
-            }, {
-                date: '工作日',
-                name: '张三',
-            }, {
-                date: '工作日,节假日',
-                name: '王小虎',
-            }, {
-                date: '节假日',
-                name: '作者',
-            }],
-            tableData1:[
-                {
-                    date: '科技园',
-                    name: '13:00:00', 
-                    address:'13:02:00',
-                    shi:'否'
-                },{
-                    date: '科技园',
-                    name: '13:00:00', 
-                    address:'13:02:00',
-                    shi:'否'
-                }
-            ],
-            options: [{
-                value: '选项5',
-                label: '交路AB'
-            }],
-            value:'选项5',
-            tableData2: [
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-                {
-                    number: "012231",
-                    stationName: "新宫车辆段",
-                    arrive: "5:10:20",
-                    depart: "5:13:24",
-                    stationTrack: "T0932",
-                },
-            ],
-            departureStationOptions: [
-                {
-                    value: "1",
-                    label: "车站1",
-                },
-                {
-                    value: "2",
-                    label: "车站2",
-                },
-            ],
-            departureStationValue: "1",
-            tableData: [
-                {
-                    startTime: "05:00:00",
-                    endTime: "06:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "06:00:00",
-                    endTime: "07:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "07:00:00",
-                    endTime: "08:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "08:00:00",
-                    endTime: "09:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "09:00:00",
-                    endTime: "10:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "10:00:00",
-                    endTime: "11:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-                {
-                    startTime: "11:00:00",
-                    endTime: "12:00:00",
-                    trainRunNum1: 10,
-                    runLevel1: 1,
-                    dir1: 80,
-                    trainRunNum0: 10,
-                    runLevel0: 1,
-                    dir0: 170,
-                    chexing:'6b'
-                },
-            ],
-            tableData4: [{
-                "startTime": 25200,
-                "endTime": 32400,
-                "crossRouteCount": 2,
-                "crossRouteList": [{
-                    "crossRouteId": 1,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 37,
-                    "tmpRout":0,
-                    "startStationId": 2101,
-                    "endStationId": 2103,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2103,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": false
-                    }],
-                    "stopOrNotList1":2104
-                }, {
-                    "crossRouteId": 2,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 65526,
-                    "tmpRout":1,
-                    "startStationId": 2104,
-                    "endStationId": 2101,
-                    "onLineTrainCount": 10,
-                    "stopOrNotList": [{
-                        "stationId": 2103,
-                        "stopOrNot": false
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }],
-                    "stopOrNotList1":2103
-                }]
-            }, {
-                "startTime": 32400,
-                "endTime": 61200,
-                "crossRouteCount": 2,
-                "crossRouteList": [{
-                    "crossRouteId": 1,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 11,
-                    "tmpRout":0,
-                    "startStationId": 2101,
-                    "endStationId": 2103,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2103,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": false
-                    }],
-                    "stopOrNotList1":2104
-                }, {
-                    "crossRouteId": 2,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 65526,
-                    "tmpRout":1,
-                    "startStationId": 2104,
-                    "endStationId": 2101,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2103,
-                        "stopOrNot": false
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }],
-                    "stopOrNotList1":2103
-                }]
-            }, {
-                "startTime": 61200,
-                "endTime": 68400,
-                "crossRouteCount": 2,
-                "crossRouteList": [{
-                    "crossRouteId": 1,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 37,
-                    "tmpRout":0,
-                    "startStationId": 2101,
-                    "endStationId": 2103,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2103,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": false
-                    }],
-                    "stopOrNotList1":2104
-                }, {
-                    "crossRouteId": 2,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 65526,
-                    "tmpRout":1,
-                    "startStationId": 2104,
-                    "endStationId": 2101,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2103,
-                        "stopOrNot": false
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }],
-                    "stopOrNotList1":2103
-                }]
-            }, {
-                "startTime": 68400,
-                "endTime": 79200,
-                "crossRouteCount": 2,
-                "crossRouteList": [{
-                    "crossRouteId": 1,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 37,
-                    "tmpRout":0,
-                    "startStationId": 2101,
-                    "endStationId": 2103,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2103,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": false
-                    }],
-                    "stopOrNotList1":2104
-                }, {
-                    "crossRouteId": 2,
-                    "trainTypeGroup": "4A",
-                    "lineWayId": 65526,
-                    "tmpRout":1 ,
-                    "startStationId": 2104,
-                    "endStationId": 2101,
-                    "onLineTrainCount": 20,
-                    "stopOrNotList": [{
-                        "stationId": 2103,
-                        "stopOrNot": false
-                    }, {
-                        "stationId": 2104,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2102,
-                        "stopOrNot": true
-                    }, {
-                        "stationId": 2101,
-                        "stopOrNot": true
-                    }],
-                    "stopOrNotList1":2103
-                }]
-            }],
-            tmp:[],
-            stations:JSON.parse(localStorage.getItem('stations')),
-            tmpRoute:JSON.parse(localStorage.getItem('tmpRoute')),
-        };
-    },
-    components: {
-        // DiagramReal
-        rungrap
-    },
-    computed: {
-        currentTimeFormat() {
-            let h = parseInt(this.currentTime / 3600);
-            let m = parseInt((this.currentTime % 3600) / 60);
-            let s = parseInt((this.currentTime % 3600) % 60);
-            return `${parseInt(h / 10)}${h % 10}:${parseInt(m / 10)}${
-                m % 10
-            }:${parseInt(s / 10)}${s % 10}`;
+              ],
+              stopOrNotList1: [2103],
+            },
+          ],
         },
+        {
+          startTime: 32400,
+          endTime: 61200,
+          crossRouteCount: 2,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "4A",
+              lineWayId: 11,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
+            },
+            {
+              crossRouteId: 2,
+              trainTypeGroup: "4A",
+              lineWayId: 65526,
+              tmpRout: 1,
+              startStationId: 2104,
+              endStationId: 2101,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2103,
+                  stopOrNot: false,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+              ],
+              stopOrNotList1: [2103],
+            },
+          ],
+        },
+        {
+          startTime: 61200,
+          endTime: 68400,
+          crossRouteCount: 2,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "4A",
+              lineWayId: 37,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
+            },
+            {
+              crossRouteId: 2,
+              trainTypeGroup: "4A",
+              lineWayId: 65526,
+              tmpRout: 1,
+              startStationId: 2104,
+              endStationId: 2101,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2103,
+                  stopOrNot: false,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+              ],
+              stopOrNotList1: [2103],
+            },
+          ],
+        },
+        {
+          startTime: 68400,
+          endTime: 79200,
+          crossRouteCount: 2,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "4A",
+              lineWayId: 37,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
+            },
+            {
+              crossRouteId: 2,
+              trainTypeGroup: "4A",
+              lineWayId: 65526,
+              tmpRout: 1,
+              startStationId: 2104,
+              endStationId: 2101,
+              onLineTrainCount: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2103,
+                  stopOrNot: false,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+              ],
+              stopOrNotList1: [2103],
+            },
+          ],
+        },
+      ],
+      tmp: [],
+      stations: JSON.parse(localStorage.getItem("stations")),
+      tmpRoute: JSON.parse(localStorage.getItem("tmpRoute")),
+    };
+  },
+  components: {
+    // DiagramReal
+    rungrap,
+  },
+  computed: {
+    currentTimeFormat() {
+      let h = parseInt(this.currentTime / 3600);
+      let m = parseInt((this.currentTime % 3600) / 60);
+      let s = parseInt((this.currentTime % 3600) % 60);
+      return `${parseInt(h / 10)}${h % 10}:${parseInt(m / 10)}${m % 10}:${parseInt(
+        s / 10
+      )}${s % 10}`;
     },
-    created() {
-        var self = this;
-        this.rungrapData = {}
-        var data = {
-            msgId: 1,
-            msgType: 103,
-            requestId: "12345678",
-            session: this.$getCurrentDate(),
-            timestamp: this.$getCurrentDate(),
-            data: 2,
-        };
+  },
+  created() {
+    var self = this;
+    this.rungrapData = {};
+    var data = {
+      msgId: 1,
+      msgType: 103,
+      requestId: "12345678",
+      session: this.$getCurrentDate(),
+      timestamp: this.$getCurrentDate(),
+      data: 2,
+    };
 
-        this.rungrapData.multiply = this.$route.meta.type;
-        let currentLine = sessionStorage.getItem("currentLine");
-        this.rungrapData.station=getStations(currentLine);
-        console.log(this.rungrapData);
-      
-        // *配置上下行线路及坐标主颜色，组件内已默认，可自定义设置
-        this.rungrapData.colors = ["#5793f3", "#d14a61"];
+    this.rungrapData.multiply = this.$route.meta.type;
+    let currentLine = sessionStorage.getItem("currentLine");
+    this.rungrapData.station = getStations(currentLine);
+    console.log(this.rungrapData);
 
-        // *确认获取到运行图源数据后，将源数据挂载到浏览器本地session中，key值为rungrap。并执行运行图组件内的initData方法
-        // * window.sessionStorage.setItem('rungrap',your get data
-        function initData() {
-            self.$nextTick(() => {
-                self.$refs.grap.initData();
-            });
+    // *配置上下行线路及坐标主颜色，组件内已默认，可自定义设置
+    this.rungrapData.colors = ["#5793f3", "#d14a61"];
+
+    // *确认获取到运行图源数据后，将源数据挂载到浏览器本地session中，key值为rungrap。并执行运行图组件内的initData方法
+    // * window.sessionStorage.setItem('rungrap',your get data
+    function initData() {
+      self.$nextTick(() => {
+        self.$refs.grap.initData();
+      });
+    }
+  },
+  mounted() {
+    // this.ws.registerCallback("mainPage", this.wsCallback);
+    // this.sendPackage("line-info");
+    // this.sendPackage("plan-diagram");
+    // this.sendPackage("scheme-diagram");
+    // this.getData();
+  },
+  methods: {
+    formatTime(time) {
+      let hour = parseInt(time / 3600)
+        .toString()
+        .padStart(2, "0");
+      let minute = parseInt((time % 3600) / 60)
+        .toString()
+        .padStart(2, "0");
+      let second = parseInt(time % 60)
+        .toString()
+        .padStart(2, "0");
+      return `${hour}:${minute}:${second}`;
+    },
+    getRungrapClick(params) {
+      console.log(params);
+    },
+    drewPlan() {
+      this.$refs.grap.drewPlan();
+    },
+    addTable() {
+      this.tableData.push({
+        startTime: "00:00:00",
+        endTime: "00:00:00",
+        trainRunNum1: 10,
+        runLevel1: 1,
+        dir1: 80,
+        trainRunNum0: 10,
+        runLevel0: 1,
+        dir0: 170,
+      });
+      this.deleteData = true;
+    },
+    deleteTableData(index1, index) {
+      this.tableData4[index1].crossRouteList.splice(index, 1);
+
+      if (this.tableData4.length <= 1) {
+        this.deleteData = false;
+      } else {
+        this.deleteData = true;
+      }
+    },
+    resetRungrap() {
+      var self = this;
+      let data = {};
+      data.routingTrainRunNums = [];
+      data.routingTrainRunNums[0] = {};
+      data.routingTrainRunNums[0].routingId = 1;
+      data.routingTrainRunNums[0].trainRunNums = [];
+
+      // self.hideLeft();
+      var changeData = JSON.parse(JSON.stringify(this.tableData));
+      function returnTime(data) {
+        var str = data.split(":");
+        for (let index = 0; index < str.length; index++) {
+          str[index] = Number(str[index]);
         }
+        return str[0] * 3600 + str[1] * 60 + str[2];
+      }
+      for (let index = 0; index < changeData.length; index++) {
+        for (const key in changeData[index]) {
+          if (key != "startTime" && key != "endTime") {
+            changeData[index][key] = Number(changeData[index][key]);
+          } else {
+            changeData[index][key] = returnTime(changeData[index][key]);
+          }
+        }
+      }
+      data.routingTrainRunNums[0].trainRunNums = changeData;
+      console.log("send 702");
+      let param = this.ws.getPackage(702, data);
+      this.ws.sendSock(param);
     },
-    mounted() {
-        // this.ws.registerCallback("mainPage", this.wsCallback);
-        // this.sendPackage("line-info");
-        // this.sendPackage("plan-diagram");
-        // this.sendPackage("scheme-diagram");
 
-        // this.getData();
-    },
-    methods: {
-        formatTime(time) {
-            let hour = parseInt(time / 3600)
-                .toString()
-                .padStart(2, "0");
-            let minute = parseInt((time % 3600) / 60)
-                .toString()
-                .padStart(2, "0");
-            let second = parseInt(time % 60)
-                .toString()
-                .padStart(2, "0");
-            return `${hour}:${minute}:${second}`;
-        },
-        getRungrapClick(params) {
-            console.log(params);
-        },
-        drewPlan() {
-            this.$refs.grap.drewPlan();
-        },
-        addTable() {
-            this.tableData.push({
-                startTime: "00:00:00",
-                endTime: "00:00:00",
-                trainRunNum1: 10,
-                runLevel1: 1,
-                dir1: 80,
-                trainRunNum0: 10,
-                runLevel0: 1,
-                dir0: 170,
+    getData() {
+      let planTripArr = [];
+      let planServes = testData[0].serveList;
+      planServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
             });
-            this.deleteData = true;
-        },
-        deleteTableData(params) {
-            this.tableData.splice(params.$index, 1);
-            if (this.tableData.length <= 1) {
-                this.deleteData = false;
-            }
-        },
-        resetRungrap() {
-            var self = this;
-            let data = {};
-            data.routingTrainRunNums = [];
-            data.routingTrainRunNums[0] = {};
-            data.routingTrainRunNums[0].routingId = 1;
-            data.routingTrainRunNums[0].trainRunNums = [];
+          });
+          planTripArr.push(trip);
+        });
+      });
 
-            // self.hideLeft();
-            var changeData = JSON.parse(JSON.stringify(this.tableData));
-            function returnTime(data) {
-                var str = data.split(":");
-                for (let index = 0; index < str.length; index++) {
-                    str[index] = Number(str[index]);
-                }
-                return str[0] * 3600 + str[1] * 60 + str[2];
-            }
-            for (let index = 0; index < changeData.length; index++) {
-                for (const key in changeData[index]) {
-                    if (key != "startTime" && key != "endTime") {
-                        changeData[index][key] = Number(changeData[index][key]);
-                    } else {
-                        changeData[index][key] = returnTime(
-                            changeData[index][key]
-                        );
-                    }
-                }
-            }
-            data.routingTrainRunNums[0].trainRunNums = changeData;
+      let realTripArr = [];
+      let realServes = testData[1].serveList;
+      realServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
+              late: parseInt(strArr[3]),
+            });
+          });
+          realTripArr.push(trip);
+        });
+      });
 
-            console.log("send 702");
-            let param = getPackage(702, data);
-            sendSock(param);
-        },
+      let forecastTripArr = [];
+      let forecastServes = testData[2].serveList;
+      forecastServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
+              late: parseInt(strArr[3]),
+            });
+          });
+          forecastTripArr.push(trip);
+        });
+      });
 
-        
-        getData() {
+      this.planData = planTripArr;
+      this.realData = realTripArr;
+      this.forecastData = forecastTripArr;
+    },
+
+    _setMsg(msg, type = "normal") {
+      if (this.listRealMsg.length >= 100) {
+        this.listRealMsg = [];
+      }
+      this.listRealMsg.unshift({
+        time: this.$getCurrentDate(),
+        msg: msg,
+        type: type,
+      });
+    },
+    wsCallback(data) {
+      return false;
+      if (data.msgType == 3003) {
+        // 线路车站信息
+        this.transAppInfo(JSON.parse(data.data));
+      } else if (data.msgType == 3002) {
+        // 计划运行图
+        this.transPlanData(JSON.parse(data.data));
+      } else if (data.msgType == 2002) {
+        // 【现场】故障信息
+        this.transFaultData(JSON.parse(data.data));
+      } else if (data.msgType == 2004) {
+        // 【现场】实时信息
+        this.transRealtimeData(JSON.parse(data.data));
+      } else if (data.msgType == 3004) {
+        // 【现场】预测信息
+        this.transForecastData(JSON.parse(data.data));
+      } else if (data.msgType == 4001) {
+        // TODO 运行指标信息
+        // 暂时没有接口
+      } else if (data.msgType == 4002) {
+        // 【方案】计划图
+        let d = JSON.parse(data.data);
+        let findP = this.solutions.find((s) => {
+          return s.planNo == d.planNo;
+        });
+
+        let index = this.solutions.indexOf(findP);
+        if (index == -1) {
+          this.solutions.push(d);
+          index++;
+        }
+
+        this.$nextTick(() => {
+          let component = this.$refs.PlanDiagram[index];
+          if (component) {
             let planTripArr = [];
-            let planServes = testData[0].serveList;
+            console.log(d);
+            let planServes = d.graphData.serveList;
             planServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                        });
-                    });
-                    planTripArr.push(trip);
+              serve.tripList.forEach((tripItem) => {
+                let trip = {
+                  serveNo: serve.serveNo,
+                  tripNo: tripItem.tripNo,
+                  data: [],
+                  dir: tripItem.runDir,
+                };
+                tripItem.pathListStr.forEach((str) => {
+                  let strArr = str.split(",");
+                  trip.data.push({
+                    sid: parseInt(strArr[0]),
+                    arrive: parseInt(strArr[1]),
+                    depart: parseInt(strArr[2]),
+                    loadrate: parseInt(strArr[4]),
+                    laterate: parseInt(strArr[5]),
+                    late: parseInt(strArr[6]),
+                  });
                 });
+                planTripArr.push(trip);
+              });
             });
+            component.setPlanData(planTripArr);
+          }
+        });
+      } else if (data.msgType == 4003) {
+        // TODO 【方案】实际图
+        let d = JSON.parse(data.data);
+        let index = this.solutions.indexOf(d.planNo);
+        if (index == -1) {
+          this.solutions.push(d.planNo);
+          index++;
+        }
 
+        this.$nextTick(() => {
+          let component = this.$refs.PlanDiagram[index];
+          if (component) {
             let realTripArr = [];
-            let realServes = testData[1].serveList;
-            realServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                            late: parseInt(strArr[3]),
-                        });
-                    });
-                    realTripArr.push(trip);
+            console.log(d);
+            d.graphData.serveList.forEach((serve) => {
+              serve.tripList.forEach((tripItem) => {
+                let trip = {
+                  serveNo: serve.serveNo,
+                  tripNo: tripItem.tripNo,
+                  data: [],
+                  dir: tripItem.runDir,
+                };
+                tripItem.pathListStr.forEach((str) => {
+                  let strArr = str.split(",");
+                  trip.data.push({
+                    sid: parseInt(strArr[0]),
+                    arrive: parseInt(strArr[1]),
+                    depart: parseInt(strArr[2]),
+                    loadrate: parseInt(strArr[4]),
+                    laterate: parseInt(strArr[5]),
+                    late: parseInt(strArr[6]),
+                  });
                 });
+                realTripArr.push(trip);
+              });
             });
-
-            let forecastTripArr = [];
-            let forecastServes = testData[2].serveList;
-            forecastServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                            late: parseInt(strArr[3]),
-                        });
-                    });
-                    forecastTripArr.push(trip);
-                });
-            });
-
-            this.planData = planTripArr;
-            this.realData = realTripArr;
-            this.forecastData = forecastTripArr;
-        },
-
-        _setMsg(msg, type = "normal") {
-            if (this.listRealMsg.length >= 100) {
-                this.listRealMsg = [];
-            }
-            this.listRealMsg.unshift({
-                time: this.$getCurrentDate(),
-                msg: msg,
-                type: type,
-            });
-        },
-        wsCallback(data) {
-            return false;
-            if (data.msgType == 3003) {
-                // 线路车站信息
-                this.transAppInfo(JSON.parse(data.data));
-            } else if (data.msgType == 3002) {
-                // 计划运行图
-                this.transPlanData(JSON.parse(data.data));
-            } else if (data.msgType == 2002) {
-                // 【现场】故障信息
-                this.transFaultData(JSON.parse(data.data));
-            } else if (data.msgType == 2004) {
-                // 【现场】实时信息
-                this.transRealtimeData(JSON.parse(data.data));
-            } else if (data.msgType == 3004) {
-                // 【现场】预测信息
-                this.transForecastData(JSON.parse(data.data));
-            } else if (data.msgType == 4001) {
-                // TODO 运行指标信息
-                // 暂时没有接口
-            } else if (data.msgType == 4002) {
-                // 【方案】计划图
-                let d = JSON.parse(data.data);
-                let findP = this.solutions.find((s) => {
-                    return s.planNo == d.planNo;
-                });
-
-                let index = this.solutions.indexOf(findP);
-                if (index == -1) {
-                    this.solutions.push(d);
-                    index++;
-                }
-
-                this.$nextTick(() => {
-                    let component = this.$refs.PlanDiagram[index];
-                    if (component) {
-                        let planTripArr = [];
-                        console.log(d);
-                        let planServes = d.graphData.serveList;
-                        planServes.forEach((serve) => {
-                            serve.tripList.forEach((tripItem) => {
-                                let trip = {
-                                    serveNo: serve.serveNo,
-                                    tripNo: tripItem.tripNo,
-                                    data: [],
-                                    dir: tripItem.runDir,
-                                };
-                                tripItem.pathListStr.forEach((str) => {
-                                    let strArr = str.split(",");
-                                    trip.data.push({
-                                        sid: parseInt(strArr[0]),
-                                        arrive: parseInt(strArr[1]),
-                                        depart: parseInt(strArr[2]),
-                                        loadrate: parseInt(strArr[4]),
-                                        laterate: parseInt(strArr[5]),
-                                        late: parseInt(strArr[6]),
-                                    });
-                                });
-                                planTripArr.push(trip);
-                            });
-                        });
-                        component.setPlanData(planTripArr);
-                    }
-                });
-            } else if (data.msgType == 4003) {
-                // TODO 【方案】实际图
-                let d = JSON.parse(data.data);
-                let index = this.solutions.indexOf(d.planNo);
-                if (index == -1) {
-                    this.solutions.push(d.planNo);
-                    index++;
-                }
-
-                this.$nextTick(() => {
-                    let component = this.$refs.PlanDiagram[index];
-                    if (component) {
-                        let realTripArr = [];
-                        console.log(d);
-                        d.graphData.serveList.forEach((serve) => {
-                            serve.tripList.forEach((tripItem) => {
-                                let trip = {
-                                    serveNo: serve.serveNo,
-                                    tripNo: tripItem.tripNo,
-                                    data: [],
-                                    dir: tripItem.runDir,
-                                };
-                                tripItem.pathListStr.forEach((str) => {
-                                    let strArr = str.split(",");
-                                    trip.data.push({
-                                        sid: parseInt(strArr[0]),
-                                        arrive: parseInt(strArr[1]),
-                                        depart: parseInt(strArr[2]),
-                                        loadrate: parseInt(strArr[4]),
-                                        laterate: parseInt(strArr[5]),
-                                        late: parseInt(strArr[6]),
-                                    });
-                                });
-                                realTripArr.push(trip);
-                            });
-                        });
-                        component.setRealData(realTripArr);
-                    }
-                });
-            }
-        },
-        transAppInfo(d) {
-            this._setMsg(`收到 [${d.lineName}] 数据。`);
-            this.lineName = d.lineName;
-            this.stations = d.vecStation;
-        },
-        transPlanData(d) {
-            this._setMsg(`收到计划运行图 [${d.graphId}] 信息。`);
-            let planTripArr = [];
-            let planServes = d.serveList;
-            planServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                        });
-                    });
-                    planTripArr.push(trip);
-                });
-            });
-            this.planData = planTripArr;
-        },
-        transFaultData(d) {
-            this._setMsg(d.strFaultMsg, "fault");
-        },
-        transRealtimeData(d) {
-            this._setMsg(`收到实时运行图 [${d.graphId}] 信息。`);
-            let realTripArr = [];
-            let forecastServes = d.serveList;
-            forecastServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                            loadrate: parseInt(strArr[4]),
-                            laterate: parseInt(strArr[5]),
-                            late: parseInt(strArr[6]),
-                        });
-                        this.currentTime =
-                            this.currentTime > parseInt(strArr[2])
-                                ? this.currentTime
-                                : parseInt(strArr[2]);
-                    });
-                    realTripArr.push(trip);
-                });
-            });
-            this.realData = realTripArr;
-        },
-        transForecastData(d) {
-            this._setMsg(`收到预测 [${d.graphId}] 信息。`);
-            let forecastTripArr = [];
-            let realServes = d.serveList;
-            this.forcastTime = -2;
-            realServes.forEach((serve) => {
-                serve.tripList.forEach((tripItem) => {
-                    let trip = {
-                        serveNo: serve.serveNo,
-                        tripNo: tripItem.tripNo,
-                        data: [],
-                        dir: tripItem.runDir,
-                    };
-                    tripItem.pathListStr.forEach((str) => {
-                        let strArr = str.split(",");
-                        trip.data.push({
-                            sid: parseInt(strArr[0]),
-                            arrive: parseInt(strArr[1]),
-                            depart: parseInt(strArr[2]),
-                            loadrate: parseInt(strArr[4]),
-                            laterate: parseInt(strArr[5]),
-                            late: parseInt(strArr[6]),
-                        });
-
-                        this.forcastTime =
-                            this.forcastTime > parseInt(strArr[2])
-                                ? this.forcastTime
-                                : parseInt(strArr[2]);
-                    });
-                    forecastTripArr.push(trip);
-                });
-            });
-            this.forecastData = forecastTripArr;
-        },
-        sendPackage(handle) {
-            if (handle == "stop") {
-                let d = this.ws.getPackage("business.plan", 1001, "停止推演");
-                this.ws.sendSock(d);
-                console.log(d);
-            } else if (handle == "select-scheme") {
-                let d = this.ws.getPackage(
-                    "business.actual",
-                    1002,
-                    "更新运行图"
-                );
-                this.ws.sendSock(d);
-            } else if (handle == "line-info") {
-                let d = this.ws.getPackage(
-                    "business.actual",
-                    1003,
-                    "请求线路车站信息"
-                );
-                this.ws.sendSock(d);
-            } else if (handle == "plan-diagram") {
-                let d = this.ws.getPackage(
-                    "business.actual",
-                    1004,
-                    "请求计划运行图"
-                );
-                this.ws.sendSock(d);
-            } else if (handle == "scheme-diagram") {
-                let d = this.ws.getPackage(
-                    "business.plan",
-                    1005,
-                    "请求方案计划图"
-                );
-                this.ws.sendSock(d);
-            } else if (handle == "init") {
-                // this.$router.go(0);
-                location.reload();
-            }
-        },
-        //运行图内置功能外移至父组件
-        importRungraph(){
-            this.$refs.grap.importRungraph()
-        },
-        startStop(){
-            this.$refs.grap.startStop()
-        },
-        drawAllData(){
-            this.$refs.grap.drawAllData()
-        },
+            component.setRealData(realTripArr);
+          }
+        });
+      }
     },
-    beforeDestroy() {
-        this.rungrapData = {}
+    transAppInfo(d) {
+      this._setMsg(`收到 [${d.lineName}] 数据。`);
+      this.lineName = d.lineName;
+      this.stations = d.vecStation;
     },
+    transPlanData(d) {
+      this._setMsg(`收到计划运行图 [${d.graphId}] 信息。`);
+      let planTripArr = [];
+      let planServes = d.serveList;
+      planServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
+            });
+          });
+          planTripArr.push(trip);
+        });
+      });
+      this.planData = planTripArr;
+    },
+    transFaultData(d) {
+      this._setMsg(d.strFaultMsg, "fault");
+    },
+    transRealtimeData(d) {
+      this._setMsg(`收到实时运行图 [${d.graphId}] 信息。`);
+      let realTripArr = [];
+      let forecastServes = d.serveList;
+      forecastServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
+              loadrate: parseInt(strArr[4]),
+              laterate: parseInt(strArr[5]),
+              late: parseInt(strArr[6]),
+            });
+            this.currentTime =
+              this.currentTime > parseInt(strArr[2])
+                ? this.currentTime
+                : parseInt(strArr[2]);
+          });
+          realTripArr.push(trip);
+        });
+      });
+      this.realData = realTripArr;
+    },
+    transForecastData(d) {
+      this._setMsg(`收到预测 [${d.graphId}] 信息。`);
+      let forecastTripArr = [];
+      let realServes = d.serveList;
+      this.forcastTime = -2;
+      realServes.forEach((serve) => {
+        serve.tripList.forEach((tripItem) => {
+          let trip = {
+            serveNo: serve.serveNo,
+            tripNo: tripItem.tripNo,
+            data: [],
+            dir: tripItem.runDir,
+          };
+          tripItem.pathListStr.forEach((str) => {
+            let strArr = str.split(",");
+            trip.data.push({
+              sid: parseInt(strArr[0]),
+              arrive: parseInt(strArr[1]),
+              depart: parseInt(strArr[2]),
+              loadrate: parseInt(strArr[4]),
+              laterate: parseInt(strArr[5]),
+              late: parseInt(strArr[6]),
+            });
+
+            this.forcastTime =
+              this.forcastTime > parseInt(strArr[2])
+                ? this.forcastTime
+                : parseInt(strArr[2]);
+          });
+          forecastTripArr.push(trip);
+        });
+      });
+      this.forecastData = forecastTripArr;
+    },
+    sendPackage(handle) {
+      if (handle == "stop") {
+        let d = this.ws.getPackage("business.plan", 1001, "停止推演");
+        this.ws.sendSock(d);
+        console.log(d);
+      } else if (handle == "select-scheme") {
+        let d = this.ws.getPackage("business.actual", 1002, "更新运行图");
+        this.ws.sendSock(d);
+      } else if (handle == "line-info") {
+        let d = this.ws.getPackage("business.actual", 1003, "请求线路车站信息");
+        this.ws.sendSock(d);
+      } else if (handle == "plan-diagram") {
+        let d = this.ws.getPackage("business.actual", 1004, "请求计划运行图");
+        this.ws.sendSock(d);
+      } else if (handle == "scheme-diagram") {
+        let d = this.ws.getPackage("business.plan", 1005, "请求方案计划图");
+        this.ws.sendSock(d);
+      } else if (handle == "init") {
+        // this.$router.go(0);
+        location.reload();
+      }
+    },
+    //运行图内置功能外移至父组件
+    importRungraph() {
+      this.$refs.grap.importRungraph();
+    },
+    startStop() {
+      this.$refs.grap.startStop();
+    },
+    drawAllData() {
+      this.$refs.grap.drawAllData();
+      this.$message({
+        type: "success",
+        message: "打开成功",
+      });
+    },
+  },
+  beforeDestroy() {
+    this.rungrapData = {};
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .dashboard-container {
-    height: calc(100vh - 50px);
-    width: 100%;
-    position: relative;
-    z-index: 99;
-    min-height: 890px;
+  height: calc(100vh - 50px);
+  width: 100%;
+  position: relative;
+  z-index: 99;
+  min-height: 890px;
+}
+.select-line {
+  //   align: center;
+  margin: auto;
+  .el-input {
+    width: 35%;
+  }
 }
 .left-panel {
-    width: 400px;
-    height: calc(100% - 62px);
-    float: left;
-    z-index: 100;
-    /* left: -50px; */
+  width: 400px;
+  height: calc(100% - 62px);
+  float: left;
+  z-index: 100;
+  /* left: -50px; */
 }
 
-.selfTable{width: 660px;border-left: 1px solid #ebeef5;border-bottom: 1px solid #ebeef5;border-spacing: 0;color: #606266;background: #fff;}
-.selfTable tr{line-height: 40px;}
-.selfTable tr:hover,.selfTable .thead{background-color: #f5f7fa;}
-.selfTable tr td,.selfTable tr th{border-right: 1px solid #ebeef5;border-top: 1px solid #ebeef5;text-align: center;position: relative;}
+.selfTable {
+  width: 660px;
+  border-left: 1px solid #ebeef5;
+  border-bottom: 1px solid #ebeef5;
+  border-spacing: 0;
+  color: #606266;
+  background: #fff;
+}
+.selfTable tr {
+  line-height: 40px;
+}
+.selfTable tr:hover,
+.selfTable .thead {
+  background-color: #f5f7fa;
+}
+.selfTable tr td,
+.selfTable tr th {
+  border-right: 1px solid #ebeef5;
+  border-top: 1px solid #ebeef5;
+  text-align: center;
+  position: relative;
+}
 
-.drawTable{overflow-x:auto;}
+.drawTable {
+  overflow-x: auto;
+}
 </style>
