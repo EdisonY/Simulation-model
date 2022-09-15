@@ -10,9 +10,11 @@ import Cookies from 'js-cookie'
 import './assets/icon/iconfont.css'
 import '@/styles/index.scss' // global css
 
+
 import App from './App'
 import store from './store'
 import router from './router'
+import XLSX from 'xlsx'
 
 import api from './utils/request';
 
@@ -34,6 +36,7 @@ require('echarts/lib/chart/gauge');
 
 Vue.use(api);
 Vue.use(Cookies)
+Vue.use(XLSX)
 
 Vue.prototype.Cookies = Cookies
 Vue.prototype.ws = ws;
@@ -55,8 +58,8 @@ Vue.prototype.$echarts = echarts;
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
+    // 如果想要中文版 element-ui，按如下方式声明
+    // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 

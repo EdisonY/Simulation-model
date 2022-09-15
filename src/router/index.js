@@ -9,39 +9,41 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 
-export const constantRoutes = [
-    {
+export const constantRoutes = [{
         path: '/login',
-        component: () => import('@/views/index'),
+        component: () =>
+            import ('@/views/index'),
         hidden: true
     },
     {
         path: '/main',
-        component: () => import('@/views/main1'),
+        component: () =>
+            import ('@/views/main1'),
         hidden: true
     },
     {
         path: '/next',
-        component: () => import('@/views/next'),
+        component: () =>
+            import ('@/views/next'),
         hidden: true
     },
     {
         path: '/add',
-        component: () => import('@/views/chooseLine2'),
+        component: () =>
+            import ('@/views/chooseLine2'),
         hidden: true
     },
     {
         path: '/nav',
         // component: Layout,
         hidden: true,
-        children: [
-            {
-                path: '/main',
-                name: '首页',
-                component: () => import('@/views/main1'),
-                meta: { title: '首页', icon: 'form' }
-            }
-        ]
+        children: [{
+            path: '/main',
+            name: '首页',
+            component: () =>
+                import ('@/views/main1'),
+            meta: { title: '首页', icon: 'form' }
+        }]
     },
     {
         path: '/',
@@ -61,7 +63,8 @@ export const constantRoutes = [
     // },
     {
         path: '/subway',
-        component: () => import('@/views/subway'),
+        component: () =>
+            import ('@/views/subway'),
         hidden: true
     },
     {
@@ -70,155 +73,168 @@ export const constantRoutes = [
         redirect: '/basedata',
         name: '线路设计',
         meta: { title: '线路设计', icon: 'tree' },
-        children: [
-            {
+        children: [{
                 path: 'basedata',
                 name: '项目基础数据',
-                component: () => import('@/views/projectdata/baseData'),
-                meta: { title: '项目基础数据'}
+                component: () =>
+                    import ('@/views/projectdata/baseData'),
+                meta: { title: '项目基础数据' }
             },
             {
                 path: 'line',
                 name: '线路设计数据',
-                component: () => import('@/views/lines/LineDesign'),
-                meta: { title: '线路设计数据'}
+                component: () =>
+                    import ('@/views/lines/LineDesign'),
+                meta: { title: '线路设计数据' }
             },
             {
                 path: 'traindata',
                 name: '列车特性数据',
-                component: () => import('@/views/projectdata/trainFeatureData'),
+                component: () =>
+                    import ('@/views/projectdata/trainFeatureData'),
                 meta: { title: '列车特性数据', type: true }
             },
             {
                 path: 'signaldata',
                 name: '信号控制数据',
-                component: () => import('@/views/projectdata/signalCtrData'),
+                component: () =>
+                    import ('@/views/projectdata/signalCtrData'),
                 meta: { title: '信号控制数据', affix: true }
             },
             {
                 path: 'operationdata',
                 name: '运营管理数据',
-                component: () => import('@/views/projectdata/operationData'),
-                meta: { title: '运营管理数据'}
+                component: () =>
+                    import ('@/views/projectdata/operationData'),
+                meta: { title: '运营管理数据' }
             }
         ]
     },
     {
         path: '/operation',
         component: Layout,
-        children: [
-            {
-                path: '/operation',
-                name: '运行数据配置',
-                component: () => import('@/views/roadnetwork/pfbasic/trainNumber'),
-                meta: { title: '运行数据配置', icon: 'icon' }
-            }
-        ]
+        children: [{
+            path: '/operation',
+            name: '运行数据配置',
+            component: () =>
+                import ('@/views/roadnetwork/pfbasic/trainNumber'),
+            meta: { title: '运行数据配置', icon: 'icon' }
+        }]
     },
     {
         path: '/passenger',
         component: Layout,
-        children: [
-            {
-                path: '/passenger',
-                name: '客流数据管理',
-                component: () => import('@/views/passenger'),
-                meta: { title: '客流数据管理', icon: 'peopels' }
-            }
-        ]
+        children: [{
+            path: '/passenger',
+            name: '客流数据管理',
+            component: () =>
+                import ('@/views/passenger'),
+            meta: { title: '客流数据管理', icon: 'peopels' }
+        }]
     },
     {
-        path:'/emergency',
-        component:Layout,
+        path: '/emergency',
+        component: Layout,
         redirect: '/rungraph',
-        name:'线路模型',
-        meta:{ title: '线路模型', icon: 'dashboard' },
-        children:[{
-            path: 'rungraphset',
-            name: '运行图设置',
-            component: () => import('@/views/roadnetwork/rungraph/rungraphset'),
-            meta: { title: '运行图设置',type: true }
-        },{
-            path: 'rungraph',
-            name: '实际运行图',
-            component: () => import('@/views/roadnetwork/rungraph/rungraph'),
-            meta: { title: '实际运行图',type: true }
-        },{
-            path: 'trainrun',
-            name: '站场监控',
-            component: () => import('@/views/train_sim/TrainRun'),
-            meta: { title: '站场监控',  }
-        },{
-            path: 'report',
-            name: '指标查看',
-            component: () => import('@/views/report'),
-            meta: { title: '指标查看', }
-        },{
-            path: 'fault',
-            name: '故障设置',
-            component: () => import('@/views/train_sim/TrainRunFault'),
-            meta: { title: '故障设置', }
-        },{
-            path: 'history',
-            name: '历史记录查看',
-            component: () => import('@/views/history'),
-            meta: { title: '历史记录查看', }
-        },
-        // {
-        //     path: 'scenes',
-        //     name: '场景设置',
-        //     disabled:true,
-        //     component: () => import('@/views/projectdata/baseData'),
-        //     meta: { title: '场景设置', type: true }
-        // },{
-        //     path: '',
-        //     name: '运行策略设置',
-        //     disabled:true,
-        //     component: () => import('@/views/projectdata/baseData'),
-        //     meta: { title: '运行策略设置', type: true }
-        // },{
-        //     path: 'rungraph1',
-        //     name: '运行图视图',
-        //     component: () => import('@/views/roadnetwork/rungraph/rungraph'),
-        //     meta: { title: '运行图视图', type: true }
-        // }
+        name: '线路模型',
+        meta: { title: '线路模型', icon: 'dashboard' },
+        children: [{
+                path: 'rungraphset',
+                name: '运行图设置',
+                component: () =>
+                    import ('@/views/roadnetwork/rungraph/rungraphset'),
+                meta: { title: '运行图设置', type: true }
+            }, {
+                path: 'rungraph',
+                name: '实际运行图',
+                component: () =>
+                    import ('@/views/roadnetwork/rungraph/rungraph'),
+                meta: { title: '实际运行图', type: true }
+            }, {
+                path: 'trainrun',
+                name: '站场监控',
+                component: () =>
+                    import ('@/views/train_sim/TrainRun'),
+                meta: { title: '站场监控', }
+            }, {
+                path: 'report',
+                name: '指标查看',
+                component: () =>
+                    import ('@/views/report'),
+                meta: { title: '指标查看', }
+            }, {
+                path: 'fault',
+                name: '故障设置',
+                component: () =>
+                    import ('@/views/train_sim/TrainRunFault'),
+                meta: { title: '故障设置', }
+            }, {
+                path: 'history',
+                name: '历史记录查看',
+                component: () =>
+                    import ('@/views/history'),
+                meta: { title: '历史记录查看', }
+            },
+            // {
+            //     path: 'scenes',
+            //     name: '场景设置',
+            //     disabled:true,
+            //     component: () => import('@/views/projectdata/baseData'),
+            //     meta: { title: '场景设置', type: true }
+            // },{
+            //     path: '',
+            //     name: '运行策略设置',
+            //     disabled:true,
+            //     component: () => import('@/views/projectdata/baseData'),
+            //     meta: { title: '运行策略设置', type: true }
+            // },{
+            //     path: 'rungraph1',
+            //     name: '运行图视图',
+            //     component: () => import('@/views/roadnetwork/rungraph/rungraph'),
+            //     meta: { title: '运行图视图', type: true }
+            // }
         ]
     },
-    
-    
-    
+
+
+
     {
-        path:'/emergency1',
-        component:Layout,
+        path: '/emergency1',
+        component: Layout,
         redirect: '/wirenetwork',
-        name:'线网模型',
-        meta:{ title: '线网模型', icon: 'example' },
-        children:[{
+        name: '线网模型',
+        meta: { title: '线网模型', icon: 'example' },
+        children: [{
             path: 'wirenetwork',
             name: '线网仿真',
-            component: () => import('@/views/wirenetwork'),
-            meta: { title: '线网仿真',type: true }
-        },{
+            component: () =>
+                import ('@/views/wirenetwork'),
+            meta: { title: '线网仿真', type: true }
+        }, {
             path: 'marshalling',
             name: '线网集群',
             hidden: true,
-            component: () => import('@/views/marshalling'),
-            meta: { title: '线网集群',type: true }
-        },{
+            component: () =>
+                import ('@/views/marshalling'),
+            meta: { title: '线网集群', type: true }
+        }, {
             path: 'linepassenger',
             name: '线网客流设置',
-            component: () => import('@/views/linepassenger'),
-            meta: { title: '线网客流设置',type: true }
-        },{
+            component: () =>
+                import ('@/views/linepassenger'),
+            meta: { title: '线网客流设置', type: true }
+        }, {
             path: 'wireset',
             name: '线网运行图设置',
-            component: () => import('@/views/wireset'),
-            meta: { title: '线网运行图设置',type: true }
-        },{
+            component: () =>
+                import ('@/views/wireset'),
+            meta: { title: '线网运行图设置', type: true }
+        }, {
             path: 'networkindicators',
             name: '线网指标查看',
-            component: () => import('@/views/networkindicators'),
-            meta: { title: '线网指标查看',type: true }
+            component: () =>
+                import ('@/views/networkindicators'),
+            meta: { title: '线网指标查看', type: true }
         }]
     },
     // {
@@ -234,7 +250,7 @@ export const constantRoutes = [
     //         }
     //     ]
     // },
-    
+
     // {
     //     path: '/traincapacity',
     //     component: Layout,
@@ -348,7 +364,8 @@ export const constantRoutes = [
     // },
     {
         path: '/404',
-        component: () => import('@/views/404'),
+        component: () =>
+            import ('@/views/404'),
         hidden: true
     },
     // 404 page must be placed at the end !!!
@@ -379,7 +396,7 @@ router.beforeEach((to, from, next) => {
     next()
 })
 
-Vue.prototype.$resetRoute = function () {
+Vue.prototype.$resetRoute = function() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher
 }
