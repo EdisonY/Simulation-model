@@ -870,10 +870,10 @@ export default {
     }
   },
   mounted() {
-    this.ws.registerCallback("mainPage", this.wsCallback);
-    this.sendPackage("line-info");
-    this.sendPackage("plan-diagram");
-    this.sendPackage("scheme-diagram");
+    // this.ws.registerCallback("mainPage", this.wsCallback);
+    // this.sendPackage("line-info");
+    // this.sendPackage("plan-diagram");
+    // this.sendPackage("scheme-diagram");
     // this.getData();
     this.tableData4.forEach((item)=>{
       if(typeof  item.startTime != "Date")
@@ -1138,7 +1138,7 @@ export default {
       });
     },
     wsCallback(data) {
-      // return false;
+      return false;
       if (data.msgType == 3003) {
         // 线路车站信息
         this.transAppInfo(JSON.parse(data.data));
@@ -1376,9 +1376,15 @@ export default {
       this.$refs.grap.drawAllData();
       this.$message({
         type: "success",
-        message: "打开成功",
+        message: "数据加载中",
       });
     },
+    /**
+     * 铺画开行方案702接口
+     */
+    drawgraph(){
+    },
+
   },
   beforeDestroy() {
     this.rungrapData = {};
