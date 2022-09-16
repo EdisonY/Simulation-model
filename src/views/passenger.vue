@@ -20,7 +20,7 @@
       <el-table-column prop="address" label="备注"> </el-table-column>
     </el-table>
     <p class="text_r">
-      <el-upload accept=".xls,.xlsx" :auto-upload="false" :on-change="loadFile" action="">
+      <el-upload accept=".xls,.xlsx" :auto-upload="false" :on-change="loadFile" action="" :show-file-list="false">
         <el-button
           icon="el-icon-upload2"
           slot="trigger"

@@ -15,8 +15,7 @@
             <el-table-column prop="data" label="操作">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="drawAllData"
-                  >打开</el-button
-                >
+                  >打开</el-button>
                 <el-button type="danger" size="mini">删除</el-button>
               </template>
             </el-table-column>
@@ -28,138 +27,145 @@
             </el-input>
             备注：<el-input placeholder="备注" size="mini" v-model="address"> </el-input>
           </div>
-          <!-- <div class="table-line" style="padding-bottom:10px">
-                        <el-table border
-                            :data="tableData"
-                            style="width: 100%;"
-                            max-height="700">
-                            <el-table-column prop="startTime"
-                                label="起始时间"
-                                align="center"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.startTime}}</span>
-                                    <el-time-picker v-model="scope.row.startTime"
-                                        value-format="HH:mm:ss"
-                                        :clearable=false
-                                        v-if="edit"
-                                        placeholder="选择时间">
-                                    </el-time-picker>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="endTime"
-                                label="终止时间"
-                                align="center"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.endTime}}</span>
-                                    <el-time-picker v-model="scope.row.endTime"
-                                        value-format="HH:mm:ss"
-                                        :clearable=false
-                                        v-if="edit"
-                                        placeholder="选择时间">
-                                    </el-time-picker>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="trainRunNum1"
-                                align="center"
-                                label="上行列车开行数量"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.trainRunNum1}}</span>
-                                    <el-input v-model="scope.row.trainRunNum1"
-                                        v-if="edit"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="runLevel1"
-                                align="center"
-                                label="上行运行等级"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.runLevel1}}</span>
-                                    <el-input v-model="scope.row.runLevel1"
-                                        v-if="edit"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="trainRunNum0"
-                                align="center"
-                                label="下行列车开行数量"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.trainRunNum0}}</span>
-                                    <el-input v-model="scope.row.trainRunNum0"
-                                        v-if="edit"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="runLevel0"
-                                align="center"
-                                label="下行列车等级"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.runLevel0}}</span>
-                                    <el-input v-model="scope.row.runLevel0"
-                                        v-if="edit"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="chexing"
-                                align="center"
-                                label="车型"
-                                min-width="120">
-                                <template slot-scope="scope">
-                                    <span v-if="!edit">{{scope.row.chexing}}</span>
-                                    <el-input v-model="scope.row.chexing"
-                                        v-if="edit"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column align="center"
-                                label="操作"
-                                min-width="120"
-                                v-if="deleteData">
-                                <template slot-scope="scope">
-                                    <el-button type="danger"
-                                        icon="el-icon-delete"
-                                        circle
-                                        @click="deleteTableData(scope)"></el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div> -->
+          <!-- <div class="table-line" style="padding-bottom: 10px">
+            <el-table border :data="tableData4" style="width: 100%" max-height="700">
+              <el-table-column
+                label="起始时间"
+                align="center"
+                min-width="120"
+                width="150"
+              >
+                <template slot-scope="scope">
+                  <el-time-picker
+                    v-model="scope.row.startTime"
+                    style="width: 120px"
+                    placeholder="选择时间"
+                  >
+                  </el-time-picker>
+                </template>
+              </el-table-column>
+              <el-table-column label="终止时间" align="center"  width="150"min-width="120">
+                <template slot-scope="scope">
+                  <el-time-picker
+                    v-model="scope.row.endTime"
+                    style="width: 120px"
+                    placeholder="选择时间"
+                  >
+                  </el-time-picker>
+                </template>
+              </el-table-column>
+              <el-table-column label="交路方式" align="center"  width="150" min-width="120">
+                <template slot-scope="scope">
+                 
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                prop="trainRunNum1"
+                align="center"
+                label="上行列车开行数量"
+                min-width="120"
+              >
+                <template slot-scope="scope">
+                  <span v-if="!edit">{{ scope.row.trainRunNum1 }}</span>
+                  <el-input v-model="scope.row.trainRunNum1" v-if="edit"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="runLevel1"
+                align="center"
+                label="上行运行等级"
+                min-width="120"
+              >
+                <template slot-scope="scope">
+                  <span v-if="!edit">{{ scope.row.runLevel1 }}</span>
+                  <el-input v-model="scope.row.runLevel1" v-if="edit"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="trainRunNum0"
+                align="center"
+                label="下行列车开行数量"
+                min-width="120"
+              >
+                <template slot-scope="scope">
+                  <span v-if="!edit">{{ scope.row.trainRunNum0 }}</span>
+                  <el-input v-model="scope.row.trainRunNum0" v-if="edit"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="runLevel0"
+                align="center"
+                label="下行列车等级"
+                min-width="120"
+              >
+                <template slot-scope="scope">
+                  <span v-if="!edit">{{ scope.row.runLevel0 }}</span>
+                  <el-input v-model="scope.row.runLevel0" v-if="edit"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="chexing" align="center" label="车型" min-width="120">
+                <template slot-scope="scope">
+                  <span v-if="!edit">{{ scope.row.chexing }}</span>
+                  <el-input v-model="scope.row.chexing" v-if="edit"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                align="center"
+                label="操作"
+                min-width="120"
+                v-if="deleteData"
+              >
+                <template slot-scope="scope">
+                  <el-button
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    @click="deleteTableData(scope)"
+                  ></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div> -->
           <div class="table-line drawTable" style="padding-bottom: 10px">
             <table class="selfTable">
               <tr class="thead">
-                <th colspan="2" style="width: fit-content">起止时间</th>
-                <th>交路方式</th>
-                <th>跳停车站</th>
+                <th colspan="1" style="width: 260px">起止时间</th>
+                <th style="width: 160px">交路方式</th>
+                <th style="width: 160px">跳停车站</th>
                 <th>编组信息</th>
-                <th>开行对数</th>
+                <th>上行开行列数</th>
+                <th>下行开行列数</th>
                 <th>操作</th>
               </tr>
               <tbody v-for="(item, index1) in tableData4" :key="item.label">
                 <tr v-for="(items, index) in item.crossRouteList">
                   <td
-                    style="width: 100px"
                     v-if="index == 0 && item.crossRouteList.length >= 1"
-                    :colspan="
-                      item.crossRouteList.length > 1 ? item.crossRouteList.length : 2
-                    "
                     :rowspan="item.crossRouteList.length"
                   >
                     <el-time-picker
-                      style="width: fit-content"
+                      style="width: 120px"
                       v-model="item.startTime"
                       placeholder="起始时间"
+                      label="起始时间"
+                      :clearable="false"
                     >
-                    </el-time-picker>
+                    </el-time-picker
+                    >-
                     <el-time-picker
-                      style="width: fit-content"
+                      style="width: 120px"
                       v-model="item.endTime"
                       placeholder="结束时间"
+                      :clearable="false"
                     >
                     </el-time-picker>
-                    <!-- {{ formatTime(item.startTime) }} - {{ formatTime(item.endTime) }} -->
                   </td>
                   <td>
-                    <el-select v-model="items.tmpRout" placeholder="请选择">
+                    <el-select
+                      v-model="items.tmpRout"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in tmpRoute"
                         :key="item.value"
@@ -174,6 +180,7 @@
                       v-model="items.stopOrNotList1"
                       placeholder="请选择"
                       multiple
+                      size="medium"
                     >
                       <el-option
                         v-for="items in stations"
@@ -189,11 +196,24 @@
                     </el-input>
                   </td>
                   <td>
-                    <el-input v-model="items.onLineTrainCount" style="width: 60px">
+                    <el-input v-model="items.trainRunNum1" style="width: 60px">
                     </el-input>
                   </td>
                   <td>
-                    <el-button
+                    <el-input v-model="items.trainRunNum0" style="width: 60px">
+                    </el-input>
+                  </td>
+                  <td>
+                    <el-tooltip content="添加交路">
+                      <el-button
+                      icon="el-icon-plus"
+                      @click="addTableData(index1, index)"
+                      size="mini"
+                      style="width: fit-content"
+                    ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="删除当前交路">
+                      <el-button
                       v-if="deleteData"
                       type="danger"
                       icon="el-icon-delete"
@@ -201,6 +221,7 @@
                       size="mini"
                       style="width: fit-content"
                     ></el-button>
+                    </el-tooltip>
                   </td>
                 </tr>
               </tbody>
@@ -209,7 +230,7 @@
           <div class="btn-line-2">
             <el-checkbox
               v-model="runGraphOrPassengerGraph"
-              style="color: white; display: block; margin:5px 0;"
+              style="color: white; display: block; margin: 5px 0"
               >只评估客流</el-checkbox
             >
             <el-button type="primary" size="small" @click="addTable()"
@@ -319,7 +340,7 @@ export default {
         topBlockHeight: 100,
         sideWidth: 100,
       },
-      edit: false,
+      edit: true,
       deleteData: true,
       first: true,
       stations: testStations,
@@ -549,7 +570,8 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              onLineTrainCount: 20,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -577,7 +599,8 @@ export default {
               tmpRout: 1,
               startStationId: 2104,
               endStationId: 2101,
-              onLineTrainCount: 10,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2103,
@@ -612,7 +635,8 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              onLineTrainCount: 20,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -640,7 +664,8 @@ export default {
               tmpRout: 1,
               startStationId: 2104,
               endStationId: 2101,
-              onLineTrainCount: 20,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2103,
@@ -675,7 +700,9 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              onLineTrainCount: 20,
+
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -703,7 +730,8 @@ export default {
               tmpRout: 1,
               startStationId: 2104,
               endStationId: 2101,
-              onLineTrainCount: 20,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2103,
@@ -738,7 +766,9 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              onLineTrainCount: 20,
+
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -766,7 +796,9 @@ export default {
               tmpRout: 1,
               startStationId: 2104,
               endStationId: 2101,
-              onLineTrainCount: 20,
+
+              trainRunNum1: 20,
+              trainRunNum0: 20,
               stopOrNotList: [
                 {
                   stationId: 2103,
@@ -838,11 +870,16 @@ export default {
     }
   },
   mounted() {
-    // this.ws.registerCallback("mainPage", this.wsCallback);
-    // this.sendPackage("line-info");
-    // this.sendPackage("plan-diagram");
-    // this.sendPackage("scheme-diagram");
+    this.ws.registerCallback("mainPage", this.wsCallback);
+    this.sendPackage("line-info");
+    this.sendPackage("plan-diagram");
+    this.sendPackage("scheme-diagram");
     // this.getData();
+    this.tableData4.forEach((item)=>{
+      if(typeof  item.startTime != "Date")
+      item.startTime=new Date('2022/9/16,'+this.formatTime( item.startTime));
+      item.endTime=new Date('2022/9/16,'+this.formatTime( item.endTime));
+    })
   },
   methods: {
     formatTime(time) {
@@ -857,6 +894,17 @@ export default {
         .padStart(2, "0");
       return `${hour}:${minute}:${second}`;
     },
+   /**
+    * 将时间转换成秒
+    * @param {Date} date 
+    */
+    transTime(date){
+      let H=date.getHours;
+      let m=date.getMinutes;
+      let s=date.getSeconds;
+      let sum=H*3600+m*60+s;
+      return sum;
+    },
     getRungrapClick(params) {
       console.log(params);
     },
@@ -864,16 +912,72 @@ export default {
       this.$refs.grap.drewPlan();
     },
     addTable() {
-      this.tableData.push({
-        startTime: "00:00:00",
-        endTime: "00:00:00",
-        trainRunNum1: 10,
-        runLevel1: 1,
-        dir1: 80,
-        trainRunNum0: 10,
-        runLevel0: 1,
-        dir0: 170,
-      });
+      const temp={
+          startTime: 25200,
+          endTime: 32400,
+          crossRouteCount: 2,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "4A",
+              lineWayId: 37,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
+            },
+            {
+              crossRouteId: 2,
+              trainTypeGroup: "4A",
+              lineWayId: 65526,
+              tmpRout: 1,
+              startStationId: 2104,
+              endStationId: 2101,
+              trainRunNum1: 20,
+              trainRunNum0: 20,
+              stopOrNotList: [
+                {
+                  stationId: 2103,
+                  stopOrNot: false,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+              ],
+              stopOrNotList1: [2103],
+            },
+          ],
+        };
+      this.tableData4.push(temp);
       this.deleteData = true;
     },
     deleteTableData(index1, index) {
@@ -884,6 +988,38 @@ export default {
       } else {
         this.deleteData = true;
       }
+    },
+    addTableData(index1, index) {
+      const tempdata = {
+        crossRouteId: 1,
+        trainTypeGroup: "4A",
+        lineWayId: 37,
+        tmpRout: 0,
+        startStationId: 2101,
+        endStationId: 2103,
+        trainRunNum1: 20,
+        trainRunNum0: 20,
+        stopOrNotList: [
+          {
+            stationId: 2101,
+            stopOrNot: true,
+          },
+          {
+            stationId: 2102,
+            stopOrNot: true,
+          },
+          {
+            stationId: 2103,
+            stopOrNot: true,
+          },
+          {
+            stationId: 2104,
+            stopOrNot: true,
+          },
+        ],
+        stopOrNotList1: [],
+      };
+      this.tableData4[index1].crossRouteList.splice(index + 1, 0, tempdata);
     },
     resetRungrap() {
       var self = this;
@@ -1002,7 +1138,7 @@ export default {
       });
     },
     wsCallback(data) {
-      return false;
+      // return false;
       if (data.msgType == 3003) {
         // 线路车站信息
         this.transAppInfo(JSON.parse(data.data));
@@ -1104,6 +1240,8 @@ export default {
             component.setRealData(realTripArr);
           }
         });
+      }else if(data.msgType == 702){
+
       }
     },
     transAppInfo(d) {
@@ -1272,7 +1410,7 @@ export default {
 }
 
 .selfTable {
-  width: 660px;
+  width: 880px;
   border-left: 1px solid #ebeef5;
   border-bottom: 1px solid #ebeef5;
   border-spacing: 0;
