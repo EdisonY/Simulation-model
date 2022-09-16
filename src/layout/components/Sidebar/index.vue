@@ -48,7 +48,7 @@
                 </g>
             </g>
         </svg> -->
-        <img v-if="!isCollapse" src="../../../assets/basie/metromodel2(1).jpg" />
+        <img v-if="!isCollapse" src="../../../assets/basie/logo1.png" />
 
      </h2>
       <el-menu

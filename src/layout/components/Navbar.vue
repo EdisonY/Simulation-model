@@ -5,7 +5,9 @@
             @toggleClick="toggleSideBar" />
 
         <!-- <breadcrumb class="breadcrumb-container" v-show="false" /> -->
-        <div class="title">北京轨道交通燕房线
+        <div class="title">
+            <!-- 北京轨道交通燕房线 -->
+            {{currentLine}}
             <!-- <span v-show="currentLine"> ({{currentLine}})</span> -->
         </div>
         <!-- <div class="title" style="font-size:20px">{{currentLine}}</div> -->

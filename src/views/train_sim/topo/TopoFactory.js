@@ -3,6 +3,7 @@ import TopoBumper from './TopoBumper';
 import TopoSignal from './TopoSignal';
 import TopoLink from './TopoLink';
 import TopoTrain from './TopoTrain';
+import TopoPerson from './TopoPerson';
 
 
 /**
@@ -26,6 +27,8 @@ TopoFactory.getInstance = (type) => {
         instance = new TopoLink();
     } else if (type == "tct.TopoTrain") {
         instance = new TopoTrain();
+    } else if (type == "tct.TopoPerson") {
+        instance = new TopoPerson();
     }else {
         console.log("没有匹配到元素:", type);
     }

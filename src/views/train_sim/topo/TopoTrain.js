@@ -6,6 +6,17 @@ joint.shapes.tct = joint.shapes.tct ? joint.shapes.tct : {};
 
 let TopoTrain = joint.dia.Element.define('tct.TopoTrain', {
     attrs: {
+        abnormal:{
+            width: 190,
+            height: 84,
+            x: -50,
+            y: -15,
+            rx:10,
+            ry:10,
+            fill:'transparent',
+            stroke: 'transparent',
+            'stroke-width': 6,
+        },
         body: {
             width: 90,
             height: 54,
@@ -34,12 +45,28 @@ let TopoTrain = joint.dia.Element.define('tct.TopoTrain', {
             d:'M -10,-3 -40,27 -10,57 z',
             fill:'yellow',
             'fill-opacity':1
+        },
+        notify:{
+            x:38,
+            y:-30,
+            "font-size": 40,
+            "background": 'yellow',
+            "font-weight": 'bold',
+            fill: "red",
+            text: "!!!",
+            "text-anchor": "middle",
+            "dominant-baseline": "middle",
+            'fill-opacity':0.0
         }
     },
     markup: [
         {
             tagName: 'rect',
             selector: 'body'
+        },
+        {
+            tagName:'rect',
+            selector:'abnormal'
         },
         {
             tagName: 'text',
@@ -53,6 +80,10 @@ let TopoTrain = joint.dia.Element.define('tct.TopoTrain', {
             tagName: 'path',
             selector: 'right'
         },
+        {
+            tagName:'text',
+            selector:'notify'
+        }
     ],
     tctData: {
         typeName: "车",
@@ -83,6 +114,12 @@ joint.shapes.tct.TopoTrainView = joint.dia.ElementView.extend({
      * 取消选中
      */
     unselect() {
+    },
+    notifyWarning(){
+        this.model.attr('notify/fill-opacity',1.0);
+        setTimeout(()=>{
+            this.model.attr('notify/fill-opacity',0.0);
+        },2500);
     },
     /**
      * 组内元素鼠标落下，记录位置

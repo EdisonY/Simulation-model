@@ -94,20 +94,25 @@ export default {
             activeNames: ["1", "2", "3"],
             options: {},
             tableData: [
+                // {
+                //     index: 1,
+                //     name: "北京7号线",
+                //     c_time: "2020/12/01",
+                //     change_time: "2020/12/01",
+                // },
+                // {
+                //     index: 2,
+                //     name: "北京28号线",
+                //     c_time: "2020/12/29",
+                //     change_time: "2020/12/29",
+                // },
                 {
                     index: 1,
-                    name: "北京7号线",
-                    c_time: "2020/12/01",
-                    change_time: "2020/12/01",
-                },
-                {
+                    name: "北京轨道交通11号线",
+                    c_time: "2021/04/07",
+                    change_time: "2021/04/07",
+                },{
                     index: 2,
-                    name: "北京28号线",
-                    c_time: "2020/12/29",
-                    change_time: "2020/12/29",
-                },
-                {
-                    index: 3,
                     name: "北京轨道交通燕房线",
                     c_time: "2021/04/07",
                     change_time: "2021/04/07",

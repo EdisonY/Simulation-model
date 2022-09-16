@@ -111,8 +111,9 @@
                         <el-checkbox label="5" border>集群5</el-checkbox>
                     </el-checkbox-group>
                 </div>
-                <!-- <br/>
-                <el-button type="success" size="small">开始仿真 / 暂停</el-button> -->
+                <br/>
+                <el-button type="primary" size="small" @click="dialogVisible = true">选择运行图</el-button>
+                <el-button type="success" size="small" v-if="choseGap">开始仿真</el-button>
             </el-card>
         </div>
         <div class="Line" v-loading="loading">
@@ -152,6 +153,46 @@
             <i class="el-icon-video-pause" @click="pauseHistory()" v-if="historyState"></i>
             <el-slider v-model="historyTime" :format-tooltip="formatTooltip" @change="changeTime()"></el-slider>
         </div>
+
+        <el-dialog
+        title="选择方案"
+        :append-to-body="true"
+        :visible.sync="dialogVisible"
+        width="40%">
+            <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    prop="xuhao"
+                    align="center"
+                    label="序号">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    align="center"
+                    label="运行图/开行方案名称">
+                    </el-table-column>
+                    <el-table-column
+                    prop="keliu"
+                    align="center"
+                    label="客流名称">
+                    </el-table-column>
+                    <el-table-column
+                    prop="shijian"
+                    align="center"
+                    label="创建时间">
+                    </el-table-column>
+                    <el-table-column
+                    align="center"
+                    label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="success" size="mini" @click="choseGap = true, dialogVisible = false">加载</el-button>
+                    </template>
+                    </el-table-column>
+                </el-table>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -206,7 +247,35 @@ export default {
                 }, 
             ],
             speed:'1',
-            timeZone:0
+            timeZone:0,
+            dialogVisible:false,
+            tableData: [{
+                xuhao:1,
+                shijian: '2022-05-02',
+                keliu:'2022-05-02',
+                name: '工作日',
+                address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                xuhao:2,
+                shijian: '2022-05-04',
+                keliu:'2022-05-02',
+                name: '工作日',
+                address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                xuhao:3,
+                shijian: '2022-05-01',
+                keliu:'2022-05-02',
+                name: '双休日',
+                address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                xuhao:4,
+                shijian: '2022-05-03',
+                keliu:'2022-05-02',
+                name: '工作日，双休日',
+                address: '上海市普陀区金沙江路 1516 弄'
+            }],
+            choseGap:false
+
         }
     },
     created () {

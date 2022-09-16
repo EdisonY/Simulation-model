@@ -8,7 +8,7 @@ joint.shapes.tct = joint.shapes.tct ? joint.shapes.tct : {};
 let TopoLink = joint.dia.Element.define('tct.TopoLink', {
     attrs: {
         line: {
-            class:'testclass',
+            class: 'testclass',
             x1: 0,
             y1: 0,
             x2: 150,
@@ -17,8 +17,8 @@ let TopoLink = joint.dia.Element.define('tct.TopoLink', {
             stroke: '#30499f',
         },
         label: {
-            x:75,
-            y:0,
+            x: 75,
+            y: 0,
             'font-size': 24,
             fill: '#EEE',
             text: '2'
@@ -89,6 +89,15 @@ joint.shapes.tct.TopoLinkView = joint.dia.ElementView.extend({
                 this.VSelect.remove();
                 this.VSelect = null;
             }
+        }
+    },
+    toggle() {
+        if (this.model.attributes.drawData.toggle) {
+            this.model.attributes.drawData.toggle = false;
+            this.model.attr("line/stroke", '#30499f');
+        } else {
+            this.model.attributes.drawData.toggle = true;
+            this.model.attr("line/stroke", '#F56C6C');
         }
     },
     /**

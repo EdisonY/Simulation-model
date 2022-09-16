@@ -8,6 +8,7 @@ let TopoPaper = joint.dia.Paper.extend({
     trainList: [],
     fsLinkMap: null,
     toolTip: null,
+    setTmpLimit: false,
     /**
      * 根据id获取view
      */
@@ -70,14 +71,20 @@ let TopoPaper = joint.dia.Paper.extend({
                 }
             },
             "cell:pointerdown": (cellView, evt, x, y) => {
-                // 取消高亮
-                paper.model.getCells().forEach((item) => {
-                    let view = paper.findViewByModel(item);
-                    view.unselect();
-                    view.passiveDown();
-                });
+                if (paper.setTmpLimit) {
+                    if (cellView.toggle) {
+                        cellView.toggle();
+                    }
+                } else {
+                    // 取消高亮
+                    paper.model.getCells().forEach((item) => {
+                        let view = paper.findViewByModel(item);
+                        view.unselect();
+                        view.passiveDown();
+                    });
 
-                cellView.select();
+                    cellView.select();
+                }
             },
 
             "cell:mouseover": (cellView, evt) => {
@@ -96,7 +103,9 @@ let TopoPaper = joint.dia.Paper.extend({
                 // 取消高亮
                 paper.model.getCells().forEach((item) => {
                     let view = paper.findViewByModel(item);
-                    view.unselect();
+                    if (!paper.setTmpLimit) {
+                        view.unselect();
+                    }
                     view.passiveDown();
                 });
 
@@ -143,6 +152,34 @@ let TopoPaper = joint.dia.Paper.extend({
             },
         });
     },
+    clearSetLimitLink() {
+        let cells = this.model.getCells();
+        cells.forEach(c => {
+            if (c.attributes.drawData.toggle) {
+                let view = this.findViewByModel(c);
+                if (view && view.toggle) {
+                    view.toggle();
+                }
+            }
+        });
+    },
+    getTmpLimitFromLink() {
+        let data = [];
+        let cells = this.model.getCells();
+        cells.forEach(c => {
+            if (c.attributes.drawData.toggle) {
+                data.push({
+                    id: -1,
+                    link: c.attributes.tctData.tctId,
+                    headOfst: 0,
+                    tailOfst: c.attributes.tctData.length,
+                    limitSpd: 0,
+                    remove:false
+                });
+            }
+        });
+        return data;
+    },
     drawTopo(project, graph) {
         this.topoLinks = [];
         if (project && project.logicData && project.cells) {
@@ -160,6 +197,7 @@ let TopoPaper = joint.dia.Paper.extend({
                     if (start && end) {
                         let line = TopoFactory.getInstance('tct.TopoLink');
                         line.attributes.tctData.tctId = link.id;
+                        line.attributes.tctData.length = link.length;
                         line.position(start.position.x, start.position.y);
                         line.attr('line/x2', end.position.x - start.position.x);
                         line.attr('line/y2', end.position.y - start.position.y);
@@ -206,10 +244,77 @@ let TopoPaper = joint.dia.Paper.extend({
         }
         this.reset();
     },
-    drawTrain(realData) {
+    clearPerson() {
+        try {
+            let cells = this.model.getCells();
+            let persons = cells.filter(c => {
+                return c.attributes.type == 'tct.TopoPerson';
+            });
+            if (persons) {
+                persons.forEach(t => {
+                    t.remove();
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    },
+    drawPerson(realData) {
+        this.clearPerson();
         let cells = this.model.getCells();
         let bsV = realData;
+        if (bsV.bsTrainData && bsV.bsTrainData.length > 0) {
+            bsV.bsTrainData.forEach(bst => {
+                if(bst.driverOnboardFlag !== 0){
+                    let linkModel = cells.find(c => {
+                        return c.attributes.type == 'tct.TopoLink' && c.attributes.tctData.tctId == this.fsLinkMap[bst.driverLinkId].linkid;
+                    });
+    
+                    if (linkModel) {
+                        let person = TopoFactory.getInstance('tct.TopoPerson');
+                        let x1 = linkModel.attr('line/x1');
+                        let y1 = linkModel.attr('line/y1');
+                        let rate = bst.driverLinkOfst * 1.0 / this.fsLinkMap[bst.driverLinkId].length;
+                        let x = linkModel.position().x + (linkModel.attr('line/x2') - x1) * rate - 45;
+                        let y = linkModel.position().y + (linkModel.attr('line/y2') - y1) * rate - 28;
+                        person.position(x, y);
+                        if (bst.driverOnboardFlag == 1) {
+                            person.attr('head/fill', 'orange');
+                            person.attr('body/fill', 'orange');
+                        } else if (bst.driverOnboardFlag == 2) {
+                            person.attr('head/fill', 'green');
+                            person.attr('body/fill', 'green');
+                        }
+                        person.addTo(this.model);
+                    }
+                }
+            });
+        }
+        return;
+    },
+    test(){
+        // let person = TopoFactory.getInstance('tct.TopoPerson');
+        // person.position(300, 300);
+        // person.attr('head/fill', '#409EFF');
+        // person.attr('body/fill', '#409EFF');  
+
+        let train = TopoFactory.getInstance('tct.TopoTrain');
+        train.position(300, 300);
+        train.attr('body/fill', '#750614');
+        train.attr('body/stroke', '#750614');  
+        train.addTo(this.model);
+
+        let view = this.findViewByModel(train);
+        if(view){
+            console.log('test animation.');
+            view.notifyWarning();
+        }
+       
+    },
+    drawTrain(realData) {
         this.clearTrain();
+        let cells = this.model.getCells();
+        let bsV = realData;
         if (bsV.bsTrainData && bsV.bsTrainData.length > 0) {
             bsV.bsTrainData.forEach(bst => {
                 let linkModel = cells.find(c => {
@@ -258,14 +363,27 @@ let TopoPaper = joint.dia.Paper.extend({
 
                     train.attr('text/text', bst.orderNum);
                     train.addTo(this.model);
+
+                    if(bst.msgFlag == 1){
+                        let view = this.findViewByModel(train);
+                        if(view && view.notifyWarning){
+                            view.notifyWarning();
+                        }
+                    }
+
+                    if(bst.abnormal){
+                        train.attr('abnormal/stroke', '#fc0000');
+                    }else{
+                        train.attr('abnormal/stroke', 'transparent');
+                    }
                 }
             });
         }
         return;
     },
     updateStationColor(data) {
-        console.log('---daa');
-        console.log(data);
+        // console.log('---daa');
+        // console.log(data);
         let cells = this.model.getCells();
         cells.forEach(c => {
             if (c.attributes.type == 'tct.TopoStation') {
@@ -315,14 +433,14 @@ let TopoPaper = joint.dia.Paper.extend({
     },
     checkFsLinkMap(project) {
         this.fsLinkMap = {};
-        if(project && project.logicData && project.logicData.links){
-            project.logicData.links.forEach(item=>{
+        if (project && project.logicData && project.logicData.links) {
+            project.logicData.links.forEach(item => {
                 this.fsLinkMap[Number(item.id)] = {
                     linkid: Number(item.id),
                     length: Number(item.length)
                 }
             });
-        } 
+        }
     },
     _getCellLocationMap(cells) {
         let map = [];

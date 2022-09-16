@@ -1,152 +1,359 @@
 <template>
-    <div class="main">
+    <div class="main"
+        v-loading="loading">
+        <div class="left_new shiji" style="height:fit-content">
+            <el-tabs style="flex:1;margin:0 10px 10px 0;background:#304156;max-height: 380px;overflow:auto;"
+                type="border-card"
+                v-model="activeName">
+                <el-tab-pane label="倍速" 
+                    name="倍速">
 
-        <div class="left_new shiji">
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>操作</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">暂停</el-button>
-                </div>
-                <div style="display:flex;justify-content:center">
-                    <el-radio v-model="radio2" label="1" border size="medium">1倍速</el-radio>
-                    <el-radio v-model="radio2" label="2" border size="medium">2倍速</el-radio>
-                    <el-radio v-model="radio2" label="3" border size="medium">4倍速</el-radio>
-                    <el-radio v-model="radio2" label="4" border size="medium">最高速</el-radio>
-                </div>
-            </el-card>
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>消息</span>
-                </div>
-                <div style="text-align:left">
-                    <ul>
-                        <li>打开运行图成功。。。。</li>
-                        <li>运行图名称：北京轨道交通验方线</li>
-                        <li>00:00:00 xx 发生紧急制动</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                        <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
-                    </ul>
-                </div>
-            </el-card>
+                    <div style="display:flex;justify-content:center;max-height:100px">
+                        <el-select v-model="sim_speed" size="medium" style="flex:1;max-width:150px;">
+                            <el-option :value="1" label="倍速x1"></el-option>
+                            <el-option :value="2" label="倍速x2"></el-option>  
+                            <el-option :value="4" label="倍速x4"></el-option>
+                            <el-option :value="8" label="倍速x8"></el-option>  
+                            <el-option :value="16" label="倍速x16"></el-option>
+                            <el-option :value="32" label="倍速x32"></el-option>
+                            <el-option :value="64" label="倍速x64"></el-option> 
+                            <el-option :value="100" label="最大倍速"></el-option>   
+                        </el-select>
+                        <el-button style="margin-left:20px" type="primary"
+                        size="medium" @click="changeSimSpeed">设置</el-button>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="列车"
+                    name="列车">
+                    <div style="height:67vh;display:flex;flex-direction:column;justify-content:flex-start;">
+                        <el-form>
+                            <el-form-item label="车组号"
+                                label-width="75px">
+                                <el-input style="width:160px"
+                                    value="140C"></el-input>
+                                <el-button type="primary"
+                                    style="width:110px"
+                                    size="mini">修改运行</el-button>
+                            </el-form-item>
+                            <el-form-item label="车次号"
+                                label-width="75px">
+                                <template>
+                                    <div>
+                                        <el-radio v-model="diao2"
+                                            label="d1">
+                                            <el-input value="12001"
+                                                style="width:135px"></el-input>
+                                            <el-button type="primary"
+                                                style="width:110px"
+                                                size="mini">查询车次号</el-button>
+                                        </el-radio>
+                                    </div>
+                                    <el-radio v-model="diao2"
+                                        label="d2">头码车</el-radio>
+                                </template>
+                            </el-form-item>
+                            <el-form-item label="起始站台"
+                                label-width="75px">
+                                <el-input style="width:160px"
+                                    value="北安河上行"></el-input>
+                            </el-form-item>
+                            <el-form-item label="终点站台"
+                                label-width="75px">
+                                <el-input style="width:160px"
+                                    value="稻香湖上行"></el-input>
+                            </el-form-item>
+                            <el-form-item label="发车时间"
+                                label-width="75px">
+                                <el-input style="width:160px"
+                                    value="12:25:03"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <el-table style="flex:1;height:100%;overflow-y: auto;"
+                            border
+                            :data="diao3">
+                            <el-table-column prop="d1"
+                                label="站台名称">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.d1"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="d2"
+                                label="站停时间">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.d2"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="命令">
+                                <template slot-scope="scope">
+                                    <el-checkbox-group v-model="scope.row.d3">
+                                        <el-checkbox label="跳停"></el-checkbox>
+                                        <el-checkbox label="扣车"></el-checkbox>
+                                        <el-checkbox label="清客"></el-checkbox>
+                                        <el-checkbox label="回库"></el-checkbox>
+                                    </el-checkbox-group>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+
+                </el-tab-pane>
+                <el-tab-pane label="站台"
+                    name="站台">
+                    <el-form>
+                        <el-form-item label="站台编号">
+                            <el-input style="width:180px"
+                                value="23"></el-input>
+                        </el-form-item>
+                        <el-form-item label="站台名称">
+                            <el-input style="width:180px"
+                                value="温阳路上行站台"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <el-checkbox-group v-model="diao1">
+                        <el-checkbox label="跳停"></el-checkbox>
+                        <el-checkbox label="扣车"></el-checkbox>
+                        <el-checkbox label="清客"></el-checkbox>
+                        <!-- <el-checkbox label="下线"></el-checkbox> -->
+
+                    </el-checkbox-group>
+
+                    <el-button type="primary"
+                        size="mini"
+                        style="float:right;margin:20px">下发命令</el-button>
+                </el-tab-pane>
+            </el-tabs>
+
+            <Msg ref="msg"
+                :trainrun="true" />
         </div>
-
-        <div class="main-right" style="padding-left:10px">
+        <div class="main-right">
             <div style="overflow: hidden">
                 <div class="drawArea"></div>
             </div>
-            <div style="position: absolute; margin-top: 10px; margin-left:10px">
-                <el-button type="primary"
-                    size="mini"
-                    style=" margin: 10px;"
-                    @click="onRestLine">重置线路</el-button>
-            </div>
-            <div class="msgTip"
-                style="visibility:hidden">
-                <div v-for="(data, index) in tooltipData">
-                    {{data.name}}：{{transTrainDataDisplay(data)}}
-                </div>
-            </div>
-            <div class="info-panel">
-                <div class="info"
-                    v-if="currentFrame">
-                    <div style="flex:1">
-                        <span style="font-size:20px;font-weight:bold;color:#2fd991">列车</span>
-                        <div class="train-panel">
-                            <div class="model-list1"
-                                v-for="(trainData, index) in currentFrame.bsTrainData">
-                                <div v-for="(data, index) in getTrainInfo(trainData)">
-                                    {{data.name}}：{{transTrainDataDisplay(data)}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="flex:2">
-                        <span style="font-size:20px;font-weight:bold;color:#2fd991">车站</span>
-                        <div class="station-panel">
-                            <div class="model-list2"
-                                v-for="(stationData, index) in currentFrame.bsStationStru">
-                                <div v-for="(data, index) in getStationInfo(stationData)">
-                                    {{data.name}}：{{data.value}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="time-axis">
-                    <div class="slider">
-                        <span style="margin:0 10px 0 10px;">{{formatTime(startTime)}}</span>
-                        <el-slider style="flex:1"
-                            :min="startTime"
-                            v-model="currentTime"
-                            :max="endTime"
-                            :marks="marks"
-                            :format-tooltip="formatTime"
-                            @change="timeChange"></el-slider>
-                        <span style="margin:0 10px 0 10px;">{{formatTime(endTime)}}</span>
+        </div>
 
-                        <span style="margin:0 20px 0 10px;color:#2fd991;font-weight:bold">当前时间:{{formatTime(currentTime)}}</span>
-                    </div>
-                    <div class="handle">
-                        <div class="player">
-                            <el-button type="primary"
-                                v-show="!timer"
-                                size="small"
-                                style=" margin: 10px;font-size:100%"
-                                icon="icon-play"
-                                circle
-                                @click="onStart"></el-button>
-                            <el-button type="primary"
-                                v-show="timer"
-                                size="small"
-                                style=" margin: 10px;font-size:100%"
-                                icon="icon-suspend"
-                                circle
-                                @click="onPause"></el-button>
-                            <el-button type="primary"
-                                size="small"
-                                style=" margin: 10px;"
-                                icon="icon-rectangle"
-                                circle
-                                @click="onStop"></el-button>
-                            <span style="margin:0 20px 0 10px;color:#2fd991;font-weight:bold">当前倍速:{{speedRate}}</span>
-                            <el-radio v-model="speedRate"
-                                :label="1">x1</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="2">x2</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="4">x4</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="8">x8</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="16">x16</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="32">x32</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="64">x64</el-radio>
-                            <el-radio v-model="speedRate"
-                                :label="128">x128</el-radio>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="waring-panel"
-                v-if="warningListArr && warningListArr.length>0">
-                <p v-for="msg in warningListArrDisplay"
-                    style="direction:ltr;">{{msg}}</p>
+        <div style="position: absolute; margin-top: 10px; margin-left:430px">
+            <el-button v-show="!setTmpLimit"
+                type="primary"
+                size="mini"
+                style=" margin: 10px;"
+                @click="onRestLine">重置线路</el-button>
+            <el-button v-show="!setTmpLimit"
+                type="primary"
+                size="mini"
+                style=" margin: 10px;"
+                @click="scaleVisible=true">比例缩放</el-button>
+            <el-radio-group v-show="!setTmpLimit"
+                v-model="runmode"
+                size="mini"
+                style=" margin: 10px;"
+                >
+                 <!-- @change="onStart" -->
+                <el-radio-button label="实时模式"></el-radio-button>
+                <el-radio-button label="历史模式"></el-radio-button>
+            </el-radio-group>
+            <el-button v-show="!setTmpLimit"
+                type="primary"
+                size="mini"
+                style=" margin: 10px;"
+                @click="changeLimitMode(true)">设置临时限速</el-button>
+
+            <el-button v-show="setTmpLimit"
+                type="danger"
+                size="mini"
+                style=" margin: 10px;"
+                @click="changeLimitMode(false)">取消设置</el-button>
+
+            <el-button v-show="setTmpLimit"
+                type="success"
+                size="mini"
+                style=" margin: 10px;"
+                @click="prepareApplyLimit">应用临时限速</el-button>
+        </div>
+
+        <span style="cursor:default; position: absolute; padding:0 10px; margin-left:1200px;background:#409EFF;color:white;font-weight:bold;font-size:50px">{{formatTime(currentTime)}}</span>
+
+        <div class="msgTip"
+            style="visibility:hidden">
+            <div v-for="(data, index) in tooltipData">
+                {{data.name}}：{{transTrainDataDisplay(data)}}
             </div>
         </div>
+
+        <div class="info-panel">
+            <div class="info"
+                v-if="currentFrame">
+                <div style="flex:1">
+                    <span style="font-size:20px;font-weight:bold;color:#2fd991">列车</span>
+                    <div class="train-panel">
+                        <div class="model-list1"
+                            v-for="(trainData, index) in currentFrame.bsTrainData">
+                            <div v-for="(data, index) in getTrainInfo(trainData)">
+                                {{data.name}}：{{transTrainDataDisplay(data)}}
+                            </div>
+                            <p style="color:#fc0000"
+                                v-if="trainData.abnormal">{{trainData.abnormal}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex:2">
+                    <span style="font-size:20px;font-weight:bold;color:#2fd991">车站</span>
+                    <div class="station-panel">
+                        <div class="model-list2"
+                            v-for="(stationData, index) in currentFrame.bsStationStru">
+                            <div v-for="(data, index) in getStationInfo(stationData)">
+                                {{data.name}}：{{data.value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="time-axis"
+                v-if="runmode==='历史模式'">
+                <div class="slider">
+                    <span style="margin:0 10px 0 10px;">{{formatTime(startTime)}}</span>
+                    <el-slider style="flex:1"
+                        :min="startTime"
+                        v-model="currentTime"
+                        :max="endTime"
+                        :marks="marks"
+                        :format-tooltip="formatTime"
+                        @change="timeChange"></el-slider>
+                    <span style="margin:0 10px 0 10px;">{{formatTime(endTime)}}</span>
+
+                    <span style="margin:0 20px 0 10px;color:#2fd991;font-weight:bold">当前时间:{{formatTime(currentTime)}}</span>
+                </div>
+                <div class="handle">
+                    <div class="player">
+                        <el-button type="primary"
+                            v-show="!timer"
+                            size="small"
+                            style=" margin: 10px;font-size:100%"
+                            icon="icon-play"
+                            circle
+                            @click="onStart"></el-button>
+                        <el-button type="primary"
+                            v-show="timer"
+                            size="small"
+                            style=" margin: 10px;font-size:100%"
+                            icon="icon-suspend"
+                            circle
+                            @click="onPause"></el-button>
+                        <el-button type="primary"
+                            size="small"
+                            style=" margin: 10px;"
+                            icon="icon-rectangle"
+                            circle
+                            @click="onStop"></el-button>
+                        <span style="margin:0 20px 0 10px;color:#2fd991;font-weight:bold">当前倍速:{{speedRate}}</span>
+                        <el-radio v-model="speedRate"
+                            :label="1">x1</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="2">x2</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="4">x4</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="8">x8</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="16">x16</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="32">x32</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="64">x64</el-radio>
+                        <el-radio v-model="speedRate"
+                            :label="128">x128</el-radio>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- <div class="waring-panel"
             v-if="warningList && warningList.length>0">
             <p v-for="msg in warningList">{{msg}}</p>
         </div> -->
+        <div class="waring-panel"
+            v-if="warningListArr && warningListArr.length>0">
+            <p v-for="msg in warningListArrDisplay"
+                style="direction:ltr;">{{msg}}</p>
+        </div>
+
+        <el-dialog title="设置线路缩放"
+            :visible.sync="scaleVisible"
+            width="30%">
+            <el-form label-width="80px">
+                <span>根据需要,设置水平和垂直方向的缩放比例。有效值是大于0的数值</span>
+                <el-form-item label="水平(X)">
+                    <el-input v-model="scaleX"
+                        placeholder="水平缩放值"></el-input>
+                </el-form-item>
+                <el-form-item label="垂直(Y)">
+                    <el-input v-model="scaleY"
+                        placeholder="垂直缩放值"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer"
+                class="dialog-footer">
+                <el-button @click="scaleVisible = false">取 消</el-button>
+                <el-button type="primary"
+                    @click="onScalePaper">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog title="设置临时限速"
+            :visible.sync="limitVisible"
+            width="60%">
+            <el-table height="600"
+                border
+                :data="needSendTmpLimit">
+                <el-table-column prop="id"
+                    label="id">
+                </el-table-column>
+                <el-table-column prop="link"
+                    label="link"
+                    width="180">
+                </el-table-column>
+                <el-table-column prop="headOfst"
+                    label="headOfst">
+                    <template slot-scope="scope">
+                        <el-input type="number"
+                            v-model="scope.row.headOfst"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="tailOfst"
+                    label="tailOfst">
+                    <template slot-scope="scope">
+                        <el-input type="number"
+                            v-model="scope.row.tailOfst"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="limitSpd"
+                    label="临时限速">
+                    <template slot-scope="scope">
+                        <el-input type="number"
+                            v-model="scope.row.limitSpd"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column width="80"
+                    label="移除限速">
+                    <template slot-scope="scope">
+                        <el-checkbox v-model="scope.row.remove"></el-checkbox>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <span slot="footer"
+                class="dialog-footer">
+                <el-button @click="limitVisible = false">取 消</el-button>
+                <el-button type="primary"
+                    @click="applyLimit">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
 import * as joint from "jointjs";
 import TopoPaper from "./TopoPaper";
-import * as Utils from "@/utils/util";
 import { getStationsObjIdProp } from "@/utils/station";
 import {
     registerCallback,
@@ -154,11 +361,14 @@ import {
     sendSock,
     getPackage,
 } from "@/utils/ws";
+import Msg from "../../components/msg.vue";
 
 export default {
-    components: {},
+    components: { Msg },
     data() {
         return {
+            runmode: "历史模式",
+            loading: false,
             paper: null,
             graph: null,
             g: null,
@@ -184,7 +394,39 @@ export default {
             warningListArrDisplay: [],
             dataBuffer: [],
             packageLength: 300,
-            radio2:1,
+            scaleVisible: false,
+            scaleX: 1,
+            scaleY: 1,
+            sim_speed: 100,//默认仿真速度为最高速度100
+            limitVisible: false,
+            setTmpLimit: false, // 设置临时限速模式
+            tmpLimits: [],
+            needSendTmpLimit: [],
+            diao1: [],
+            diao2: "",
+            diao3: [
+                {
+                    d1: "北安河上行",
+                    d2: "30",
+                    d3: [],
+                },
+                {
+                    d1: "温阳路上行",
+                    d2: "30",
+                    d3: [],
+                },
+                {
+                    d1: "稻香湖上行",
+                    d2: "30",
+                    d3: [],
+                },
+                {
+                    d1: "...",
+                    d2: "...",
+                    d3: [],
+                },
+            ],
+            activeName: "倍速",
         };
     },
     created() {
@@ -197,8 +439,15 @@ export default {
                 operaType: 2,
                 lineName: this.currentLine,
             });
+
+            // this.loading = true; TODO
             sendSock(param);
             this.initJoint();
+            let s = this.paper.scale();
+            this.scaleX = s.sx;
+            this.scaleY = s.sy;
+            this.changeSimSpeed();
+            sendSock(getPackage(307, { limitSpeed: [] }));
         }
     },
     methods: {
@@ -236,18 +485,39 @@ export default {
         onRestLine() {
             this.paper.reset();
         },
-        onStart() {
-            let mainThis = this;
-            this.paper.clearTrain();
-            clearInterval(this.timer);
-            this.timer = setInterval(() => {
-                mainThis.getTimeRange();
-                if (mainThis.currentTime > mainThis.endTime) {
-                    mainThis.onStop();
+        onScalePaper() {
+            if (this.paper) {
+                this.scaleX = Number(this.scaleX);
+                this.scaleY = Number(this.scaleY);
+                if (this.scaleX > 0 && this.scaleY > 0) {
+                    this.paper.scale(this.scaleX, this.scaleY);
                 }
-                // 行车
-                this.trainRun();
-            }, 1000);
+            }
+        },
+        onStart() {
+            if (this.runmode === "实时模式") {
+                let mainThis = this;
+                this.paper.clearTrain();
+                this.paper.clearPerson();
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    // 行车
+                    this.trainRun2();
+                }, 3500);
+            } else if (this.runmode === "历史模式") {
+                let mainThis = this;
+                this.paper.clearTrain();
+                this.paper.clearPerson();
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    mainThis.getTimeRange();
+                    if (mainThis.currentTime > mainThis.endTime) {
+                        mainThis.onStop();
+                    }
+                    // 行车
+                    this.trainRun();
+                }, 1000);
+            }
         },
         onStop() {
             clearInterval(this.timer);
@@ -368,8 +638,6 @@ export default {
             ];
         },
         getStationInfo(data) {
-            console.log('--station--');
-            console.log(data);
             if (!data) {
                 return [];
             }
@@ -414,7 +682,6 @@ export default {
             }
         },
         trainRun() {
-            console.log("---run");
             if (!this.dataBuffer || this.dataBuffer.length == 0) {
                 this.getRealData();
             } else {
@@ -427,6 +694,7 @@ export default {
                 } else {
                     this.currentFrame = findPackage;
                     this.paper.drawTrain(findPackage);
+                    this.paper.drawPerson(findPackage);
                     this.paper.updateStationColor(findPackage);
                     this.warningList = findPackage.strDeviInfo;
                     this.setInfo(findPackage);
@@ -435,18 +703,49 @@ export default {
 
                     // 检查是否获取新数据
                     let index = this.dataBuffer.indexOf(findPackage);
-                    if (this.dataBuffer.length - index < 4) {
+                    if (this.dataBuffer.length - index < 2) {
+                        console.log(this.dataBuffer.length);
                         this.getRealData(index);
                     }
-                    // if (index > this.dataBuffer.length - 10 * this.speedRate) {
-                    //     this.getRealData();
-                    // }
                 }
             }
+
+            this.$refs.msg.getMessage(this.currentTime);
+        },
+        trainRun2() {
+            let p = getPackage(105, {
+                startTime: 2147483647,
+                speedTimes: this.speedRate,
+            }); // 0-86400
+            sendSock(p);
+
+            if (this.dataBuffer.length > 0) {
+                let findPackage = this.dataBuffer[this.dataBuffer.length - 1];
+                this.currentTime = findPackage.wTime;
+                this.currentFrame = findPackage;
+                this.paper.drawTrain(findPackage);
+                this.paper.drawPerson(findPackage);
+                this.paper.updateStationColor(findPackage);
+                this.warningList = findPackage.strDeviInfo;
+                this.setInfo(findPackage);
+
+                this.currentTime += this.speedRate;
+
+                // 检查是否获取新数据
+                let index = this.dataBuffer.indexOf(findPackage);
+                if (this.dataBuffer.length - index < 4) {
+                    this.getRealData(index);
+                }
+            }
+
+            this.$refs.msg.getMessage(this.currentTime);
+        },
+        changeSimSpeed() {
+            sendSock(getPackage(142, { sim_speed: this.sim_speed }));
         },
         getRealData(index) {
             if (index) {
-                this.dataBuffer = this.dataBuffer.splice(0, index);
+                this.dataBuffer.splice(0, index);
             }
 
             let p = getPackage(105, {
@@ -498,6 +797,28 @@ export default {
                     return a.wTime - b.wTime;
                 });
 
+                let findModel = this.warningListArr.find((item) => {
+                    return item.wTime == this.currentTime;
+                });
+
+                if (findModel && findModel.list) {
+                    findModel.list.forEach((d) => {
+                        info.push(`${this.formatTime(findModel.wTime)} ${d}`);
+                    });
+                }
+            }
+            if (info.length > 0) {
+                this.warningListArrDisplay = info;
+            }
+
+            // 消息显示改为只显示当前时间的消息,2022.08016
+            return;
+            //let info = [];
+            if (this.warningListArr) {
+                this.warningListArr.sort((a, b) => {
+                    return a.wTime - b.wTime;
+                });
+
                 for (
                     let i = 0;
                     i < this.warningListArr.length &&
@@ -514,11 +835,46 @@ export default {
             }
             this.warningListArrDisplay = info;
         },
+        changeLimitMode(val) {
+            this.setTmpLimit = val;
+            this.paper.setTmpLimit = this.setTmpLimit;
+            if (!val) {
+                // 取消选中的Link
+                this.paper.clearSetLimitLink();
+            }
+        },
+        prepareApplyLimit() {
+            let newList = this.paper.getTmpLimitFromLink();
+            this.needSendTmpLimit = this.tmpLimits.concat(newList);
+            this.limitVisible = true;
+        },
+        applyLimit() {
+            let sendData = this.needSendTmpLimit.map((m) => {
+                if (m.remove) {
+                    m.limitSpd = 65535;
+                }
+                return {
+                    id: parseInt(m.id),
+                    link: parseInt(m.link),
+                    headOfst: parseInt(m.headOfst),
+                    tailOfst: parseInt(m.tailOfst),
+                    limitSpd: parseInt(m.limitSpd),
+                };
+            });
+
+            sendSock(getPackage(307, { limitSpeed: sendData }));
+            this.paper.clearSetLimitLink();
+            this.limitVisible = false;
+        },
         wsCallback(res) {
             if (res.msgType == 205) {
                 let rundata = res.data.bsVtsDataVector;
-                if (rundata.length > 0) {
-                    this.dataBuffer = this.dataBuffer.concat(rundata);
+                if (this.runmode === "实时模式") {
+                    this.dataBuffer = rundata;
+                } else if (this.runmode === "历史模式") {
+                    if (rundata.length > 0) {
+                        this.dataBuffer = this.dataBuffer.concat(rundata);
+                    }
                 }
             } else if (res.msgType == 236) {
                 let timeData = res.data;
@@ -548,7 +904,21 @@ export default {
                 }
                 let lineData = res.data;
                 this.project = JSON.parse(lineData.strJsonData);
+
                 this.drawLine();
+                this.loading = false;
+            } else if (res.msgType == 407) {
+                if (res.status != 1) {
+                    this.$message({
+                        message: res.msg,
+                        type: "warning",
+                    });
+                    return;
+                }
+                this.tmpLimits = res.data.limitSpeed;
+                this.tmpLimits = this.tmpLimits.map((m) => {
+                    return { ...m, remove: false };
+                });
             }
         },
     },
@@ -566,7 +936,7 @@ export default {
     flex-direction: row;
     justify-content: flex-start;
     height: calc(100vh - 50px);
-    /* padding: 10px; */
+    padding: 10px;
 }
 
 .main-right {
@@ -604,7 +974,7 @@ export default {
 
 .info-panel {
     position: absolute;
-    width: calc(100% - 20px);
+    width: calc(100% - 420px);
     background-color: #194a9944;
     color: #fff;
     text-align: left;
@@ -612,6 +982,7 @@ export default {
     z-index: 1;
     bottom: 10px !important;
     display: flex;
+    right: 10px;
     flex-direction: column;
 }
 
@@ -831,12 +1202,28 @@ export default {
     stroke: red;
 }
 
-.left_new{width: 400px;}
-.el-card {margin: 0 0 20px 10px;}
-.el-card__body .el-radio--medium.is-bordered{padding:10px 10px 0 5px;margin:0 10px !important}
+.left_new {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.el-card {
+    margin: 0;
+}
+.el-card__body .el-radio--medium.is-bordered {
+    padding: 10px 10px 0 5px;
+    margin: 0 10px !important;
+}
 
-.shiji .el-card{margin: 10px 0 0 10px;}
-.shiji .el-radio.is-bordered+.el-radio.is-bordered,.shiji .el-radio--medium.is-bordered,.shiji .el-radio.is-bordered+.el-radio.is-bordered{margin:0 5px !important;padding: 10px 10px 0 5px;}
-
+.shiji .el-card {
+    margin: 0 10px 10px 0;
+}
+.shiji .el-radio.is-bordered + .el-radio.is-bordered,
+.shiji .el-radio--medium.is-bordered,
+.shiji .el-radio.is-bordered + .el-radio.is-bordered {
+    margin: 0 5px !important;
+    padding: 10px 10px 0 5px;
+}
 </style>
 
