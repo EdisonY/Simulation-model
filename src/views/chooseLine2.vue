@@ -108,7 +108,7 @@ export default {
                 // },
                 {
                     index: 1,
-                    name: "北京轨道交通11号线",
+                    name: "北京轨道交通11号线西段",
                     c_time: "2021/04/07",
                     change_time: "2021/04/07",
                 },{
