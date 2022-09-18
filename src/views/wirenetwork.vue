@@ -113,7 +113,7 @@
                 </div>
                 <br/>
                 <el-button type="primary" size="small" @click="dialogVisible = true">选择运行图</el-button>
-                <el-button type="success" size="small" v-if="choseGap">开始仿真</el-button>
+                <el-button type="success" size="small" v-if="choseGap" @click="sim">开始仿真</el-button>
             </el-card>
         </div>
         <div class="Line" v-loading="loading">
@@ -159,35 +159,21 @@
         :append-to-body="true"
         :visible.sync="dialogVisible"
         width="40%">
+        {{choseGapData}}
             <el-table
                     :data="tableData"
                     border
                     style="width: 100%">
-                    <el-table-column
-                    prop="xuhao"
-                    align="center"
-                    label="序号">
-                    </el-table-column>
                     <el-table-column
                     prop="name"
                     align="center"
                     label="运行图/开行方案名称">
                     </el-table-column>
                     <el-table-column
-                    prop="keliu"
-                    align="center"
-                    label="客流名称">
-                    </el-table-column>
-                    <el-table-column
-                    prop="shijian"
-                    align="center"
-                    label="创建时间">
-                    </el-table-column>
-                    <el-table-column
                     align="center"
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="success" size="mini" @click="choseGap = true, dialogVisible = false">加载</el-button>
+                        <el-button type="success" size="mini" @click="choseGap = true, dialogVisible = false,choseGapData = scope.row.name">加载</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -274,12 +260,20 @@ export default {
                 name: '工作日，双休日',
                 address: '上海市普陀区金沙江路 1516 弄'
             }],
+            choseGapData:'',
             choseGap:false
 
         }
     },
     created () {
-        
+        var self = this
+        this.$api.get('/api/ntms/graph/list').then(res => {             
+            for (let index = 0; index < res.graph.length; index++) {
+                self.tableData.push({})
+                self.tableData[index].xuhao = index + 1
+                self.tableData[index].name = res.graph[index]
+            }
+        })
     },
     mounted () {
         tctSubway = new tct_subway({
@@ -605,6 +599,29 @@ export default {
 
             clearTimeout(realtimeOut)
             
+        },
+        sim(){
+            
+            this.$api.post('/api/ntms/graph/sim',this.choseGapData).then(res => {             
+                switch (res.status) {
+                    case 0:
+                        this.$message.error('启动失败');
+                    break;
+                    case 1:
+                        this.$message({
+                            message: '启动成功',
+                            type: 'success'
+                        });
+                    break;
+                    case 2:
+                        this.$message.error('未找到运行图');
+                    break;
+                    case 3:
+                        this.$message('已在运行');
+                    break;
+                
+                }
+            })
         }
     }
 }
