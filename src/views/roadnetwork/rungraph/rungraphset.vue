@@ -1137,7 +1137,24 @@ export default {
         type: type,
       });
     },
-    wsCallback(data) {
+    wsCallback(res) {
+      //802回调
+      if(res.msgType==802){
+        console.log("receive 802 data");
+                console.log(res);
+                if (res.data && res.data.length > 0) {
+                  this.$refs.grap.gclearChartData()
+                  this.$refs.grap.gclearChartData();
+                    let planData = res.data[0].serveList;
+                    let realData = res.data[1].serveList;
+                    this.$refs.grap.initData(planData, false);
+                    this.$refs.grap.initData(realData, true);
+                    this.$refs.grap.cacheData = {
+                        planData,
+                        realData,
+                    };
+                }
+      }
       return false;
       if (data.msgType == 3003) {
         // 线路车站信息
@@ -1383,6 +1400,8 @@ export default {
      * 铺画开行方案702接口
      */
     drawgraph(){
+      
+
     },
 
   },
