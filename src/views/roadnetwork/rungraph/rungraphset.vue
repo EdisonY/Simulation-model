@@ -15,7 +15,8 @@
             <el-table-column prop="data" label="操作">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="drawAllData"
-                  >打开</el-button>
+                  >打开</el-button
+                >
                 <el-button type="danger" size="mini">删除</el-button>
               </template>
             </el-table-column>
@@ -162,10 +163,7 @@
                     </el-time-picker>
                   </td>
                   <td>
-                    <el-select
-                      v-model="items.tmpRout"
-                      placeholder="请选择"
-                    >
+                    <el-select v-model="items.tmpRout" placeholder="请选择">
                       <el-option
                         v-for="item in tmpRoute"
                         :key="item.value"
@@ -206,21 +204,21 @@
                   <td>
                     <el-tooltip content="添加交路">
                       <el-button
-                      icon="el-icon-plus"
-                      @click="addTableData(index1, index)"
-                      size="mini"
-                      style="width: fit-content"
-                    ></el-button>
+                        icon="el-icon-plus"
+                        @click="addTableData(index1, index)"
+                        size="mini"
+                        style="width: fit-content"
+                      ></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除当前交路">
                       <el-button
-                      v-if="deleteData"
-                      type="danger"
-                      icon="el-icon-delete"
-                      @click="deleteTableData(index1, index)"
-                      size="mini"
-                      style="width: fit-content"
-                    ></el-button>
+                        v-if="deleteData"
+                        type="danger"
+                        icon="el-icon-delete"
+                        @click="deleteTableData(index1, index)"
+                        size="mini"
+                        style="width: fit-content"
+                      ></el-button>
                     </el-tooltip>
                   </td>
                 </tr>
@@ -236,9 +234,7 @@
             <el-button type="primary" size="small" @click="addTable()"
               >添加条数</el-button
             >
-            <el-button type="success" size="small" @click="resetRungrap()"
-              >铺画</el-button
-            >
+            <el-button type="success" size="small" @click="drawgraph">铺画</el-button>
           </div>
         </el-tab-pane>
         <!-- <el-tab-pane label="修改运行图">
@@ -322,6 +318,8 @@ import { getStations } from "@/utils/station";
 // import DiagramReal from "../../../components/DiagramRealLocal.vue";
 // import testData from "../../../components/testData";
 import testStations from "../../../components/stations";
+import { type } from "os";
+import { getTypeOf } from "../../../../public/libs/jszip/2.6.1/jszip";
 
 export default {
   name: "Rungrap",
@@ -700,7 +698,6 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-
               trainRunNum1: 20,
               trainRunNum0: 20,
               stopOrNotList: [
@@ -796,7 +793,6 @@ export default {
               tmpRout: 1,
               startStationId: 2104,
               endStationId: 2101,
-
               trainRunNum1: 20,
               trainRunNum0: 20,
               stopOrNotList: [
@@ -855,6 +851,7 @@ export default {
 
     this.rungrapData.multiply = this.$route.meta.type;
     let currentLine = sessionStorage.getItem("currentLine");
+    console.log(currentLine);
     this.rungrapData.station = getStations(currentLine);
     console.log(this.rungrapData);
 
@@ -868,6 +865,16 @@ export default {
         self.$refs.grap.initData();
       });
     }
+    //时间数据转化
+    this.tableData4.forEach((item) => {
+      if (typeof item.startTime != "object") {
+        let ss = new Date("2022/9/16," + this.formatTime(item.startTime));
+        let ee = new Date("2022/9/16," + this.formatTime(item.endTime));
+        item.startTime = ss;
+        item.endTime = ee;
+        console.log(item.startTime);
+      }
+    });
   },
   mounted() {
     // this.ws.registerCallback("mainPage", this.wsCallback);
@@ -875,11 +882,6 @@ export default {
     // this.sendPackage("plan-diagram");
     // this.sendPackage("scheme-diagram");
     // this.getData();
-    this.tableData4.forEach((item)=>{
-      if(typeof  item.startTime != "Date")
-      item.startTime=new Date('2022/9/16,'+this.formatTime( item.startTime));
-      item.endTime=new Date('2022/9/16,'+this.formatTime( item.endTime));
-    })
   },
   methods: {
     formatTime(time) {
@@ -894,15 +896,17 @@ export default {
         .padStart(2, "0");
       return `${hour}:${minute}:${second}`;
     },
-   /**
-    * 将时间转换成秒
-    * @param {Date} date 
-    */
-    transTime(date){
-      let H=date.getHours;
-      let m=date.getMinutes;
-      let s=date.getSeconds;
-      let sum=H*3600+m*60+s;
+    /**
+     * 将时间转换成秒
+     * @param {Date} date
+     */
+    transTime(date) {
+      console.log(date);
+      var HH = date.getHours();
+      let mm = date.getMinutes();
+      let ss = date.getSeconds();
+      let sum = HH * 3600 + mm * 60 + ss;
+      // console.log(date + "=" + sum + "s");
       return sum;
     },
     getRungrapClick(params) {
@@ -912,71 +916,71 @@ export default {
       this.$refs.grap.drewPlan();
     },
     addTable() {
-      const temp={
-          startTime: 25200,
-          endTime: 32400,
-          crossRouteCount: 2,
-          crossRouteList: [
-            {
-              crossRouteId: 1,
-              trainTypeGroup: "4A",
-              lineWayId: 37,
-              tmpRout: 0,
-              startStationId: 2101,
-              endStationId: 2103,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2103,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: false,
-                },
-              ],
-              stopOrNotList1: [2104],
-            },
-            {
-              crossRouteId: 2,
-              trainTypeGroup: "4A",
-              lineWayId: 65526,
-              tmpRout: 1,
-              startStationId: 2104,
-              endStationId: 2101,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2103,
-                  stopOrNot: false,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-              ],
-              stopOrNotList1: [2103],
-            },
-          ],
-        };
+      const temp = {
+        startTime: 25200,
+        endTime: 32400,
+        crossRouteCount: 2,
+        crossRouteList: [
+          {
+            crossRouteId: 1,
+            trainTypeGroup: "4A",
+            lineWayId: 37,
+            tmpRout: 0,
+            startStationId: 2101,
+            endStationId: 2103,
+            trainRunNum1: 20,
+            trainRunNum0: 20,
+            stopOrNotList: [
+              {
+                stationId: 2101,
+                stopOrNot: true,
+              },
+              {
+                stationId: 2102,
+                stopOrNot: true,
+              },
+              {
+                stationId: 2103,
+                stopOrNot: true,
+              },
+              {
+                stationId: 2104,
+                stopOrNot: false,
+              },
+            ],
+            stopOrNotList1: [2104],
+          },
+          {
+            crossRouteId: 2,
+            trainTypeGroup: "4A",
+            lineWayId: 65526,
+            tmpRout: 1,
+            startStationId: 2104,
+            endStationId: 2101,
+            trainRunNum1: 20,
+            trainRunNum0: 20,
+            stopOrNotList: [
+              {
+                stationId: 2103,
+                stopOrNot: false,
+              },
+              {
+                stationId: 2104,
+                stopOrNot: true,
+              },
+              {
+                stationId: 2102,
+                stopOrNot: true,
+              },
+              {
+                stationId: 2101,
+                stopOrNot: true,
+              },
+            ],
+            stopOrNotList1: [2103],
+          },
+        ],
+      };
       this.tableData4.push(temp);
       this.deleteData = true;
     },
@@ -1052,7 +1056,6 @@ export default {
       let param = this.ws.getPackage(702, data);
       this.ws.sendSock(param);
     },
-
     getData() {
       let planTripArr = [];
       let planServes = testData[0].serveList;
@@ -1139,21 +1142,21 @@ export default {
     },
     wsCallback(res) {
       //802回调
-      if(res.msgType==802){
+      if (res.msgType == 802) {
         console.log("receive 802 data");
-                console.log(res);
-                if (res.data && res.data.length > 0) {
-                  this.$refs.grap.gclearChartData()
-                  this.$refs.grap.gclearChartData();
-                    let planData = res.data[0].serveList;
-                    let realData = res.data[1].serveList;
-                    this.$refs.grap.initData(planData, false);
-                    this.$refs.grap.initData(realData, true);
-                    this.$refs.grap.cacheData = {
-                        planData,
-                        realData,
-                    };
-                }
+        console.log(res);
+        if (res.data && res.data.length > 0) {
+          this.$refs.grap.gclearChartData();
+          this.$refs.grap.gclearChartData();
+          let planData = res.data[0].serveList;
+          let realData = res.data[1].serveList;
+          this.$refs.grap.initData(planData, false);
+          this.$refs.grap.initData(realData, true);
+          this.$refs.grap.cacheData = {
+            planData,
+            realData,
+          };
+        }
       }
       return false;
       if (data.msgType == 3003) {
@@ -1257,8 +1260,7 @@ export default {
             component.setRealData(realTripArr);
           }
         });
-      }else if(data.msgType == 702){
-
+      } else if (data.msgType == 702) {
       }
     },
     transAppInfo(d) {
@@ -1399,11 +1401,41 @@ export default {
     /**
      * 铺画开行方案702接口
      */
-    drawgraph(){
-      
-
+    drawgraph() {
+      var tempData =[];
+      this.tableData4.forEach(item=>{
+        let a=[];
+        item.crossRouteList.forEach(item2=>{
+          a.push({
+            trainTypeGroup:item2.trainTypeGroup,
+            lineway1:1,
+            trainRunNum1:item2.trainRunNum1,
+            runLevel1:1,
+            dir1:85,
+            lineway0:2,
+            trainRunNum0:item2.trainRunNum0,
+            runLevel0:1,
+            dir0:170,
+          })
+        })
+        tempData.push({
+          startTime:this.transTime(item.startTime),
+          endTime:this.transTime(item.endTime),
+          trainRunNums:a
+        })
+      })
+      console.log(tempData);
+      let tempData2={
+        Caption:'1',
+        remarks:this.address,
+        lineId:sessionStorage.getItem("currentLine"),
+        runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==true?2:1,
+        mRoutingTrainRunNums:tempData
+      }
+      console.log(tempData2);
+      console.log(sessionStorage);
+      this.ws.sendSock(702,tempData2);
     },
-
   },
   beforeDestroy() {
     this.rungrapData = {};
