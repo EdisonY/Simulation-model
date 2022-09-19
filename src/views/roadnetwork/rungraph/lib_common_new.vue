@@ -528,7 +528,6 @@ export default {
     },
     props: ["rungrapData"],
     created() {
-        registerCallback("lib_common-33", this.wsCallback);
         var hours = 4;
         var min = 0;
         var second = -10;
@@ -595,6 +594,7 @@ export default {
         }
     },
     mounted() {
+        registerCallback("lib_common-33", this.wsCallback);
         this.currentLine = sessionStorage.getItem("currentLine");
         this.drawLine(); // 画坐标系
         // 遍历每个图表，禁用系统滚动事件
