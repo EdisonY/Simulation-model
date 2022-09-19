@@ -74,11 +74,12 @@
                     _self.__proto__.xml = xml;
                     _self._generate('g',{'id':'normal','class':'normal'},'subwayMain')
                     _self._generate('g',{'id':'image'},'subwayMain')
+                    
                     _self._generate('g',{'id':'fullLoad'},'subwayMain')
-                    _self._generate('g',{'id':'alarm'},'subwayMain')
                     _self._generate('g',{'id':'lineName'},'subwayMain')
                     _self._generate('g',{'id':'stationPoint'},'subwayMain')
                     _self._generate('g',{'id':'stationName'},'subwayMain')
+                    _self._generate('g',{'id':'alarm'},'subwayMain')
                     _self._generate('g',{'id':'arrow'},'subwayMain')
                     _self._generate('g',{'id':'HeatMap'},'subwayMain')
                     _self._generate('g',{'id':'Passengerflow'},'subwayMain')
@@ -215,11 +216,15 @@
                 stationPath[stationPath.length - 1].station.push({
                     'sId':data[index].attributes.acc.value,
                     'id':'up',
-                    'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                    'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                    'endX':Number(data[next].attributes.x.value),
+                    'endY':Number(data[next].attributes.y.value)
                 },{
                     'sId':data[index].attributes.acc.value,
                     'id':'down',
-                    'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy)
+                    'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
+                    'endX':_x,
+                    'endY':_y
                 })
 
             }else{
@@ -230,11 +235,14 @@
                     'sId':data[index].attributes.acc.value,
                     'id':'up',
                     'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                    'endX':Number(data[next].attributes.x.value),
+                    'endY':Number(data[next].attributes.y.value)
                 },{
                     'sId':data[index].attributes.acc.value,
                     'id':'down',
                     'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' L' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
-                    
+                    'endX':_x,
+                    'endY':_y                    
                 })
 
             }
@@ -256,11 +264,15 @@
                         stationPath[stationPath.length - 1].station.push({
                             'sId':data[index].attributes.acc.value,
                             'id':'up',
-                            'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value))
+                            'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' Q' + (Number(arr[0]) + 2 * urc[0]) + ' ' + (Number(arr[1]) + 2 * urc[1]) + ' ' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                            'endX':Number(data[next].attributes.x.value),
+                            'endY':Number(data[next].attributes.y.value)
                         },{
                             'sId':data[index].attributes.acc.value,
                             'id':'down',
-                            'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy)
+                            'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' Q' + (Number(arr[0]) + 2 * drc[0]) + ' ' + (Number(arr[1]) + 2 * drc[1]) + ' ' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
+                            'endX':_x,
+                            'endY':_y
                         })
 
                     }else{
@@ -271,11 +283,14 @@
                             'sId':data[index].attributes.acc.value,
                             'id':'up',
                             'd':' M' + (_x + 2 * _uox) + ' ' + (_y + 2 * _uoy) + ' L' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.uox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.uoy.value)),
+                            'endX':Number(data[next].attributes.x.value),
+                            'endY':Number(data[next].attributes.y.value)
                         },{
                             'sId':data[index].attributes.acc.value,
                             'id':'down',
                             'd':' M' + (Number(data[next].attributes.x.value) + 2 * Number(data[next].attributes.dox.value)) + ' ' + (Number(data[next].attributes.y.value) + 2 * Number(data[next].attributes.doy.value)) + ' L' + (_x + 2 * _dox) + ' ' + (_y + 2 * _doy),
-                            
+                            'endX':_x,
+                            'endY':_y                    
                         })
 
                     }
@@ -425,33 +440,25 @@
             for (let index = 0; index < stationPath.length; index++) {
                 if(stationPath[index].line == lineId){
 
-                    if(direction == 1){
-
-                        for (let i = stationPath[index].station.length - 1; i >= 0; i--) {
-                            
-                            if(stationPath[index].station[i].sId == tId){
-                                position = true
-                            }else if(stationPath[index].station[i].sId == fId){
-                                position = false
-                            }
-
-                            if(position){
-                                if(stationPath[index].station[i].id == 'up'){
+                    for (let i = 0; i < stationPath[index].station.length; i++) {
+                        if(direction == 1){
+                            if(lineId == 7 || lineId == 5|| lineId == 1 || lineId == 6){
+                                if(stationPath[index].station[i].sId == fId && stationPath[index].station[i].id == 'up'){
+                                    path += stationPath[index].station[i].d
+                                }
+                            }else{
+                                if(stationPath[index].station[i].sId == tId && stationPath[index].station[i].id == 'up'){
                                     path += stationPath[index].station[i].d
                                 }
                             }
-                        }
-
-                    }else{
-                        for (let i = 0; i < stationPath[index].station.length; i++) {
-                            if(stationPath[index].station[i].sId == fId){
-                                position = true
-                            }else if(stationPath[index].station[i].sId == tId){
-                                position = false
-                            }
-
-                            if(position){
-                                if(stationPath[index].station[i].id == 'down'){
+                            
+                        }else{
+                            if(lineId == 7 || lineId == 5|| lineId == 1 || lineId == 6){
+                                if(stationPath[index].station[i].sId == fId && stationPath[index].station[i].id == 'down'){
+                                    path += stationPath[index].station[i].d
+                                }
+                            }else{
+                                if(stationPath[index].station[i].sId == tId && stationPath[index].station[i].id == 'down'){
                                     path += stationPath[index].station[i].d
                                 }
                             }
@@ -708,7 +715,7 @@
                 this._generate('animateMotion',{
                     id:trainId + 'Y',
                     dur:arrive + "s",
-                    fill:"freeze", //结束后冻结车辆图标
+                    // fill:"freeze", //结束后冻结车辆图标
                     keyPoints:"0;" + per + ";1",
                     keyTimes:"0;0.0001;1",
                     rotate:"auto",
@@ -948,32 +955,6 @@
             }
         },
         getPosition:function(id){
-            // var p = new Promise(function(resolve,reject){
-            //     setTimeout(()=>{
-            //         var cb = []
-            //         $('#subwayMain g').children().each(function(e,i){
-            //             if(i.attributes.type && i.attributes.type.value == 'station'){
-            //                 if(!isNaN(Number(id))){
-            //                     if(i.attributes.id && i.attributes.id.value === id){
-            //                         cb = {
-            //                             x:i.attributes.cx ? Number(i.attributes.cx.value) : Number(i.attributes.x.value),
-            //                             y:i.attributes.cy ? Number(i.attributes.cy.value) : Number(i.attributes.y.value)
-            //                         }
-            //                     }
-            //                 }else{
-            //                     if(i.attributes.sdata && i.attributes.sdata.value === id){
-            //                         cb.push({
-            //                             x:i.attributes.cx ? Number(i.attributes.cx.value) : Number(i.attributes.x.value),
-            //                             y:i.attributes.cy ? Number(i.attributes.cy.value) : Number(i.attributes.y.value)
-            //                         })
-            //                     }
-            //                 }
-            //             }
-            //         })
-            //         resolve(cb)
-            //     },400)
-            // })
-            // return p
             var cb = {}
             var tmp = []
             var ax = parseFloat($('#subwayMain').css('transform').substring(7).split(',')[4])
