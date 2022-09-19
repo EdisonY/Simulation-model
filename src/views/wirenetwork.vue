@@ -8,7 +8,9 @@
                 </div>
                 <!-- <el-button type="primary" size="small">导入线网客流</el-button>
                 <el-button type="primary" size="small">导入运行图</el-button> -->
-                开启热力图
+
+
+                <!-- 开启热力图
                 <el-switch
                     v-model="hotMap"
                     active-color="#13ce66"
@@ -16,7 +18,9 @@
                     @change="hot">
                 </el-switch>
                 <br/>
-                <br/>
+                <br/> -->
+
+
                 线路拥挤度
                 <el-switch
                     v-model="fullload"
@@ -35,7 +39,8 @@
                 </el-switch>
                 <br/>
                 <br/>
-                实时仿真
+                <!-- 实时仿真 -->
+                列车位置
                 <el-switch
                     v-model="realtime"
                     active-color="#13ce66"
@@ -44,7 +49,7 @@
                 </el-switch>
                 <br/>
                 <br/>
-                线路状态
+                <!-- 线路状态
                 <el-switch
                     v-model="lineState"
                     active-color="#13ce66"
@@ -61,7 +66,8 @@
                     @change="lateStateChange">
                 </el-switch>
                 <br/>
-                <br/>
+                <br/> -->
+
                 <!-- 历史回放
                 <el-switch
                     v-model="historyrealtime"
@@ -95,8 +101,10 @@
                     <el-button type="warning" size="small" class="qidong" @click="pauseHistory()" v-if="historyState == 1">暂停</el-button>
                     <el-button type="success" size="small" class="qidong" @click="unpauseHistory()" v-if="historyState == 2">播放</el-button>
                     <el-button type="danger" size="small" class="qidong" @click="resetHistoryState()" v-if="historyState == 1 || historyState == 2">重置</el-button>
-                </div> -->
-                集群：
+                </div>
+                <br/>
+                <br/> -->
+                <!-- 集群：
                 <router-link to="/emergency1/marshalling">
                     <el-button type="primary" size="mini">编辑</el-button>
                 </router-link>
@@ -111,7 +119,7 @@
                         <el-checkbox label="5" border>集群5</el-checkbox>
                     </el-checkbox-group>
                 </div>
-                <br/>
+                <br/> -->
                 <el-button type="primary" size="small" @click="dialogVisible = true">选择运行图</el-button>
                 <el-button type="success" size="small" v-if="choseGap" @click="sim">开始仿真</el-button>
             </el-card>
@@ -475,7 +483,7 @@ export default {
                                 
 
                                 //测试截取片段
-                                if(tmpNumber > 0) return false
+                                // if(tmpNumber > 0) return false
                                 //测试截取片段
                                 console.log(res.trains[index]);
                                 tctSubway.drewRunning(
