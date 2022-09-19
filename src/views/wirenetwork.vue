@@ -310,7 +310,8 @@ export default {
     methods:{
         realtimeFormat(){
             var time = new Date()
-            return (time.getHours() - 2) * 3600 + time.getMinutes() * 60 + time.getSeconds()
+            // return (time.getHours() - 2) * 3600 + time.getMinutes() * 60 + time.getSeconds()
+            return 3 * 3600 + time.getMinutes() * 60 + time.getSeconds()
         },
         formatTooltip(val){
             //2h 120m 7200s
@@ -501,7 +502,7 @@ export default {
 
                     realtimeNum++
                     if(realtimeNum < RealTime.length){
-                        // realtimeOut = setTimeout(getDateSim,30000)
+                        realtimeOut = setTimeout(getDateSim,10000)
                     }else{
                         console.log('结束仿真');
                     }
