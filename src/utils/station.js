@@ -1,5 +1,4 @@
-let stations = [
-    {
+let stations = [{
         name: "默认测试线",
         data: [
             [0, 0, "测试站0"],
@@ -102,7 +101,8 @@ let stations = [
         ]
     },
     {
-        name: "北京轨道交通7号线", data: [
+        name: "北京轨道交通7号线",
+        data: [
             [0, 0, "北京西站"],
             [1, 3.7, "湾子站"],
             [2, 2.5, "达官营站"],
@@ -138,15 +138,17 @@ let stations = [
         ]
     },
     {
-        name: "北京轨道交通11号线西段", data: [
-            [1, 0, "模式口站"],
-            [2, 1, "金安桥站"],
-            [3, 1, "北辛安站"],
-            [4, 1, "新首钢站"],
+        name: "北京轨道交通11号线西段",
+        data: [
+            [0, 0, "模式口站"],
+            [1, 1, "金安桥站"],
+            [2, 1, "北辛安站"],
+            [3, 1, "新首钢站"],
         ]
     },
     {
-        name: "北京轨道交通燕房线", data: [
+        name: "北京轨道交通燕房线",
+        data: [
             [0, 0, "燕化站"],
             [1, 1, "老城区站"],
             [2, 1, "饶乐府站"],
@@ -159,7 +161,8 @@ let stations = [
         ]
     },
     {
-        name: "厦门轨道交通3号线", data: [
+        name: "厦门轨道交通3号线",
+        data: [
             [0, 0, "厦门火车站"],
             [1, 1, "湖滨东路站"],
             [2, 1, "体育中心站"],
@@ -186,7 +189,8 @@ let stations = [
         ]
     },
     {
-        name: "北京轨道交通房山线", data: [
+        name: "北京轨道交通房山线",
+        data: [
             [0, 0, "阎村车辆段"],
             [1, 1, "阎村东"],
             [2, 1, "苏庄"],
@@ -218,7 +222,7 @@ function getStations(currentLine) {
     let station = stationTMP.find(s => {
         return s.name == currentLine;
     });
-    
+
     station = station ? station : stationTMP[0];
     console.log(station);
     return station.data;

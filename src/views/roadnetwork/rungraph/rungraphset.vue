@@ -1429,7 +1429,7 @@ export default {
         Caption:'1',
         remarks:this.address,
         lineId:11, 
-        runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==true?2:1,
+        runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==false?1:2,
         mRoutingTrainRunNums:tempData
       }
       console.log(tempData2);
