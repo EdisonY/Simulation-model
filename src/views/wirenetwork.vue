@@ -235,31 +235,7 @@ export default {
             speed:'1',
             timeZone:0,
             dialogVisible:false,
-            tableData: [{
-                xuhao:1,
-                shijian: '2022-05-02',
-                keliu:'2022-05-02',
-                name: '工作日',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                xuhao:2,
-                shijian: '2022-05-04',
-                keliu:'2022-05-02',
-                name: '工作日',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                xuhao:3,
-                shijian: '2022-05-01',
-                keliu:'2022-05-02',
-                name: '双休日',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                xuhao:4,
-                shijian: '2022-05-03',
-                keliu:'2022-05-02',
-                name: '工作日，双休日',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
+            tableData: [],
             choseGapData:'',
             choseGap:false
 
