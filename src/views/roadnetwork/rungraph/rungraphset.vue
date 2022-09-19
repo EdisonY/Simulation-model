@@ -838,6 +838,7 @@ export default {
     },
   },
   created() {
+    this.ws.registerCallback("mainPage11", this.wsCallback);
     var self = this;
     this.rungrapData = {};
     var data = {
@@ -872,12 +873,11 @@ export default {
         let ee = new Date("2022/9/16," + this.formatTime(item.endTime));
         item.startTime = ss;
         item.endTime = ee;
-        console.log(item.startTime);
       }
     });
   },
   mounted() {
-    // this.ws.registerCallback("mainPage", this.wsCallback);
+    
     // this.sendPackage("line-info");
     // this.sendPackage("plan-diagram");
     // this.sendPackage("scheme-diagram");
@@ -901,7 +901,7 @@ export default {
      * @param {Date} date
      */
     transTime(date) {
-      console.log(date);
+      // console.log(date);
       var HH = date.getHours();
       let mm = date.getMinutes();
       let ss = date.getSeconds();
@@ -1428,16 +1428,18 @@ export default {
       let tempData2={
         Caption:'1',
         remarks:this.address,
-        lineId:sessionStorage.getItem("currentLine"),
+        lineId:11, 
         runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==true?2:1,
         mRoutingTrainRunNums:tempData
       }
       console.log(tempData2);
       console.log(sessionStorage);
       this.ws.sendSock(702,tempData2);
+      console.log('send 702 data');
     },
   },
   beforeDestroy() {
+    this.ws.unregisterCallback("mainPage11", this.wsCallback);
     this.rungrapData = {};
   },
 };

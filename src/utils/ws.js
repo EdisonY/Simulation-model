@@ -21,19 +21,19 @@ export function initWebSocket() { //初始化weosocket
     //ws地址
     wsuri = WS ? WS : wsuri;
     websock = new WebSocket(wsuri);
-    websock.onmessage = function (e) {
+    websock.onmessage = function(e) {
         websocketonmessage(e);
     };
-    websock.onclose = function (e) {
+    websock.onclose = function(e) {
         ack_topic = false;
         websocketclose(e);
         console.log("WebSocket关闭");
     };
-    websock.onopen = function () {
+    websock.onopen = function() {
         websocketOpen();
     };
     //连接发生错误的回调方法
-    websock.onerror = function () {
+    websock.onerror = function() {
         ack_topic = false;
         console.log("WebSocket连接发生错误");
     }
@@ -68,7 +68,7 @@ export function sendSock(agentData) {
                     skey: SERVER_KEY
                 }
             })
-            setTimeout(function () {
+            setTimeout(function() {
                 sendSock(agentData);
             }, 2000);
         } else {
@@ -76,12 +76,12 @@ export function sendSock(agentData) {
         }
     } else if (websock.readyState === websock.CONNECTING) {
         // 若是 正在开启状态，则等待1s后重新调用
-        setTimeout(function () {
+        setTimeout(function() {
             sendSock(agentData);
         }, 1000);
     } else {
         // 若未开启 ，则等待1s后重新调用
-        setTimeout(function () {
+        setTimeout(function() {
             sendSock(agentData);
         }, 1000);
     }
@@ -94,7 +94,7 @@ export function getPackage(msgType, data, status = 1, msg = "") {
         appName: APP_NAME,
         key: APP_KEY,
         msgType: msgType,
-        data: typeof (data) == 'string' ? data : JSON.stringify(data),
+        data: typeof(data) == 'string' ? data : JSON.stringify(data),
         status: status,
         msg: msg,
         dateTime: Vue.prototype.$getCurrentDate()
@@ -169,13 +169,13 @@ function reconnect() {
     lock++
     time = navigator.onLine ? 3000 : 10000
     text = navigator.onLine ? '链接丢失等待第' + lock + '次重新链接！' : '您与互联网断开连接，等待重新连接互联网！'
-    // loading = Loading.service({
-    //     lock:true,
-    //     fullscreen:true,
-    //     text:text,
-    //     background:'rgba(0, 0, 0, 0.8)',
-    //     spinner:'el-icon-loading'
-    // });
+        // loading = Loading.service({
+        //     lock:true,
+        //     fullscreen:true,
+        //     text:text,
+        //     background:'rgba(0, 0, 0, 0.8)',
+        //     spinner:'el-icon-loading'
+        // });
     if (lock < 2000) {
         setTimeout(() => {
             initWebSocket();
@@ -191,9 +191,9 @@ Vue.prototype.$getCurrentDate = function getCurrentDate(time) {
     let date = time ? new Date(time) : new Date();
     let Y = date.getFullYear() + "-";
     let M =
-        (date.getMonth() + 1 < 10
-            ? "0" + (date.getMonth() + 1)
-            : date.getMonth() + 1) + "-";
+        (date.getMonth() + 1 < 10 ?
+            "0" + (date.getMonth() + 1) :
+            date.getMonth() + 1) + "-";
     let D = ("0" + date.getDate()).slice(-2) + " ";
     let h = ("0" + date.getHours()).slice(-2) + ":";
     let m = ("0" + date.getMinutes()).slice(-2) + ":";
