@@ -120,6 +120,8 @@ let Paper = joint.dia.Paper.extend({
             if (!view) {
                 console.log('--- TODO ---')
                 console.log(node);
+                console.log('--- 应该从文件删除？ ---')
+                return;
             }
             view.model.attributes.drawData.teamId = newTeam.teamId;
             resetTeamMap.push(node.id);
@@ -303,7 +305,9 @@ let Paper = joint.dia.Paper.extend({
             if (teams[i].nodes.length < 2) {
                 teams[i].nodes.forEach(id => {
                     let node = this.model.getCell(id);
-                    node.attributes.drawData.teamId = null;
+                    if(node){
+                        node.attributes.drawData.teamId = null;
+                    }
                 });
                 this.project.teams.splice(i, 1);
                 i--;
@@ -411,7 +415,9 @@ let Paper = joint.dia.Paper.extend({
                     view.unselect();
                     view.passiveDown();
                     if (cellView.model.attributes.drawData.stationComponentId && cellView.model.attributes.drawData.stationComponentId == item.attributes.drawData.stationComponentId) {
-                        rectArr.push(view.getRect());
+                        if(view.getRect){
+                            rectArr.push(view.getRect());
+                        }
                     }
                 });
 
@@ -1196,19 +1202,24 @@ let Paper = joint.dia.Paper.extend({
                 });
                 endCell = this.findViewByModel(endCell);
 
-                let x = (startCell.getPosition().x + endCell.getPosition().x) / 2;
-                let y = (startCell.getPosition().y + endCell.getPosition().y) / 2;
-
-                let tag = ModelFactory.getInstanceByTypeName('标签');
-                tag.resize(0, 0);
-                tag.position(x, y);
-                tag.attr("text/text", "LK" + link.id);
-                tag.addTo(this.model);
-
-                if (team) {
-                    tag.attributes.drawData.teamId = team.teamId;
-                    let view = this.findViewByModel(tag);
-                    team.nodes.push(view.model.attributes.id);
+                try{
+                    let x = (startCell.getPosition().x + endCell.getPosition().x) / 2;
+                    let y = (startCell.getPosition().y + endCell.getPosition().y) / 2;
+    
+                    let tag = ModelFactory.getInstanceByTypeName('标签');
+                    tag.resize(0, 0);
+                    tag.position(x, y);
+                    tag.attr("text/text", "LK" + link.id);
+                    tag.addTo(this.model);
+    
+                    if (team) {
+                        tag.attributes.drawData.teamId = team.teamId;
+                        let view = this.findViewByModel(tag);
+                        team.nodes.push(view.model.attributes.id);
+                    }
+                }catch(err){
+                    console.log(err);
+                    console.log(link);
                 }
             });
         }

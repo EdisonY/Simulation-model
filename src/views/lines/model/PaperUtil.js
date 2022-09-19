@@ -240,9 +240,9 @@ let makeLinkGroupAndPointLinkInfo = (paper, lineGroup) => {
             segment.stopAreas.forEach(sa => {
                 let view = paper.getViewById(sa.id);
                 if (!view) {
-                    console.log('--- [WARNING] please check the data ---')
-                    console.log(segment)
-                    console.log(sa)
+                    // console.log('--- [WARNING] please check the data ---')
+                    // console.log(segment)
+                    // console.log(sa)
                 } else {
                     // 判断停车区是否在Link区间
                     if (Number(view.model.attributes.tctData.km1) >= Number(km1) && Number(view.model.attributes.tctData.km2) <= Number(km2)) {
@@ -281,7 +281,7 @@ let makeLinkGroupAndPointLinkInfo = (paper, lineGroup) => {
         });
 
         arr.sort((a, b) => {
-            return a.model.attributes.tctData.km - b.model.attributes.tctData.km;
+            return Number(a.model.attributes.tctData.km) - Number(b.model.attributes.tctData.km);
         });
 
         let linkSegment = [];
