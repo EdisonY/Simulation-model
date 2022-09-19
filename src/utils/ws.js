@@ -47,6 +47,9 @@ export function close() {
 
 export function registerCallback(pagename, callback) {
     global_callback[pagename] = callback;
+    // console.log('---global_callback---');
+    // console.log(global_callback);
+    // console.log('---------------------');
 }
 
 export function unregisterCallback(pagename) {
