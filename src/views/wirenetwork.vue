@@ -159,7 +159,6 @@
         :append-to-body="true"
         :visible.sync="dialogVisible"
         width="40%">
-        {{choseGapData}}
             <el-table
                     :data="tableData"
                     border
