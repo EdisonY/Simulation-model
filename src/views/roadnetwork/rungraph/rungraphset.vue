@@ -290,7 +290,7 @@
           </ul>
         </div>
       </el-card>
-      {{rungrapData}}
+      <!-- {{rungrapData}} -->
       <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
                 <p v-for="(msg,index) in warningList" :key="index">{{msg}}</p>
@@ -592,35 +592,35 @@ export default {
               ],
               stopOrNotList1: [2104],
             },
-            {
-              crossRouteId: 2,
-              trainTypeGroup: "4A",
-              lineWayId: 65526,
-              tmpRout: 1,
-              startStationId: 2104,
-              endStationId: 2101,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2103,
-                  stopOrNot: false,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-              ],
-              stopOrNotList1: [2103],
-            },
+            // {
+            //   crossRouteId: 2,
+            //   trainTypeGroup: "4A",
+            //   lineWayId: 65526,
+            //   tmpRout: 1,
+            //   startStationId: 2104,
+            //   endStationId: 2101,
+            //   trainRunNum1: 20,
+            //   trainRunNum0: 20,
+            //   stopOrNotList: [
+            //     {
+            //       stationId: 2103,
+            //       stopOrNot: false,
+            //     },
+            //     {
+            //       stationId: 2104,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2102,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2101,
+            //       stopOrNot: true,
+            //     },
+            //   ],
+            //   stopOrNotList1: [2103],
+            // },
           ],
         },
         {
@@ -657,35 +657,35 @@ export default {
               ],
               stopOrNotList1: [2104],
             },
-            {
-              crossRouteId: 2,
-              trainTypeGroup: "4A",
-              lineWayId: 65526,
-              tmpRout: 1,
-              startStationId: 2104,
-              endStationId: 2101,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2103,
-                  stopOrNot: false,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-              ],
-              stopOrNotList1: [2103],
-            },
+            // {
+            //   crossRouteId: 2,
+            //   trainTypeGroup: "4A",
+            //   lineWayId: 65526,
+            //   tmpRout: 1,
+            //   startStationId: 2104,
+            //   endStationId: 2101,
+            //   trainRunNum1: 20,
+            //   trainRunNum0: 20,
+            //   stopOrNotList: [
+            //     {
+            //       stationId: 2103,
+            //       stopOrNot: false,
+            //     },
+            //     {
+            //       stationId: 2104,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2102,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2101,
+            //       stopOrNot: true,
+            //     },
+            //   ],
+            //   stopOrNotList1: [2103],
+            // },
           ],
         },
         {
@@ -722,35 +722,35 @@ export default {
               ],
               stopOrNotList1: [2104],
             },
-            {
-              crossRouteId: 2,
-              trainTypeGroup: "4A",
-              lineWayId: 65526,
-              tmpRout: 1,
-              startStationId: 2104,
-              endStationId: 2101,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2103,
-                  stopOrNot: false,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-              ],
-              stopOrNotList1: [2103],
-            },
+            // {
+            //   crossRouteId: 2,
+            //   trainTypeGroup: "4A",
+            //   lineWayId: 65526,
+            //   tmpRout: 1,
+            //   startStationId: 2104,
+            //   endStationId: 2101,
+            //   trainRunNum1: 20,
+            //   trainRunNum0: 20,
+            //   stopOrNotList: [
+            //     {
+            //       stationId: 2103,
+            //       stopOrNot: false,
+            //     },
+            //     {
+            //       stationId: 2104,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2102,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2101,
+            //       stopOrNot: true,
+            //     },
+            //   ],
+            //   stopOrNotList1: [2103],
+            // },
           ],
         },
         {
@@ -788,35 +788,35 @@ export default {
               ],
               stopOrNotList1: [2104],
             },
-            {
-              crossRouteId: 2,
-              trainTypeGroup: "4A",
-              lineWayId: 65526,
-              tmpRout: 1,
-              startStationId: 2104,
-              endStationId: 2101,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
-              stopOrNotList: [
-                {
-                  stationId: 2103,
-                  stopOrNot: false,
-                },
-                {
-                  stationId: 2104,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2102,
-                  stopOrNot: true,
-                },
-                {
-                  stationId: 2101,
-                  stopOrNot: true,
-                },
-              ],
-              stopOrNotList1: [2103],
-            },
+            // {
+            //   crossRouteId: 2,
+            //   trainTypeGroup: "4A",
+            //   lineWayId: 65526,
+            //   tmpRout: 1,
+            //   startStationId: 2104,
+            //   endStationId: 2101,
+            //   trainRunNum1: 20,
+            //   trainRunNum0: 20,
+            //   stopOrNotList: [
+            //     {
+            //       stationId: 2103,
+            //       stopOrNot: false,
+            //     },
+            //     {
+            //       stationId: 2104,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2102,
+            //       stopOrNot: true,
+            //     },
+            //     {
+            //       stationId: 2101,
+            //       stopOrNot: true,
+            //     },
+            //   ],
+            //   stopOrNotList1: [2103],
+            // },
           ],
         },
       ],
