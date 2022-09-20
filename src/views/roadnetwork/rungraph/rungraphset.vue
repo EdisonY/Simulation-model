@@ -290,7 +290,6 @@
           </ul>
         </div>
       </el-card>
-      {{rungrapData}}
       <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
                 <p v-for="(msg,index) in warningList" :key="index">{{msg}}</p>
