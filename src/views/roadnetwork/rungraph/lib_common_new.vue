@@ -488,7 +488,7 @@ export default {
             subStation: [],
             key: true,
             currentLine: null,
-            loadRateMode: true, // 显示满载率模式
+            loadRateMode: false, // 显示满载率模式
             cacheData: null,
             isRunning: false, // 当前是否运行
             openLeft: true,
@@ -938,16 +938,16 @@ export default {
                                 dataColl.markLine.data[
                                     timeArrIndex - 1
                                 ][2].lineStyle.color = "#000";
-                                if (nummm != 0) {
-                                    dataColl.markLine.data[1][2].lineStyle.color =
-                                        data.runDir == 85
-                                            ? self.rungrapData.colors[0]
-                                            : self.rungrapData.colors[1];
-                                    if (nummm == 1) {
-                                        dataColl.markLine.data[1][2].lineStyle.color =
-                                            "#000";
-                                    }
-                                }
+                                // if (nummm != 0) {
+                                //     dataColl.markLine.data[1][2].lineStyle.color =
+                                //         data.runDir == 85
+                                //             ? self.rungrapData.colors[0]
+                                //             : self.rungrapData.colors[1];
+                                //     if (nummm == 1) {
+                                //         dataColl.markLine.data[1][2].lineStyle.color =
+                                //             "#000";
+                                //     }
+                                // }
                             }
                         }
                         timeArrIndex++;
@@ -1208,10 +1208,10 @@ export default {
                     let planData = res.data[0].serveList;
                     let realData = res.data[1].serveList;
                     this.initData(planData, false);
-                    this.initData(realData, true);
+                    // this.initData(realData, true);
                     this.cacheData = {
                         planData,
-                        realData,
+                        // realData,
                     };
                 }
             } else if (res.msgType == 233) {

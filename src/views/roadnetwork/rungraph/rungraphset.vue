@@ -290,6 +290,7 @@
           </ul>
         </div>
       </el-card>
+      {{rungrapData}}
       <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
                 <p v-for="(msg,index) in warningList" :key="index">{{msg}}</p>
@@ -851,8 +852,8 @@ export default {
       data: 2,
     };
 
-    // this.rungrapData.multiply = this.$route.meta.type;
-    this.rungrapData.multiply = false;
+    this.rungrapData.multiply = this.$route.meta.type;
+    // this.rungrapData.multiply = false;
     let currentLine = sessionStorage.getItem("currentLine");
     console.log(currentLine);
     this.rungrapData.station = getStations(currentLine);
