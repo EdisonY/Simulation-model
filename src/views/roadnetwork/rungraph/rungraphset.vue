@@ -290,6 +290,7 @@
           </ul>
         </div>
       </el-card>
+      {{rungrapData}}
       <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
                 <p v-for="(msg,index) in warningList" :key="index">{{msg}}</p>
@@ -307,6 +308,7 @@
                 :autoMode="autoMode"
                 :diagramName="lineName +` 实际运行图`"
                 style="height:calc(100vh - 50px);width:calc(100% - 400px)" /> -->
+                
     <rungrap ref="grap" :rungrapData="rungrapData" />
   </div>
 </template>
@@ -850,7 +852,8 @@ export default {
       data: 2,
     };
 
-    this.rungrapData.multiply = this.$route.meta.type;
+    // this.rungrapData.multiply = this.$route.meta.type;
+    this.rungrapData.multiply = false;
     let currentLine = sessionStorage.getItem("currentLine");
     console.log(currentLine);
     this.rungrapData.station = getStations(currentLine);
