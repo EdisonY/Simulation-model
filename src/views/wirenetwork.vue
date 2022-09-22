@@ -68,7 +68,7 @@
                 <br/>
                 <br/> -->
 
-                历史回放
+                <!-- 历史回放
                 <el-switch
                     v-model="historyrealtime"
                     active-color="#13ce66"
@@ -101,9 +101,9 @@
                     <el-button type="warning" size="small" class="qidong" @click="pauseHistory()" v-if="historyState == 1">暂停</el-button>
                     <el-button type="success" size="small" class="qidong" @click="unpauseHistory()" v-if="historyState == 2">播放</el-button>
                     <el-button type="danger" size="small" class="qidong" @click="resetHistoryState()" v-if="historyState == 1 || historyState == 2">重置</el-button>
-                </div>
-                <br/>
-                <br/>
+                </div> -->
+                <!-- <br/>
+                <br/> -->
                 <!-- 集群：
                 <router-link to="/emergency1/marshalling">
                     <el-button type="primary" size="mini">编辑</el-button>

@@ -632,7 +632,7 @@
             for (let index = 0; index < from.line.length; index++) {
                 cname += from.line[index].lineId + ' ';
             }
-            this._generate('image',{'href':'http://172.51.216.62:41005/subway/' + state + '.png','width':30,'height':30,'x':from.x - 15,'y':from.y - 34,'class':'cluster ' + cname},'Passengerflow')
+            this._generate('image',{'href':'http://172.51.216.62:41005/subway/' + state + '.png','width':20,'height':26,'x':from.x - 13,'y':from.y - 34,'class':'cluster zk ' + cname},'Passengerflow')
         },
         drewHeatmap:function(position,value){
             //绘制热力图
