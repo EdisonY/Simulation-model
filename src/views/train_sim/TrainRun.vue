@@ -430,7 +430,7 @@ export default {
         };
     },
     created() {
-        registerCallback("trainrun", this.wsCallback);
+        registerCallback("trainrun",this.wsCallback);
     },
     async mounted() {
         this.currentLine = sessionStorage.getItem("currentLine");

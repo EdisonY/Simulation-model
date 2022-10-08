@@ -178,7 +178,6 @@
                       v-model="items.stopOrNotList1"
                       placeholder="请选择"
                       multiple
-                      size="medium"
                     >
                       <el-option
                         v-for="items in stations"
@@ -320,8 +319,6 @@ import { getStations } from "@/utils/station";
 // import DiagramReal from "../../../components/DiagramRealLocal.vue";
 // import testData from "../../../components/testData";
 import testStations from "../../../components/stations";
-import { type } from "os";
-import { getTypeOf } from "../../../../public/libs/jszip/2.6.1/jszip";
 
 export default {
   name: "Rungrap",
@@ -330,7 +327,7 @@ export default {
       runGraphOrPassengerGraph: 1, //客流方式
       graphID: "",
       address: "",
-      lineName: "北京燕房线",
+      lineName: "",
       currentTime: new Date().toLocaleString(),
       startTime: 0,
       endTime: 1020,
@@ -570,8 +567,8 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
+              trainRunNum1: 10,
+              trainRunNum0: 10,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -635,8 +632,8 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
+              trainRunNum1: 10,
+              trainRunNum0: 10,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -700,8 +697,8 @@ export default {
               tmpRout: 0,
               startStationId: 2101,
               endStationId: 2103,
-              trainRunNum1: 20,
-              trainRunNum0: 20,
+              trainRunNum1: 10,
+              trainRunNum0: 10,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -766,8 +763,8 @@ export default {
               startStationId: 2101,
               endStationId: 2103,
 
-              trainRunNum1: 20,
-              trainRunNum0: 20,
+              trainRunNum1: 10,
+              trainRunNum0: 10,
               stopOrNotList: [
                 {
                   stationId: 2101,
@@ -931,8 +928,8 @@ export default {
             tmpRout: 0,
             startStationId: 2101,
             endStationId: 2103,
-            trainRunNum1: 20,
-            trainRunNum0: 20,
+            trainRunNum1: 10,
+            trainRunNum0: 10,
             stopOrNotList: [
               {
                 stationId: 2101,
@@ -960,8 +957,8 @@ export default {
             tmpRout: 1,
             startStationId: 2104,
             endStationId: 2101,
-            trainRunNum1: 20,
-            trainRunNum0: 20,
+            trainRunNum1: 10,
+            trainRunNum0: 10,
             stopOrNotList: [
               {
                 stationId: 2103,
@@ -1004,8 +1001,8 @@ export default {
         tmpRout: 0,
         startStationId: 2101,
         endStationId: 2103,
-        trainRunNum1: 20,
-        trainRunNum0: 20,
+        trainRunNum1: 10,
+        trainRunNum0: 10,
         stopOrNotList: [
           {
             stationId: 2101,
@@ -1161,110 +1158,110 @@ export default {
           };
         }
       }
-      return false;
-      if (data.msgType == 3003) {
-        // 线路车站信息
-        this.transAppInfo(JSON.parse(data.data));
-      } else if (data.msgType == 3002) {
-        // 计划运行图
-        this.transPlanData(JSON.parse(data.data));
-      } else if (data.msgType == 2002) {
-        // 【现场】故障信息
-        this.transFaultData(JSON.parse(data.data));
-      } else if (data.msgType == 2004) {
-        // 【现场】实时信息
-        this.transRealtimeData(JSON.parse(data.data));
-      } else if (data.msgType == 3004) {
-        // 【现场】预测信息
-        this.transForecastData(JSON.parse(data.data));
-      } else if (data.msgType == 4001) {
-        // TODO 运行指标信息
-        // 暂时没有接口
-      } else if (data.msgType == 4002) {
-        // 【方案】计划图
-        let d = JSON.parse(data.data);
-        let findP = this.solutions.find((s) => {
-          return s.planNo == d.planNo;
-        });
+      return ;
+      // if (data.msgType == 3003) {
+      //   // 线路车站信息
+      //   this.transAppInfo(JSON.parse(data.data));
+      // } else if (data.msgType == 3002) {
+      //   // 计划运行图
+      //   this.transPlanData(JSON.parse(data.data));
+      // } else if (data.msgType == 2002) {
+      //   // 【现场】故障信息
+      //   this.transFaultData(JSON.parse(data.data));
+      // } else if (data.msgType == 2004) {
+      //   // 【现场】实时信息
+      //   this.transRealtimeData(JSON.parse(data.data));
+      // } else if (data.msgType == 3004) {
+      //   // 【现场】预测信息
+      //   this.transForecastData(JSON.parse(data.data));
+      // } else if (data.msgType == 4001) {
+      //   // TODO 运行指标信息
+      //   // 暂时没有接口
+      // } else if (data.msgType == 4002) {
+      //   // 【方案】计划图
+      //   let d = JSON.parse(data.data);
+      //   let findP = this.solutions.find((s) => {
+      //     return s.planNo == d.planNo;
+      //   });
 
-        let index = this.solutions.indexOf(findP);
-        if (index == -1) {
-          this.solutions.push(d);
-          index++;
-        }
+      //   let index = this.solutions.indexOf(findP);
+      //   if (index == -1) {
+      //     this.solutions.push(d);
+      //     index++;
+      //   }
 
-        this.$nextTick(() => {
-          let component = this.$refs.PlanDiagram[index];
-          if (component) {
-            let planTripArr = [];
-            console.log(d);
-            let planServes = d.graphData.serveList;
-            planServes.forEach((serve) => {
-              serve.tripList.forEach((tripItem) => {
-                let trip = {
-                  serveNo: serve.serveNo,
-                  tripNo: tripItem.tripNo,
-                  data: [],
-                  dir: tripItem.runDir,
-                };
-                tripItem.pathListStr.forEach((str) => {
-                  let strArr = str.split(",");
-                  trip.data.push({
-                    sid: parseInt(strArr[0]),
-                    arrive: parseInt(strArr[1]),
-                    depart: parseInt(strArr[2]),
-                    loadrate: parseInt(strArr[4]),
-                    laterate: parseInt(strArr[5]),
-                    late: parseInt(strArr[6]),
-                  });
-                });
-                planTripArr.push(trip);
-              });
-            });
-            component.setPlanData(planTripArr);
-          }
-        });
-      } else if (data.msgType == 4003) {
-        // TODO 【方案】实际图
-        let d = JSON.parse(data.data);
-        let index = this.solutions.indexOf(d.planNo);
-        if (index == -1) {
-          this.solutions.push(d.planNo);
-          index++;
-        }
+      //   this.$nextTick(() => {
+      //     let component = this.$refs.PlanDiagram[index];
+      //     if (component) {
+      //       let planTripArr = [];
+      //       console.log(d);
+      //       let planServes = d.graphData.serveList;
+      //       planServes.forEach((serve) => {
+      //         serve.tripList.forEach((tripItem) => {
+      //           let trip = {
+      //             serveNo: serve.serveNo,
+      //             tripNo: tripItem.tripNo,
+      //             data: [],
+      //             dir: tripItem.runDir,
+      //           };
+      //           tripItem.pathListStr.forEach((str) => {
+      //             let strArr = str.split(",");
+      //             trip.data.push({
+      //               sid: parseInt(strArr[0]),
+      //               arrive: parseInt(strArr[1]),
+      //               depart: parseInt(strArr[2]),
+      //               loadrate: parseInt(strArr[4]),
+      //               laterate: parseInt(strArr[5]),
+      //               late: parseInt(strArr[6]),
+      //             });
+      //           });
+      //           planTripArr.push(trip);
+      //         });
+      //       });
+      //       component.setPlanData(planTripArr);
+      //     }
+      //   });
+      // } else if (data.msgType == 4003) {
+      //   // TODO 【方案】实际图
+      //   let d = JSON.parse(data.data);
+      //   let index = this.solutions.indexOf(d.planNo);
+      //   if (index == -1) {
+      //     this.solutions.push(d.planNo);
+      //     index++;
+      //   }
 
-        this.$nextTick(() => {
-          let component = this.$refs.PlanDiagram[index];
-          if (component) {
-            let realTripArr = [];
-            console.log(d);
-            d.graphData.serveList.forEach((serve) => {
-              serve.tripList.forEach((tripItem) => {
-                let trip = {
-                  serveNo: serve.serveNo,
-                  tripNo: tripItem.tripNo,
-                  data: [],
-                  dir: tripItem.runDir,
-                };
-                tripItem.pathListStr.forEach((str) => {
-                  let strArr = str.split(",");
-                  trip.data.push({
-                    sid: parseInt(strArr[0]),
-                    arrive: parseInt(strArr[1]),
-                    depart: parseInt(strArr[2]),
-                    loadrate: parseInt(strArr[4]),
-                    laterate: parseInt(strArr[5]),
-                    late: parseInt(strArr[6]),
-                  });
-                });
-                realTripArr.push(trip);
-              });
-            });
-            component.setRealData(realTripArr);
-          }
-        });
-      } else if (data.msgType == 702) {
-      }
+      //   this.$nextTick(() => {
+      //     let component = this.$refs.PlanDiagram[index];
+      //     if (component) {
+      //       let realTripArr = [];
+      //       console.log(d);
+      //       d.graphData.serveList.forEach((serve) => {
+      //         serve.tripList.forEach((tripItem) => {
+      //           let trip = {
+      //             serveNo: serve.serveNo,
+      //             tripNo: tripItem.tripNo,
+      //             data: [],
+      //             dir: tripItem.runDir,
+      //           };
+      //           tripItem.pathListStr.forEach((str) => {
+      //             let strArr = str.split(",");
+      //             trip.data.push({
+      //               sid: parseInt(strArr[0]),
+      //               arrive: parseInt(strArr[1]),
+      //               depart: parseInt(strArr[2]),
+      //               loadrate: parseInt(strArr[4]),
+      //               laterate: parseInt(strArr[5]),
+      //               late: parseInt(strArr[6]),
+      //             });
+      //           });
+      //           realTripArr.push(trip);
+      //         });
+      //       });
+      //       component.setRealData(realTripArr);
+      //     }
+      //   });
+      // } else if (data.msgType == 702) {
+      // }
     },
     transAppInfo(d) {
       this._setMsg(`收到 [${d.lineName}] 数据。`);
@@ -1435,14 +1432,15 @@ export default {
         runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==false?1:2,
         mRoutingTrainRunNums:tempData
       }
+      console.log('702接口参数')
       console.log(tempData2);
       console.log(sessionStorage);
-      this.ws.sendSock(702,tempData2);
-      console.log('send 702 data');
+      var tepdata=this.ws.getPackage(702,tempData2);
+      this.ws.sendSock(tepdata);
     },
   },
   beforeDestroy() {
-    this.ws.unregisterCallback("mainPage11", this.wsCallback);
+    this.ws.unregisterCallback("mainPage11");
     this.rungrapData = {};
   },
 };

@@ -1178,8 +1178,10 @@ export default {
         };
     },
     beforeCreate: function () {
-        registerCallback("trainNumber", this.wsCallback);
         that = this;
+    },
+    created(){
+        registerCallback("trainNumber", this.wsCallback);
     },
     beforeDestroy() {
         unregisterCallback("trainNumber");
