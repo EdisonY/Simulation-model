@@ -228,7 +228,7 @@
             <el-checkbox
               v-model="runGraphOrPassengerGraph"
               style="color: white; display: block; margin: 5px 0"
-              >只评估客流</el-checkbox
+              >简易运行图</el-checkbox
             >
             <el-button type="primary" size="small" @click="addTable()"
               >添加条数</el-button
@@ -325,7 +325,7 @@ export default {
   data() {
     return {
       runGraphOrPassengerGraph: 1, //客流方式
-      graphID: "",
+      graphID:this.getDefaultGraphID(),
       address: "",
       lineName: "",
       currentTime: new Date().toLocaleString(),
@@ -1145,17 +1145,35 @@ export default {
       if (res.msgType == 802) {
         console.log("receive 802 data");
         console.log(res);
-        if (res.data && res.data.length > 0) {
-          this.$refs.grap.gclearChartData();
-          this.$refs.grap.gclearChartData();
+        // if ( res.data.basicTrainGraphDataStru.length>0) {
+        //   console.log('802进程')
+        //   this.$refs.grap.clearChartData();
+        //   let planData = res.data.basicTrainGraphDataStru[0].serveList;
+        //   // let realData = res.data[1].serveList;
+        //   this.$refs.grap.initData(planData, false);
+        //   // this.$refs.grap.initData(realData, true);
+        //   this.$refs.grap.cacheData = {
+        //     planData,
+        //     // realData,
+        //   };
+        // }
+        // else{
+        //   console.log('未进入802进程')
+        // }
+            if ( res.data.length>0) {
+          // console.log('802进程')
+          this.$refs.grap.clearChartData();
           let planData = res.data[0].serveList;
-          let realData = res.data[1].serveList;
+          // let realData = res.data[1].serveList;
           this.$refs.grap.initData(planData, false);
-          this.$refs.grap.initData(realData, true);
+          // this.$refs.grap.initData(realData, true);
           this.$refs.grap.cacheData = {
             planData,
-            realData,
+            // realData,
           };
+        }
+        else{
+          // console.log('未进入802进程')
         }
       }
       return ;
@@ -1434,10 +1452,22 @@ export default {
       }
       console.log('702接口参数')
       console.log(tempData2);
-      console.log(sessionStorage);
+      // console.log(sessionStorage);
       var tepdata=this.ws.getPackage(702,tempData2);
       this.ws.sendSock(tepdata);
+      this.$message({type:'success',message:'数据已发送请等待'})
     },
+    /**
+     * 设置图号默认值
+     */
+    getDefaultGraphID(){
+      var time=new Date();
+      let Y=time.getFullYear().toString().slice(-2);
+      let M=(time.getMonth()+1).toString().padStart(2,'0');
+      let result='PR'+Y+M;
+      // this.graphID=result;
+      return result;
+    }
   },
   beforeDestroy() {
     this.ws.unregisterCallback("mainPage11");
