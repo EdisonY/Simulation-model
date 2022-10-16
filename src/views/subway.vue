@@ -104,7 +104,7 @@
                 </div>
                 <br/>
                 <br/>
-                <!-- 集群：
+                集群：
                 <router-link to="/emergency1/marshalling">
                     <el-button type="primary" size="mini">编辑</el-button>
                 </router-link>
@@ -119,9 +119,9 @@
                         <el-checkbox label="5" border>集群5</el-checkbox>
                     </el-checkbox-group>
                 </div>
-                <br/> -->
-                <el-button type="primary" size="small" @click="dialogVisible = true">选择运行图</el-button>
-                <el-button type="success" size="small" v-if="choseGap" @click="sim">开始仿真</el-button>
+                <br/>
+                <!-- <el-button type="primary" size="small" @click="dialogVisible = true">选择运行图</el-button>
+                <el-button type="success" size="small" v-if="choseGap" @click="sim">开始仿真</el-button> -->
             </el-card>
         </div>
         <div class="Line" v-loading="loading">
@@ -141,16 +141,9 @@
             </ul>
             <ul>
                 <li class="title_p"><span>图标</span>站控措施</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/3.png" /></span>封站</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/4.png" /></span>安检减缓速度</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/5.png" /></span>分批放行乘客</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/6.png" /></span>设立导流围栏</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/7.png" /></span>封闭部分出入口</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/8.png" /></span>关闭部分进站闸机</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/9.png" /></span>CUC减缓售票速度</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/10.png" /></span>TVM减缓售票速度</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/11.png" /></span>改变电扶梯运行方向</li>
-                <li><span><img src="http://172.51.216.62:41005/subway/12.png" /></span>引导乘客经楼梯分流</li>
+                <li><span><img src="http://172.51.216.62:41005/subway/1.png" /></span>设立导流围栏</li>
+                <li><span><img src="http://172.51.216.62:41005/subway/2.png" /></span>关闭部分进站闸机</li>
+                <li><span><img src="http://172.51.216.62:41005/subway/3.png" /></span>CUC减缓售票速度</li>
             </ul>
         </div>
         <div class="lineState">
@@ -383,28 +376,15 @@ export default {
         passengerflow(){
             this.clearAll()
             if(this.passenger){
-                $('#normal,#stationPoint').css('opacity','0.4')
-
-                this.$api.get('/api/ntms/query/stationControl/' + this.realtimeFormat()).then(res => { 
-                    for (let index = 0; index < res.length; index++) {
-
-                        for (let i = 0; i < res[index].controlList.length; i++) {
-                            tctSubway.drewAlarm(tctSubway.getPosition(tctSubway.codeStation(res[index].stationCode).name),res[index].controlList[i])
-                        }
-                        
-                        
-                    }
-                    
-                })
-
+                $('#normal').css('opacity','0.4')
                 tctSubway.stopNormail(tctSubway.getPosition('西直门'),1)
-                tctSubway.stopNormail(tctSubway.getPosition('苹果园'),0)
+                tctSubway.stopNormail(tctSubway.getPosition('东直门'),0)
                 tctSubway.stopNormail(tctSubway.getPosition('天安门东'),2)
                 tctSubway.stopNormail(tctSubway.getPosition('白石桥南'),3)
 
-                // tctSubway.drewAlarm(tctSubway.getPosition('北海北'),1)
-                // tctSubway.drewAlarm(tctSubway.getPosition('前门'),2)
-                // tctSubway.drewAlarm(tctSubway.getPosition('南礼士路'),3)
+                tctSubway.drewAlarm(tctSubway.getPosition('北海北'),1)
+                tctSubway.drewAlarm(tctSubway.getPosition('前门'),2)
+                tctSubway.drewAlarm(tctSubway.getPosition('南礼士路'),3)
 
                 tctSubway.showLess()
                 this.clusterWatch()
@@ -483,7 +463,7 @@ export default {
                 $('.time').show()
                 $('.wirenetwork .fullLoadBtn').hide()
             
-                $('#fullLoad,#stationPoint').css('opacity','0.4')
+                $('#fullLoad').css('opacity','0.4')
 
                 function getDateSim(){
                     // for (let index = 0; index < RealTime[realtimeNum].trainInfoList.length; index++) {
@@ -584,7 +564,7 @@ export default {
             $('#HeatMap').empty()
             $('.heatmap').hide()
 
-            $('#normal,#stationPoint').css('opacity','1')
+            $('#normal').css('opacity','1')
             $('#Passengerflow').empty()
             $('.passenger').hide()
 
@@ -631,7 +611,7 @@ export default {
 }
 </script>
 <style scoped>
-.wirenetwork{padding: 10px;background:#000;height:calc(100vh );overflow: hidden;}
+.wirenetwork{padding: 10px;background:#000;height:100vh;overflow: hidden;}
 /* #subway{width: 100%;height:calc(100vh - 76px);} */
 .Line{width:100%;height:100%;z-index: 2;}
 #subway{width: 3000px;height:3000px;}
