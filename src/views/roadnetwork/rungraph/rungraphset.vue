@@ -1144,7 +1144,7 @@ export default {
       //802回调
       if (res.msgType == 802) {
         console.log("receive 802 data");
-        console.log(res);
+        // console.log(res);
         // if ( res.data.basicTrainGraphDataStru.length>0) {
         //   console.log('802进程')
         //   this.$refs.grap.clearChartData();
@@ -1164,12 +1164,12 @@ export default {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
           let planData = res.data[0].serveList;
-          // let realData = res.data[1].serveList;
+          let realData = res.data[1].serveList;
           this.$refs.grap.initData(planData, false);
-          // this.$refs.grap.initData(realData, true);
+          this.$refs.grap.initData(realData, true);
           this.$refs.grap.cacheData = {
             planData,
-            // realData,
+            realData,
           };
         }
         else{
