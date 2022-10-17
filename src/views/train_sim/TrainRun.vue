@@ -1,7 +1,7 @@
 <template>
     <div class="main"
         v-loading="loading">
-        <div class="left_new shiji" style="height:fit-content">
+        <div class="left_new shiji" style="height:fit-content;display:none">
             <el-tabs style="flex:1;margin:0 10px 10px 0;background:#304156;max-height: 380px;overflow:auto;"
                 type="border-card"
                 v-model="activeName">
@@ -974,7 +974,8 @@ export default {
 
 .info-panel {
     position: absolute;
-    width: calc(100% - 420px);
+    /* width: calc(100% - 420px); */
+    width: calc(100% - 20px);
     background-color: #194a9944;
     color: #fff;
     text-align: left;
