@@ -193,11 +193,11 @@
                     </el-input>
                   </td>
                   <td>
-                    <el-input v-model="items.trainRunNum1" style="width: 60px">
+                    <el-input v-model="items.trainRunNum1"  style="width: 60px">
                     </el-input>
                   </td>
                   <td>
-                    <el-input v-model="items.trainRunNum0" style="width: 60px">
+                    <el-input v-model="items.trainRunNum0"   style="width: 60px">
                     </el-input>
                   </td>
                   <td>
@@ -1144,22 +1144,7 @@ export default {
       //802回调
       if (res.msgType == 802) {
         console.log("receive 802 data");
-        // console.log(res);
-        // if ( res.data.basicTrainGraphDataStru.length>0) {
-        //   console.log('802进程')
-        //   this.$refs.grap.clearChartData();
-        //   let planData = res.data.basicTrainGraphDataStru[0].serveList;
-        //   // let realData = res.data[1].serveList;
-        //   this.$refs.grap.initData(planData, false);
-        //   // this.$refs.grap.initData(realData, true);
-        //   this.$refs.grap.cacheData = {
-        //     planData,
-        //     // realData,
-        //   };
-        // }
-        // else{
-        //   console.log('未进入802进程')
-        // }
+        this.$message({type:'success',message:'收到开始方案数据'})
             if ( res.data.length>0) {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
@@ -1177,109 +1162,6 @@ export default {
         }
       }
       return ;
-      // if (data.msgType == 3003) {
-      //   // 线路车站信息
-      //   this.transAppInfo(JSON.parse(data.data));
-      // } else if (data.msgType == 3002) {
-      //   // 计划运行图
-      //   this.transPlanData(JSON.parse(data.data));
-      // } else if (data.msgType == 2002) {
-      //   // 【现场】故障信息
-      //   this.transFaultData(JSON.parse(data.data));
-      // } else if (data.msgType == 2004) {
-      //   // 【现场】实时信息
-      //   this.transRealtimeData(JSON.parse(data.data));
-      // } else if (data.msgType == 3004) {
-      //   // 【现场】预测信息
-      //   this.transForecastData(JSON.parse(data.data));
-      // } else if (data.msgType == 4001) {
-      //   // TODO 运行指标信息
-      //   // 暂时没有接口
-      // } else if (data.msgType == 4002) {
-      //   // 【方案】计划图
-      //   let d = JSON.parse(data.data);
-      //   let findP = this.solutions.find((s) => {
-      //     return s.planNo == d.planNo;
-      //   });
-
-      //   let index = this.solutions.indexOf(findP);
-      //   if (index == -1) {
-      //     this.solutions.push(d);
-      //     index++;
-      //   }
-
-      //   this.$nextTick(() => {
-      //     let component = this.$refs.PlanDiagram[index];
-      //     if (component) {
-      //       let planTripArr = [];
-      //       console.log(d);
-      //       let planServes = d.graphData.serveList;
-      //       planServes.forEach((serve) => {
-      //         serve.tripList.forEach((tripItem) => {
-      //           let trip = {
-      //             serveNo: serve.serveNo,
-      //             tripNo: tripItem.tripNo,
-      //             data: [],
-      //             dir: tripItem.runDir,
-      //           };
-      //           tripItem.pathListStr.forEach((str) => {
-      //             let strArr = str.split(",");
-      //             trip.data.push({
-      //               sid: parseInt(strArr[0]),
-      //               arrive: parseInt(strArr[1]),
-      //               depart: parseInt(strArr[2]),
-      //               loadrate: parseInt(strArr[4]),
-      //               laterate: parseInt(strArr[5]),
-      //               late: parseInt(strArr[6]),
-      //             });
-      //           });
-      //           planTripArr.push(trip);
-      //         });
-      //       });
-      //       component.setPlanData(planTripArr);
-      //     }
-      //   });
-      // } else if (data.msgType == 4003) {
-      //   // TODO 【方案】实际图
-      //   let d = JSON.parse(data.data);
-      //   let index = this.solutions.indexOf(d.planNo);
-      //   if (index == -1) {
-      //     this.solutions.push(d.planNo);
-      //     index++;
-      //   }
-
-      //   this.$nextTick(() => {
-      //     let component = this.$refs.PlanDiagram[index];
-      //     if (component) {
-      //       let realTripArr = [];
-      //       console.log(d);
-      //       d.graphData.serveList.forEach((serve) => {
-      //         serve.tripList.forEach((tripItem) => {
-      //           let trip = {
-      //             serveNo: serve.serveNo,
-      //             tripNo: tripItem.tripNo,
-      //             data: [],
-      //             dir: tripItem.runDir,
-      //           };
-      //           tripItem.pathListStr.forEach((str) => {
-      //             let strArr = str.split(",");
-      //             trip.data.push({
-      //               sid: parseInt(strArr[0]),
-      //               arrive: parseInt(strArr[1]),
-      //               depart: parseInt(strArr[2]),
-      //               loadrate: parseInt(strArr[4]),
-      //               laterate: parseInt(strArr[5]),
-      //               late: parseInt(strArr[6]),
-      //             });
-      //           });
-      //           realTripArr.push(trip);
-      //         });
-      //       });
-      //       component.setRealData(realTripArr);
-      //     }
-      //   });
-      // } else if (data.msgType == 702) {
-      // }
     },
     transAppInfo(d) {
       this._setMsg(`收到 [${d.lineName}] 数据。`);
@@ -1427,11 +1309,11 @@ export default {
           a.push({
             trainTypeGroup:item2.trainTypeGroup,
             lineway1:1,
-            trainRunNum1:item2.trainRunNum1,
+            trainRunNum1:Number(item2.trainRunNum1),
             runLevel1:1,
             dir1:85,
             lineway0:2,
-            trainRunNum0:item2.trainRunNum0,
+            trainRunNum0:Number(item2.trainRunNum0),
             runLevel0:1,
             dir0:170,
           })

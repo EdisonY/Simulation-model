@@ -20,7 +20,13 @@
       <el-table-column prop="address" label="备注"> </el-table-column>
     </el-table>
     <p class="text_r">
-      <el-upload accept=".xls,.xlsx" :auto-upload="false" :on-change="loadFile" action="" :show-file-list="false">
+      <el-upload
+        accept=".xls,.xlsx"
+        :auto-upload="false"
+        :on-change="loadFile"
+        action=""
+        :show-file-list="false"
+      >
         <el-button
           icon="el-icon-upload2"
           slot="trigger"
@@ -36,7 +42,9 @@
           @click="downLoadData"
           >下载
         </el-button>
-        <el-button type="primary" size="small" @click="setCurPasFlow">设置为当前客流</el-button>
+        <el-button type="primary" size="small" @click="setCurPasFlow"
+          >设置为当前客流</el-button
+        >
       </el-upload>
     </p>
     <!-- <el-row>
@@ -61,6 +69,7 @@
 
 <script>
 import XLSX from "xlsx";
+
 export default {
   name: "passenger",
   data() {
@@ -157,29 +166,29 @@ export default {
             "大郊亭",
           ],
         ];
-        XLSX.utils.book_append_sheet(wb, sheetdata, "仿真过程数据");
+        XLSX.utils.book_append_sheet(wb, sheetdata, "客流数据数据");
         XLSX.writeFile(wb, `${this.tableData[this.defaultRadio].name}.xlsx`);
       }
     },
-    /**
-     *
-     * @returns 时间 y-m-d
-     */
+
     /**
      * 设置当前客流
      */
-    setCurPasFlow(){
-        if (this.defaultRadio == -1) {
+    setCurPasFlow() {
+      if (this.defaultRadio == -1) {
         this.$message({ type: "warning", message: "请选择客流数据" });
         return;
       } else {
         this.$message({
-            type:'success',
-            message:'设置成功'
-        })
-      }  
+          type: "success",
+          message: "设置成功",
+        });
+      }
     },
-
+    /**
+     * 获得当前时间y-m-d
+     * @returns {String} y-m-d
+     */
     Getdate() {
       var time = new Date();
       var y = time.getFullYear().toString().padStart(2, 0); // 年
@@ -189,6 +198,24 @@ export default {
       // var mm = time.getUTCMinutes().toString().padStart(2, 0)
       // var ss = time.getSeconds().toString().padStart(2, 0)
       return `${y}-${m}-${d}`;
+    },
+    /**
+     * FTP测试
+     */
+    FTPTest() {
+  
+      // const ftp = new jsftp({
+      //   host: "localhost",
+      //   port: 8080, // defaults to 21
+      //   user: "LYF", // defaults to "anonymous"
+      //   pass: "1234qwer", // defaults to "@anonymous"
+      // });
+      // console.log(ftp);
+      // ftp.ls('.',(err,res)=>{
+      //   res.forEach(element => {
+      //     console.log(element.name) 
+      //   });
+      // })
     },
   },
 };
