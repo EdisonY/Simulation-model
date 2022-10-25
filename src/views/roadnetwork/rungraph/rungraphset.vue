@@ -133,7 +133,7 @@
               <tr class="thead">
                 <th colspan="1" style="width: 260px">起止时间</th>
                 <th style="width: 160px">交路方式</th>
-                <th style="width: 160px">跳停车站</th>
+                <!-- <th style="width: 160px">跳停车站</th> -->
                 <th>编组信息</th>
                 <th>上行开行列数</th>
                 <th>下行开行列数</th>
@@ -173,7 +173,7 @@
                       </el-option>
                     </el-select>
                   </td>
-                  <td>
+                  <!-- <td>
                     <el-select
                       v-model="items.stopOrNotList1"
                       placeholder="请选择"
@@ -187,17 +187,17 @@
                       >
                       </el-option>
                     </el-select>
-                  </td>
+                  </td> -->
                   <td>
                     <el-input v-model="items.trainTypeGroup" style="width: 60px">
                     </el-input>
                   </td>
                   <td>
-                    <el-input v-model="items.trainRunNum1"  style="width: 60px">
+                    <el-input v-model="items.trainRunNum1" style="width: 60px">
                     </el-input>
                   </td>
                   <td>
-                    <el-input v-model="items.trainRunNum0"   style="width: 60px">
+                    <el-input v-model="items.trainRunNum0" style="width: 60px">
                     </el-input>
                   </td>
                   <td>
@@ -274,7 +274,7 @@
                     </p>
                 </el-tab-pane> -->
       </el-tabs>
-      <el-card class="box-card" style="margin: 10px 0 0 10px">
+      <!-- <el-card class="box-card" style="margin: 10px 0 0 10px">
         <div slot="header" class="clearfix">
           <span>消息</span>
         </div>
@@ -288,7 +288,7 @@
             <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
           </ul>
         </div>
-      </el-card>
+      </el-card> -->
       <!-- {{rungrapData}} -->
       <!-- <div class="waring-panel"
                 v-if="warningList && warningList.length>0">
@@ -307,7 +307,7 @@
                 :autoMode="autoMode"
                 :diagramName="lineName +` 实际运行图`"
                 style="height:calc(100vh - 50px);width:calc(100% - 400px)" /> -->
-                
+
     <rungrap ref="grap" :rungrapData="rungrapData" />
   </div>
 </template>
@@ -325,7 +325,7 @@ export default {
   data() {
     return {
       runGraphOrPassengerGraph: 1, //客流方式
-      graphID:this.getDefaultGraphID(),
+      graphID: this.getDefaultGraphID(),
       address: "",
       lineName: "",
       currentTime: new Date().toLocaleString(),
@@ -562,7 +562,7 @@ export default {
           crossRouteList: [
             {
               crossRouteId: 1,
-              trainTypeGroup: "4A",
+              trainTypeGroup: "6B",
               lineWayId: 37,
               tmpRout: 0,
               startStationId: 2101,
@@ -591,7 +591,7 @@ export default {
             },
             // {
             //   crossRouteId: 2,
-            //   trainTypeGroup: "4A",
+            //   trainTypeGroup: "6B",
             //   lineWayId: 65526,
             //   tmpRout: 1,
             //   startStationId: 2104,
@@ -627,7 +627,7 @@ export default {
           crossRouteList: [
             {
               crossRouteId: 1,
-              trainTypeGroup: "4A",
+              trainTypeGroup: "6B",
               lineWayId: 11,
               tmpRout: 0,
               startStationId: 2101,
@@ -656,7 +656,7 @@ export default {
             },
             // {
             //   crossRouteId: 2,
-            //   trainTypeGroup: "4A",
+            //   trainTypeGroup: "6B",
             //   lineWayId: 65526,
             //   tmpRout: 1,
             //   startStationId: 2104,
@@ -692,7 +692,7 @@ export default {
           crossRouteList: [
             {
               crossRouteId: 1,
-              trainTypeGroup: "4A",
+              trainTypeGroup: "6B",
               lineWayId: 37,
               tmpRout: 0,
               startStationId: 2101,
@@ -721,7 +721,7 @@ export default {
             },
             // {
             //   crossRouteId: 2,
-            //   trainTypeGroup: "4A",
+            //   trainTypeGroup: "6B",
             //   lineWayId: 65526,
             //   tmpRout: 1,
             //   startStationId: 2104,
@@ -757,7 +757,7 @@ export default {
           crossRouteList: [
             {
               crossRouteId: 1,
-              trainTypeGroup: "4A",
+              trainTypeGroup: "6B",
               lineWayId: 37,
               tmpRout: 0,
               startStationId: 2101,
@@ -787,7 +787,7 @@ export default {
             },
             // {
             //   crossRouteId: 2,
-            //   trainTypeGroup: "4A",
+            //   trainTypeGroup: "6B",
             //   lineWayId: 65526,
             //   tmpRout: 1,
             //   startStationId: 2104,
@@ -877,7 +877,6 @@ export default {
     });
   },
   mounted() {
-    
     // this.sendPackage("line-info");
     // this.sendPackage("plan-diagram");
     // this.sendPackage("scheme-diagram");
@@ -923,7 +922,7 @@ export default {
         crossRouteList: [
           {
             crossRouteId: 1,
-            trainTypeGroup: "4A",
+            trainTypeGroup: "6B",
             lineWayId: 37,
             tmpRout: 0,
             startStationId: 2101,
@@ -952,7 +951,7 @@ export default {
           },
           {
             crossRouteId: 2,
-            trainTypeGroup: "4A",
+            trainTypeGroup: "6B",
             lineWayId: 65526,
             tmpRout: 1,
             startStationId: 2104,
@@ -996,7 +995,7 @@ export default {
     addTableData(index1, index) {
       const tempdata = {
         crossRouteId: 1,
-        trainTypeGroup: "4A",
+        trainTypeGroup: "6B",
         lineWayId: 37,
         tmpRout: 0,
         startStationId: 2101,
@@ -1144,8 +1143,8 @@ export default {
       //802回调
       if (res.msgType == 802) {
         console.log("receive 802 data");
-        this.$message({type:'success',message:'收到开始方案数据'})
-            if ( res.data.length>0) {
+        this.$message({ type: "success", message: "收到开始方案数据" });
+        if (res.data.length > 0) {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
           let planData = res.data[0].serveList;
@@ -1156,12 +1155,11 @@ export default {
             planData,
             realData,
           };
-        }
-        else{
+        } else {
           // console.log('未进入802进程')
         }
       }
-      return ;
+      return;
     },
     transAppInfo(d) {
       this._setMsg(`收到 [${d.lineName}] 数据。`);
@@ -1302,54 +1300,54 @@ export default {
      * 铺画开行方案702接口
      */
     drawgraph() {
-      var tempData =[];
-      this.tableData4.forEach(item=>{
-        let a=[];
-        item.crossRouteList.forEach(item2=>{
+      var tempData = [];
+      this.tableData4.forEach((item) => {
+        let a = [];
+        item.crossRouteList.forEach((item2) => {
           a.push({
-            trainTypeGroup:item2.trainTypeGroup,
-            lineway1:1,
-            trainRunNum1:Number(item2.trainRunNum1),
-            runLevel1:1,
-            dir1:85,
-            lineway0:2,
-            trainRunNum0:Number(item2.trainRunNum0),
-            runLevel0:1,
-            dir0:170,
-          })
-        })
+            trainTypeGroup: item2.trainTypeGroup,
+            lineway1: 1,
+            trainRunNum1: Number(item2.trainRunNum1),
+            runLevel1: 1,
+            dir1: 85,
+            lineway0: 2,
+            trainRunNum0: Number(item2.trainRunNum0),
+            runLevel0: 1,
+            dir0: 170,
+          });
+        });
         tempData.push({
-          startTime:this.transTime(item.startTime),
-          endTime:this.transTime(item.endTime),
-          trainRunNums:a
-        })
-      })
+          startTime: this.transTime(item.startTime),
+          endTime: this.transTime(item.endTime),
+          trainRunNums: a,
+        });
+      });
       console.log(tempData);
-      let tempData2={
-        Caption:'1',
-        remarks:this.address,
-        lineId:11, 
-        runGraphOrPassengerGraph:this.runGraphOrPassengerGraph==false?1:2,
-        mRoutingTrainRunNums:tempData
-      }
-      console.log('702接口参数')
+      let tempData2 = {
+        Caption: "1",
+        remarks: this.address,
+        lineId: 11,
+        runGraphOrPassengerGraph: this.runGraphOrPassengerGraph == false ? 1 : 2,
+        mRoutingTrainRunNums: tempData,
+      };
+      console.log("702接口参数");
       console.log(tempData2);
       // console.log(sessionStorage);
-      var tepdata=this.ws.getPackage(702,tempData2);
+      var tepdata = this.ws.getPackage(702, tempData2);
       this.ws.sendSock(tepdata);
-      this.$message({type:'success',message:'数据已发送请等待'})
+      this.$message({ type: "success", message: "数据已发送请等待" });
     },
     /**
      * 设置图号默认值
      */
-    getDefaultGraphID(){
-      var time=new Date();
-      let Y=time.getFullYear().toString().slice(-2);
-      let M=(time.getMonth()+1).toString().padStart(2,'0');
-      let result='PR'+Y+M;
+    getDefaultGraphID() {
+      var time = new Date();
+      let Y = time.getFullYear().toString().slice(-2);
+      let M = (time.getMonth() + 1).toString().padStart(2, "0");
+      let result = "PR" + Y + M;
       // this.graphID=result;
       return result;
-    }
+    },
   },
   beforeDestroy() {
     this.ws.unregisterCallback("mainPage11");

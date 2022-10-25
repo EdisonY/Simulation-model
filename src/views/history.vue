@@ -1,7 +1,7 @@
 <template>
     <div class="report clearfix">
-        <div class="left_new">
-            <!-- <el-card class="box-card">
+        <!-- <div class="left_new">
+            <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>操作</span>
                 </div>
@@ -9,7 +9,7 @@
                     <el-button type="primary" size="small">导出报告</el-button>
                     <el-button type="primary" size="small">保存数据</el-button>
                 </div>
-            </el-card> -->
+            </el-card>
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>消息</span>
@@ -25,7 +25,7 @@
                     </ul>
                 </div>
             </el-card>
-        </div>
+        </div> -->
         <div class="right_report">
             <el-card class="box-card nobg">
                 <el-table
@@ -116,6 +116,6 @@ export default {
 .left_new{flex:0 0 400px;}
 .el-card {margin: 0 0 20px 10px;}
 .el-card__body .el-radio--medium.is-bordered{padding:10px 10px 0 5px;margin:0 10px !important}
-.report .right_report{flex-shrink: 2;width: 100%;}
-.report .right_report .el-card{min-height: 600px;line-height: 25px;}
+.report .right_report{flex-shrink: 2;width: 100%;height: auto;}
+.report .right_report .el-card{line-height: 25px;}
 </style>

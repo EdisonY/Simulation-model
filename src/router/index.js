@@ -110,17 +110,17 @@ export const constantRoutes = [{
             }
         ]
     },
-    {
-        path: '/operation',
-        component: Layout,
-        children: [{
-            path: '/operation',
-            name: '运行数据配置',
-            component: () =>
-                import ('@/views/roadnetwork/pfbasic/trainNumber'),
-            meta: { title: '运行数据配置', icon: 'icon' }
-        }]
-    },
+    // {
+    //     path: '/operation',
+    //     component: Layout,
+    //     children: [{
+    //         path: '/operation',
+    //         name: '运行数据配置',
+    //         component: () =>
+    //             import ('@/views/roadnetwork/pfbasic/trainNumber'),
+    //         meta: { title: '运行数据配置', icon: 'icon' }
+    //     }]
+    // },
     {
         path: '/passenger',
         component: Layout,
@@ -162,13 +162,13 @@ export const constantRoutes = [{
                 component: () =>
                     import ('@/views/report'),
                 meta: { title: '仿真结果-应急', }
-            },  {
+            }, {
                 path: 'reportnormal',
                 name: '仿真结果-正常',
                 component: () =>
                     import ('@/views/roadnetwork/indicator/index1'),
                 meta: { title: '仿真结果-正常', }
-            },{
+            }, {
                 path: 'fault',
                 name: '故障设置',
                 component: () =>
@@ -180,6 +180,20 @@ export const constantRoutes = [{
                 component: () =>
                     import ('@/views/history'),
                 meta: { title: '历史记录查看', }
+            },
+            {
+                path: 'summarycheck',
+                name: '能力检验',
+                component: () =>
+                    import ('@/views/summarycheck/SummaryCheck'),
+                meta: { title: '能力检验' }
+            },
+            {
+                path: 'uic',
+                name: '线路占用泳道图',
+                component: () =>
+                    import ('@/views/uic/UIC'),
+                meta: { title: '线路占用泳道图' }
             },
             // {
             //     path: 'scenes',
@@ -271,18 +285,18 @@ export const constantRoutes = [{
     //             component: () => import('@/views/summary/Ability'),
     //             meta: { title: '能力计算', icon: 'form' }
     //         },
-    //         {
-    //             path: 'summarycheck',
-    //             name: '能力检验',
-    //             component: () => import('@/views/summarycheck/SummaryCheck'),
-    //             meta: { title: '能力检验', icon: 'form' }
-    //         },
-    //         {
-    //             path: 'uic',
-    //             name: '线路占用泳道图',
-    //             component: () => import('@/views/uic/UIC'),
-    //             meta: { title: '线路占用泳道图', icon: 'form' }
-    //         },
+    // {
+    //     path: 'summarycheck',
+    //     name: '能力检验',
+    //     component: () => import('@/views/summarycheck/SummaryCheck'),
+    //     meta: { title: '能力检验', icon: 'form' }
+    // },
+    // {
+    //     path: 'uic',
+    //     name: '线路占用泳道图',
+    //     component: () => import('@/views/uic/UIC'),
+    //     meta: { title: '线路占用泳道图', icon: 'form' }
+    // },
     //         {
     //             path: 'analysis',
     //             name: '牵引计算曲线',

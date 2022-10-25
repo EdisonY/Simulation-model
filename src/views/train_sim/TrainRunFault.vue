@@ -4,7 +4,12 @@
       <el-card class="box-card" style="max-height: 1000px">
         <div slot="header" class="clearfix">
           <span>操作</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="faultInjection">注入</el-button>
+          <el-button
+            style="float: right; padding: 3px 0"
+            type="text"
+            @click="faultInjection"
+            >注入</el-button
+          >
         </div>
         <el-form
           :label-position="labelPosition"
@@ -32,23 +37,26 @@
               </el-option-group>
             </el-select>
           </el-form-item>
-           <el-form-item label="RRM功能">
+          <el-form-item label="RRM功能">
             <el-select
               v-model="RRMFlag"
               placeholder="是否启用RRM模式"
               style="width: 218px"
             >
-             <el-option label="不启用" :value="0"></el-option>
-             <el-option label="启用" :value="1"></el-option>
+              <el-option label="不启用" :value="0"></el-option>
+              <el-option label="启用" :value="1"></el-option>
             </el-select>
           </el-form-item>
-          <div class="fault-info" v-if="faultID >= 300" >
+          <div class="fault-info" v-if="faultID >= 300">
             <el-form-item
               v-for="faultInfo1 in faultInfoItem[2]"
               :label="faultInfo1.label"
               :key="faultInfo1.label"
             >
-              <el-input v-model="faultInfo[2][faultInfo1.key]" style="width:fit-content"></el-input>
+              <el-input
+                v-model="faultInfo[2][faultInfo1.key]"
+                style="width: fit-content"
+              ></el-input>
             </el-form-item>
           </div>
           <div class="fault-info" v-else-if="faultID >= 200">
@@ -57,7 +65,10 @@
               :label="faultInfo2.label"
               :key="faultInfo2.label"
             >
-              <el-input v-model="faultInfo[1][faultInfo2.key]" style="width:fit-content"></el-input>
+              <el-input
+                v-model="faultInfo[1][faultInfo2.key]"
+                style="width: fit-content"
+              ></el-input>
             </el-form-item>
           </div>
           <div class="fault-info" v-else-if="faultID >= 100">
@@ -66,7 +77,19 @@
               :label="faultInfo3.label"
               :key="faultInfo3.label"
             >
-              <el-input v-model="faultInfo[0][faultInfo3.key]" style="width:fit-content"></el-input>
+              <el-select
+                v-if="faultInfo3.key == 'dealFlag'"
+                v-model="faultInfo[0][faultInfo3.key]"
+                style="width: fit-content"
+              >
+                <el-option :value="1" label="1-故障车优先回库"></el-option>
+                <el-option :value="2" label="2-故障车就近存车线停车"></el-option>
+              </el-select>
+              <el-input
+                v-else
+                v-model="faultInfo[0][faultInfo3.key]"
+                style="width: fit-content"
+              ></el-input>
             </el-form-item>
           </div>
           <!-- <el-form-item label="区域控制器ID">
@@ -92,7 +115,7 @@
           </el-form-item> -->
         </el-form>
       </el-card>
-      <Msg />
+      <!-- <Msg /> -->
     </div>
 
     <div class="main-right" style="padding-left: 10px">
@@ -235,7 +258,7 @@ export default {
         station2: 10042,
       },
       faultID: 0, //故障ID，0-正常，其他故障编号
-      RRMFlag:0,//RRM模式有效标志位 0：无效，1有效
+      RRMFlag: 0, //RRM模式有效标志位 0：无效，1有效
       faultOption: faultTypeOption,
       faultInfo: [
         //故障信息数组
@@ -255,7 +278,7 @@ export default {
         },
         {
           faultTime: 22000, //故障发生时间 从0点计算的s数
-          faultInterval:  "阎村东(下行)-紫草坞(下行)", //故障区间
+          faultInterval: "阎村东(下行)-紫草坞(下行)", //故障区间
           // RRMDelayTime: 180, //应答器故障触发后列车停稳后转入RRM模式所需时间
           faultLink: 44, //故障触发LINK”
           faultOffset: 0, //故障触发OFFSET”
@@ -731,8 +754,8 @@ export default {
             type: "success",
             message: "故障注入成功",
           });
-          console.log("111")
-          return
+          console.log("111");
+          return;
         } else {
           this.$message({
             type: "warning",
@@ -750,8 +773,8 @@ export default {
       const char1 = "'";
       var jsonstr = JSON.stringify(jsonObject);
       var jsonstr2 = jsonstr.replace(/\"/g, char1);
-      var jsonstr3=jsonObject.toString()
-      console.log("jsonstr3:"+jsonstr3)
+      var jsonstr3 = jsonObject.toString();
+      console.log("jsonstr3:" + jsonstr3);
       return jsonstr2;
     },
     /**
@@ -761,7 +784,7 @@ export default {
       let data = {
         faultID: this.faultID,
         faultInfo: "",
-        RRMFlag:this.RRMFlag,
+        RRMFlag: this.RRMFlag,
       };
       var tempFaultInfo = "";
       var faultIndex = -1; //故障信息索引，0,1,2有效；
@@ -780,11 +803,11 @@ export default {
         return;
       } else {
         tempFaultInfo = this.jsonStrTrans(this.faultInfo[faultIndex]);
-        data.faultInfo=tempFaultInfo;
-        console.log('故障注入信息为：')
-        console.log(JSON.stringify(data))
-        let msg=getPackage(145,data);
-        sendSock(msg)
+        data.faultInfo = tempFaultInfo;
+        console.log("故障注入信息为：");
+        console.log(JSON.stringify(data));
+        let msg = getPackage(145, data);
+        sendSock(msg);
       }
     },
   },
@@ -1088,9 +1111,9 @@ export default {
   margin: 0 10px !important;
 }
 .fault-info {
-  max-height: 200px;
   overflow: auto;
   border: 1px solid white;
   border-radius: 10px 0 0 10px;
+  padding-top: 10px;
 }
 </style>

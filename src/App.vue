@@ -13,7 +13,7 @@
             center>
             <p class="version">版本: {{version}}</p>
             <el-form>
-                <el-form-item label="服务名称">
+                <el-form-item label="服务名称" >
                     <el-input v-model="serverName"></el-input>
                 </el-form-item>
                 <el-form-item label="服务地址">
@@ -69,16 +69,22 @@ export default {
             JSON.stringify([
                 {
                     value: 0,
-                    label: "北新桥 - T2航站楼",
+                    label: "燕山-阎村东",
                     startStation: 2105,
                     endStation: 2104,
                 },
                 {
                     value: 1,
-                    label: "T2航站楼 - 北新桥",
+                    label: "燕山-星城",
                     startStation: 2104,
                     endStation: 2105,
                 },
+                {
+                    value: 1,
+                    label: "阎村-阎村东",
+                    startStation: 2104,
+                    endStation: 2105,
+                }
             ])
         );
         localStorage.setItem(
@@ -289,7 +295,7 @@ button:focus {
 .version {
     color: rgb(58, 150, 226);
     margin-bottom: 10px;
-    font-size: 1.1rem;
+    font-size: 30px;
     font-weight: bold;
     text-align: center;
 }

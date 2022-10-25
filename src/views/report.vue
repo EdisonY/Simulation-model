@@ -1,22 +1,17 @@
 <template>
   <div class="report clearfix">
-    <div class="left_new">
+    <!-- <div class="left_new">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>操作</span>
-          <!-- <el-button style="float: right; padding: 3px 0" type="text">暂停</el-button> -->
         </div>
         <div style="display: flex; justify-content: center">
-          <!-- <el-radio v-model="radio2" label="1" border size="medium">1倍速</el-radio>
-                      <el-radio v-model="radio2" label="2" border size="medium">2倍速</el-radio>
-                      <el-radio v-model="radio2" label="3" border size="medium">4倍速</el-radio>
-                      <el-radio v-model="radio2" label="4" border size="medium">最高速</el-radio> -->
           <el-button type="primary" size="small">导出报告</el-button>
           <el-button type="primary" size="small">保存数据</el-button>
         </div>
       </el-card>
       <Msg />
-    </div>
+    </div> -->
     <div class="right_report">
       <el-card class="box-card nobg">
         <!-- <ul>
@@ -294,7 +289,8 @@ export default {
         }
         for (let j = 8; j < 15; j++) {
           if (this.tableData[j].zhibiao.length > 0) {
-            const temp2 = `数量:${this.tableData[j].zhibiao.length};  车次:${this.tableData[j].zhibiao}`;
+            const temp2 = `数量:${this.tableData[j].zhibiao.length}; 
+            车次:${this.tableData[j].zhibiao}`;
             this.tableData[j].zhibiao = temp2;
           } else {
             this.tableData[j].zhibiao = 0;
@@ -383,6 +379,9 @@ export default {
   border-right: 1px solid #ebeef5;
   border-top: 1px solid #ebeef5;
   text-align: center;
+  padding: 0px 5px;
   position: relative;
+  word-wrap:break-word;
+  word-break:break-all;
 }
 </style>
