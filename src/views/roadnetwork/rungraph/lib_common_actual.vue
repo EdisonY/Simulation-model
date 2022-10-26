@@ -553,8 +553,8 @@ export default {
     var second = -10;
     this.subStation = this.rungrapData.station;
 
-    console.log("this.subStation");
-    console.log(this.subStation);
+    // console.log("this.subStation");
+    // console.log(this.subStation);
     // 计算车站Y轴实际刻度高度
     for (let index = 1; index < this.subStation.length; index++) {
       this.subStation[index][1] = this.subStation[index][1] * 10;
@@ -563,7 +563,7 @@ export default {
     for (let index = 0; index < this.subStation.length; index++) {
       this.subStation[index][1] = this.subStation[index][1] + 3;
     }
-    
+
     //添加区间Y轴数据
     var intervalTick = [];
     for (let index = 0; index < this.subStation.length - 1; index++) {
@@ -755,9 +755,6 @@ export default {
       //Y轴数据
       for (let i = 0; i < this.subStation.length; i++) {
         let stationName = this.subStation[i][2];
-        // if (stationName != " ") {
-        //   Option.yAxis.data[this.subStation[i][1]] = stationName;
-        // }
         Option.yAxis.data[this.subStation[i][1]] = stationName;
       }
     },
@@ -842,15 +839,15 @@ export default {
                 stationId: (parseInt(pathArr[0]) + preStationID) / 2, //区间ID=（pre+cur）*5
                 arriveTime: secondToDate(pathArr[7]),
                 departTime: secondToDate(pathArr[8]),
-                loadRate00: 100,
+                loadRate00: pathArr[4],
                 diviationTime: pathArr[5],
                 lateTime: pathArr[6],
                 arriveTimeInterval: secondToDate("0"),
                 departTimeInterval: secondToDate("0"),
               };
-              console.log("intervalTmp");
-              console.log(intervalTmp);
-              console.log("-----------");
+            //   console.log("intervalTmp");
+            //   console.log(intervalTmp);
+            //   console.log("-----------");
               data.pathListStr.splice(index, 0, intervalTmp);
               timeArr.push(getTime(intervalTmp.arriveTime));
               timeArr.push(getTime(intervalTmp.departTime));
