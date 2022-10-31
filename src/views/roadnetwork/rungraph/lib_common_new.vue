@@ -846,9 +846,9 @@ export default {
           timeArr.push(getTime(data.pathListStr[index].arriveTime));
           timeArr.push(getTime(data.pathListStr[index].departTime));
         }
-        console.log('timeArr')
-            console.log(timeArr)
-            console.log('-----')
+        // console.log('timeArr')
+        //     console.log(timeArr)
+        //     console.log('-----')
 
 
         dataColl.addselfSecond = timeArr[1]; // 班次第一站的离站时间
@@ -1421,7 +1421,7 @@ export default {
   left: -400px;
 }
 .isMove {
-  margin-left: 420px;
+  /* margin-left: 420px; */
 }
 
 .left-panel svg {

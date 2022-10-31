@@ -84,7 +84,7 @@
 
 <script>
 import { registerCallback, unregisterCallback, sendSock, getPackage } from "@/utils/ws";
-
+var timer;
 import Msg from "@/components/msg.vue";
 export default {
   name: "report",
@@ -220,13 +220,14 @@ export default {
     //     data:'null'
     // }
     sendSock(getPackage(143, "null"));
-    setInterval(() => {
+    timer=setInterval(() => {
       sendSock(getPackage(143, "null"));
+      console.log("-----143----------")
     }, 10000);
   },
   updated() {},
   mounted() {
-    this.ws.registerCallback("mainPage", this.wsCallbackMsg);
+    registerCallback("mainPage", this.wsCallbackMsg);
   },
   methods: {
     indexMethod(index) {
@@ -330,7 +331,10 @@ export default {
       return maxErrorTime;
     },
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    unregisterCallback("mainPage");
+    clearInterval(timer);
+  },
 };
 </script>
 

@@ -183,10 +183,10 @@ export const constantRoutes = [{
             },
             {
                 path: 'summarycheck',
-                name: '能力检验',
+                name: '运行能力检验',
                 component: () =>
                     import ('@/views/summarycheck/SummaryCheck'),
-                meta: { title: '能力检验' }
+                meta: { title: '运行能力检验' }
             },
             {
                 path: 'uic',

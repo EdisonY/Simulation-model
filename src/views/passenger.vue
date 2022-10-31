@@ -1,14 +1,14 @@
 <template>
   <div class="passenger next">
     <h2>分时OD客流数据</h2>
-    <div class="search">
-      <!-- <el-button type="primary">客流加载</el-button> -->
+    <!-- <div class="search">
+      <el-button type="primary">客流加载</el-button>
       <p>
         <el-input placeholder="请输入内容" size="small"></el-input>
         <el-button type="success" size="small">搜索</el-button>
       </p>
-    </div>
-    <el-table :data="tableData" border style="width: 100%">
+    </div> -->
+    <el-table :data="tableData" border style="width: 100%;margin-top:10px">
       <el-table-column type="index" width="40px" align="center">
         <template slot-scope="scope">
           <el-radio v-model="defaultRadio" :label="scope.$index"> </el-radio>

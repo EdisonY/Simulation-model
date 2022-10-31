@@ -2,7 +2,7 @@
     <div class="shiji dashboard-container edittable">
         <!-- <el-button @click="drewPlan()" style="position:absolute;z-index:99999">默认按钮</el-button> -->
         <!-- <rungrap ref="grap" :rungrapData="rungrapData" /> -->
-        <div class="left-panel" style="z-index:100">
+        <!-- <div class="left-panel" style="z-index:100">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>操作</span>
@@ -15,7 +15,7 @@
                     <el-radio v-model="radio2" label="4" border size="medium">最高速</el-radio>
                 </div>
             </el-card>
-            <!-- <el-card class="box-card">
+            <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>消息</span>
                 </div>
@@ -29,8 +29,8 @@
                         <li>00:00:00 - 00:02:00 扣故障区外即将进入该控区相邻车站</li>
                     </ul>
                 </div>
-            </el-card> -->
-        </div>
+            </el-card>
+        </div> -->
         <!-- <DiagramReal :first="first"
                 :maxTime="currentTime"
                 :forcastTime="forcastTime"

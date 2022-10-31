@@ -157,7 +157,7 @@
             <div class="ability-item-btn">
                 <el-button type="primary"
                     style="width: 220px"
-                    @click="onRunAbility">开始能力分析</el-button>
+                    @click="onRunAbility">开始运行能力检验</el-button>
             </div>
         </div>
         <div class="main-right">

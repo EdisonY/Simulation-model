@@ -23,10 +23,25 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="输入开行方案">
-          <div class="select-line" style="padding-bottom: 10px">
-            图号：<el-input placeholder="图号" size="mini" type="value" v-model="graphID">
-            </el-input>
-            备注：<el-input placeholder="备注" size="mini" v-model="address"> </el-input>
+          <div class="btn-line-2" style="margin-bottom:20px">
+            <el-button type="primary" size="small" @click="addTable()"
+              >添加条数</el-button
+            >
+            <el-button type="primary" size="small" @click="drawgraph" style="width:80px">提交设置</el-button>
+            <el-button type="success" size="small" @click="startStop" style="width:80px">启动</el-button>
+          </div>
+          <div class="select-line" style="margin-bottom: 20px">
+            <div class="select-item" style="margin-bottom: 10px">
+              图号：<el-input placeholder="图号" size="mini" type="value" v-model="graphID"></el-input>
+            </div>
+            <div class="select-item" style="margin-bottom: 10px">
+              备注：<el-input placeholder="备注" size="mini" v-model="address"> </el-input>
+            </div>
+            <el-checkbox
+              v-model="runGraphOrPassengerGraph"
+              style="color: white; display:block; margin: 10px 5px"
+              >简易时刻表</el-checkbox
+            >
           </div>
           <!-- <div class="table-line" style="padding-bottom: 10px">
             <el-table border :data="tableData4" style="width: 100%" max-height="700">
@@ -223,17 +238,7 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          <div class="btn-line-2">
-            <el-checkbox
-              v-model="runGraphOrPassengerGraph"
-              style="color: white; display: block; margin: 5px 0"
-              >简易运行图</el-checkbox
-            >
-            <el-button type="primary" size="small" @click="addTable()"
-              >添加条数</el-button
-            >
-            <el-button type="success" size="small" @click="drawgraph">铺画</el-button>
+           
           </div>
         </el-tab-pane>
         <!-- <el-tab-pane label="修改运行图">
@@ -307,8 +312,10 @@
                 :autoMode="autoMode"
                 :diagramName="lineName +` 实际运行图`"
                 style="height:calc(100vh - 50px);width:calc(100% - 400px)" /> -->
-
-    <rungrap ref="grap" :rungrapData="rungrapData" />
+    <div>
+      <rungrap ref="grap" :rungrapData="rungrapData" />
+    </div>
+    
   </div>
 </template>
 
@@ -1327,7 +1334,7 @@ export default {
         Caption: "1",
         remarks: this.address,
         lineId: 11,
-        runGraphOrPassengerGraph: this.runGraphOrPassengerGraph == false ? 1 : 2,
+        runGraphOrPassengerGraph: this.runGraphOrPassengerGraph == true ? 1 : 2,
         mRoutingTrainRunNums: tempData,
       };
       console.log("702接口参数");
@@ -1376,6 +1383,7 @@ export default {
   height: calc(100% - 62px);
   float: left;
   z-index: 100;
+  position: relative;
   /* left: -50px; */
 }
 

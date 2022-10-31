@@ -1296,7 +1296,6 @@ export default {
   height: 100%;
   width: 100%;
   position: relative;
-  z-index: 99;
 }
 .calcH {
   height: 100%;
@@ -1458,7 +1457,7 @@ export default {
   left: -400px;
 }
 .isMove {
-  margin-left: 420px;
+  /* margin-left: 420px; */
 }
 
 .left-panel svg {

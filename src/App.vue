@@ -76,14 +76,14 @@ export default {
                 {
                     value: 1,
                     label: "燕山-星城",
-                    startStation: 2104,
-                    endStation: 2105,
+                    startStation: 2105,
+                    endStation: 2103,
                 },
                 {
-                    value: 1,
+                    value: 2,
                     label: "阎村-阎村东",
                     startStation: 2104,
-                    endStation: 2105,
+                    endStation: 2104,
                 }
             ])
         );
