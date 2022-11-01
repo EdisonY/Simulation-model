@@ -133,64 +133,64 @@ export default {
         },
         {
           //6
-          id: "stationErrorInfo",
-          name: "始发晚点,到达晚点信息",
-          list: [],
-        },
-        {
-          //7
           id: "tripErrorInfo",
           name: "总晚点信息",
           list: [],
         },
         {
-          //8
+          //7
           id: "departErrorTripNumber",
           name: "出发晚点列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //9
+          //8
           id: "arriveErrorTripNumber",
           name: "到达晚点列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //10
+          //9
           id: "tripErrorTripNumber",
           name: "总晚点列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //11
+          //10
           id: "tripErrorTripNumber5",
           name: "晚点5-15分钟列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //12
+          //11
           id: "tripErrorTripNumber15",
           name: "晚点15-30分钟列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //13
+          //12
           id: "tripErrorTripNumber30",
           name: "晚点30-45分钟列车数",
           zhibiao: "",
           beizhu: "",
         },
         {
-          //14
+          //13
           id: "tripErrorTripNumber45",
           name: "晚点45分钟以上列车数",
           zhibiao: "",
           beizhu: "",
+        },
+        {
+          //14
+          id: "stationErrorInfo",
+          name: "始发晚点,到达晚点信息",
+          list: [],
         },
         {
           //15
@@ -269,8 +269,8 @@ export default {
         this.tableData[0].zhibiao = Number(this.tableData[0].zhibiao).toFixed(2);
         this.tableData[1].zhibiao = Number(this.tableData[1].zhibiao).toFixed(2);
         //正点率备注
-        if (this.tableData[6].list.length > 0) {
-          let tempData = JSON.parse(JSON.stringify(this.tableData[6].list));
+        if (this.tableData[14].list.length > 0) {
+          let tempData = JSON.parse(JSON.stringify(this.tableData[14].list));
           tempData.sort((a, b) => {
             return Number(b.errorValue) - Number(a.errorValue);
           });
@@ -279,7 +279,7 @@ export default {
           maxErrorTime = this.timeTrans(maxError.errorValue);
           this.tableData[0].beizhu = `最大延误车次:${maxError.zhibiao};\n 最大延误时间:${maxErrorTime}`;
         }
-        //增加对应列车数量:index数据范围：2-5,8-14
+        //增加对应列车数量:index数据范围：2-5,7-13
         for (let i = 2; i < 6; i++) {
           if (this.tableData[i].zhibiao.length > 0) {
             const temp1 = `数量:${this.tableData[i].zhibiao.length};  车次:${this.tableData[i].zhibiao}`;
@@ -288,7 +288,7 @@ export default {
             this.tableData[i].zhibiao = 0;
           }
         }
-        for (let j = 8; j < 15; j++) {
+        for (let j = 7; j < 14; j++) {
           if (this.tableData[j].zhibiao.length > 0) {
             const temp2 = `数量:${this.tableData[j].zhibiao.length}; 
             车次:${this.tableData[j].zhibiao}`;
