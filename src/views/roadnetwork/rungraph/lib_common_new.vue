@@ -850,7 +850,6 @@ export default {
         //     console.log(timeArr)
         //     console.log('-----')
 
-
         dataColl.addselfSecond = timeArr[1]; // 班次第一站的离站时间
         dataColl.addselfArrive = timeArr[timeArr.length - 2]; // 班次最后一站的到站时间
         dataColl.addselfEnd = timeArr[timeArr.length - 1]; // 班次最后一站的离站时间
@@ -1205,17 +1204,15 @@ export default {
         console.log("receive 237 package");
         let infoType = res.status == 1 ? "success" : "warning";
         let msg = res.msg;
-        if (res.data.operaType == 1 && res.status == 1) {
-          this.isRunning = true;
-        } else if (res.data.operaType == 2 && res.status == 0) {
-          this.isRunning = false;
-        } else if (res.data.operaType == 0) {
-          this.isRunning = false;
+
+        this.isRunning = res.data.runOver; //后端运行状态
+        this.$emit("isRunning", this.isRunning);
+        if (msg) {
+          this.$message({
+            message: msg,
+            type: infoType,
+          });
         }
-        this.$message({
-          message: msg,
-          type: infoType,
-        });
       }
     },
   },

@@ -6,7 +6,10 @@
       <el-tabs type="border-card" style="margin: 10px 0 0 10px">
         <el-tab-pane label="选择运行图">
           <el-button type="primary" size="small" @click="importRungraph">上传</el-button>
-          <el-button type="success" size="small" @click="startStop">启动</el-button>
+          <el-button type="success" size="small" @click="startStop">{{
+            buttonText
+          }}</el-button>
+
           <br />
           <br />
           <el-table :data="tableData3" style="width: 100%">
@@ -23,23 +26,37 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="输入开行方案">
-          <div class="btn-line-2" style="margin-bottom:20px">
+          <div class="btn-line-2" style="margin-bottom: 20px">
             <el-button type="primary" size="small" @click="addTable()"
               >添加条数</el-button
             >
-            <el-button type="primary" size="small" @click="drawgraph" style="width:80px">提交设置</el-button>
-            <el-button type="success" size="small" @click="startStop" style="width:80px">启动</el-button>
+            <el-button type="primary" size="small" @click="drawgraph" style="width: 80px"
+              >提交设置</el-button
+            >
+            <el-button
+              type="success"
+              size="small"
+              @click="startStop"
+              style="width: 80px"
+              >{{ buttonText }}</el-button
+            >
           </div>
           <div class="select-line" style="margin-bottom: 20px">
             <div class="select-item" style="margin-bottom: 10px">
-              图号：<el-input placeholder="图号" size="mini" type="value" v-model="graphID"></el-input>
+              图号：<el-input
+                placeholder="图号"
+                size="mini"
+                type="value"
+                v-model="graphID"
+              ></el-input>
             </div>
             <div class="select-item" style="margin-bottom: 10px">
-              备注：<el-input placeholder="备注" size="mini" v-model="address"> </el-input>
+              备注：<el-input placeholder="备注" size="mini" v-model="address">
+              </el-input>
             </div>
             <el-checkbox
               v-model="runGraphOrPassengerGraph"
-              style="color: white; display:block; margin: 10px 5px"
+              style="color: white; display: block; margin: 10px 5px"
               >简易时刻表</el-checkbox
             >
           </div>
@@ -238,7 +255,6 @@
                 </tr>
               </tbody>
             </table>
-           
           </div>
         </el-tab-pane>
         <!-- <el-tab-pane label="修改运行图">
@@ -313,9 +329,8 @@
                 :diagramName="lineName +` 实际运行图`"
                 style="height:calc(100vh - 50px);width:calc(100% - 400px)" /> -->
     <div>
-      <rungrap ref="grap" :rungrapData="rungrapData" />
+      <rungrap ref="grap" :rungrapData="rungrapData" @isRunning="isRunning" />
     </div>
-    
   </div>
 </template>
 
@@ -331,7 +346,8 @@ export default {
   name: "Rungrap",
   data() {
     return {
-      runGraphOrPassengerGraph: 1, //客流方式
+      buttonText: "启动",
+      runGraphOrPassengerGraph: false, //客流方式
       graphID: this.getDefaultGraphID(),
       address: "",
       lineName: "",
@@ -562,6 +578,42 @@ export default {
         },
       ],
       tableData4: [
+        {
+          startTime: 18000,
+          endTime: 25200,
+          crossRouteCount: 1,
+          crossRouteList: [
+            {
+              crossRouteId: 1,
+              trainTypeGroup: "6B",
+              lineWayId: 37,
+              tmpRout: 0,
+              startStationId: 2101,
+              endStationId: 2103,
+              trainRunNum1: 10,
+              trainRunNum0: 10,
+              stopOrNotList: [
+                {
+                  stationId: 2101,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2102,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2103,
+                  stopOrNot: true,
+                },
+                {
+                  stationId: 2104,
+                  stopOrNot: false,
+                },
+              ],
+              stopOrNotList1: [2104],
+            },
+          ],
+        },
         {
           startTime: 25200,
           endTime: 32400,
@@ -859,6 +911,7 @@ export default {
     this.rungrapData.multiply = this.$route.meta.type;
     // this.rungrapData.multiply = false;
     let currentLine = sessionStorage.getItem("currentLine");
+
     console.log(currentLine);
     this.rungrapData.station = getStations(currentLine);
     console.log(this.rungrapData);
@@ -882,14 +935,38 @@ export default {
         item.endTime = ee;
       }
     });
+
+    
   },
   mounted() {
     // this.sendPackage("line-info");
     // this.sendPackage("plan-diagram");
     // this.sendPackage("scheme-diagram");
     // this.getData();
+    //获取后端运行状态，设置按钮功能
+    this.getServerState();
   },
   methods: {
+    /**
+     * 获取后端运行状态，设置启动按钮状态
+     */
+    getServerState() {
+      let lineName = this.$refs.grap.currentLine;
+       3; //查询运行状态
+      let param = this.ws.getPackage(137, {
+        lineName: lineName,
+        operaType: 3,
+      });
+      console.log("send 137 package type-3");
+      this.ws.sendSock(param);
+    },
+    /**
+     *
+     * @param {} isRunning 仿真运行标志
+     */
+    isRunning(isRunning) {
+      this.buttonText = isRunning == true ? "停止" : "启动";
+    },
     formatTime(time) {
       let hour = parseInt(time / 3600)
         .toString()
@@ -1155,12 +1232,12 @@ export default {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
           let planData = res.data[0].serveList;
-          let realData = res.data[1].serveList;
+          // let realData = res.data[1].serveList;
           this.$refs.grap.initData(planData, false);
-          this.$refs.grap.initData(realData, true);
+          // this.$refs.grap.initData(realData, true);
           this.$refs.grap.cacheData = {
             planData,
-            realData,
+            // realData,
           };
         } else {
           // console.log('未进入802进程')
@@ -1308,16 +1385,29 @@ export default {
      */
     drawgraph() {
       var tempData = [];
+
       this.tableData4.forEach((item) => {
         let a = [];
         item.crossRouteList.forEach((item2) => {
+          let l1 = 0,
+            l2 = 0;
+          if (item2.tmpRout == 0) {
+            l1 = 1;
+            l2 = 2;
+          } else if (item2.tmpRout == 1) {
+            l1 = 3;
+            l2 = 4;
+          } else if (item2.tmpRout == 2) {
+            l1 = 5;
+            l2 = 6;
+          }
           a.push({
             trainTypeGroup: item2.trainTypeGroup,
-            lineway1: 1,
+            lineway1: l1,
             trainRunNum1: Number(item2.trainRunNum1),
             runLevel1: 1,
             dir1: 85,
-            lineway0: 2,
+            lineway0: l2,
             trainRunNum0: Number(item2.trainRunNum0),
             runLevel0: 1,
             dir0: 170,
@@ -1334,12 +1424,11 @@ export default {
         Caption: "1",
         remarks: this.address,
         lineId: 11,
-        runGraphOrPassengerGraph: this.runGraphOrPassengerGraph == true ? 1 : 2,
+        runGraphOrPassengerGraph: this.runGraphOrPassengerGraph == true ? 2 : 1,
         mRoutingTrainRunNums: tempData,
       };
       console.log("702接口参数");
       console.log(tempData2);
-      // console.log(sessionStorage);
       var tepdata = this.ws.getPackage(702, tempData2);
       this.ws.sendSock(tepdata);
       this.$message({ type: "success", message: "数据已发送请等待" });

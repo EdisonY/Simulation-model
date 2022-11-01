@@ -22,19 +22,12 @@
               placeholder="请选择故障类型"
               style="width: 218px"
             >
-              <el-option-group
-                v-for="group in faultOption"
-                :key="group.label"
-                :label="group.label"
-              >
                 <el-option
-                  v-for="item in group.option"
-                  :key="item.value"
+                  v-for="item in faultTypeOption"
+                  :key="item.label"
                   :label="item.label"
-                  :value="item.value"
-                >
+                  :value="item.value">
                 </el-option>
-              </el-option-group>
             </el-select>
           </el-form-item>
           <el-form-item label="RRM功能">
@@ -239,7 +232,7 @@ import TopoPaper from "./TopoPaper";
 import * as Utils from "@/utils/util";
 import { getStationsObjIdProp } from "@/utils/station";
 import { registerCallback, unregisterCallback, sendSock, getPackage } from "@/utils/ws";
-import faultTypeOption from "@/utils/faultInjection";
+// import {faultTypeOption} from "@/utils/faultInjection";
 import Msg from "@/components/msg.vue";
 
 export default {
@@ -259,7 +252,12 @@ export default {
       },
       faultID: 0, //故障ID，0-正常，其他故障编号
       RRMFlag: 0, //RRM模式有效标志位 0：无效，1有效
-      faultOption: faultTypeOption,
+      faultTypeOption: [
+    { value: 0, label: '正常运行' },
+    { value: 101, label: '车辆牵引系统故障' },
+    { value: 201, label: '信号区域控制器完全故障' },
+    { value: 301, label: '信号信标/应答器故障（考虑RRM模式）' }
+],
       faultInfo: [
         //故障信息数组
         {
@@ -1113,7 +1111,7 @@ export default {
 .fault-info {
   overflow: auto;
   border: 1px solid white;
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px 10px 10px 10px;
   padding-top: 10px;
 }
 </style>
