@@ -192,8 +192,13 @@
 <script>
 var tctSubway = null
 var realtimeOut = null
-var realtimeNum = 0
+var fullRealt = 0
 var historyOut = null
+var historyNum = 0
+var startTime = 0
+var endTime = 0
+var passengerMain = null
+
 export default {
     name: 'wirenetwork',
     data () {
@@ -222,6 +227,7 @@ export default {
                 fullload:false,
                 passenger:false,
                 realtime:false,
+                alarm:false,
             },
             time:'',
             value2:[new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
@@ -240,12 +246,193 @@ export default {
                 }, 
             ],
             speed:'1',
+            step:0,
+            goneTime:'',
             timeZone:0,
             dialogVisible:false,
+            zkDialog:false,
             tableData: [],
             choseGapData:'',
-            choseGap:false
-
+            choseGap:false,
+            leftShow:true,
+            legendShow:true,
+            li:[{
+                lb:'1号线',
+                chose:false,
+                color:'#C23A30',
+                label:'1',
+                lbx: "783",
+                lby: "840"
+            },{
+                lb:'2号线',
+                chose:false,
+                color:'#006098',
+                label:'2',
+                lbx: "960",
+                lby: "740"
+            },{
+                lb:'4号线大兴线',
+                chose:false,
+                color:'#008E9C',
+                label:'4',
+                lbx:"666",
+                lby:"816"
+            },{
+                lb:'5号线',
+                chose:false,
+                color:'#A6217F',
+                label:'5',
+                lbx:"1065",
+                lby:"620"
+            },{
+                lb:'6号线',
+                chose:false,
+                color:'#D29700',
+                label:'6',
+                lbx:"1134",
+                lby:"728"
+            },{
+                lb:'7号线',
+                chose:false,
+                color:'#f6c582',
+                label:'7',
+                lbx:"1110",
+                lby:"867"
+            },{
+                lb:'8号线',
+                chose:false,
+                color:'#009B6B',
+                label:'8',
+                lbx:"875",
+                lby:"720"
+            },{
+                lb:'9号线',
+                chose:false,
+                color:'#8FC31F',
+                label:'9',
+                lbx:"590",
+                lby:"840"
+            },{
+                lb:'10号线',
+                chose:false,
+                color:'#009BC0',
+                label:'10',
+                lbx:"885",
+                lby:"760"
+            },{
+                lb:'11号线',
+                chose:false,
+                color:'#ed796b',
+                label:'11',
+                lbx:"370",
+                lby:"800"
+            },{
+                lb:'13号线',
+                chose:false,
+                color:'#F9E700',
+                label:'13',
+                lbx:"960",
+                lby:"520"
+            },{
+                lb:'14号线',
+                chose:false,
+                color:'#D5A7A1',
+                label:'14',
+                lbx:"850",
+                lby:"580"
+            },{
+                lb:'15号线',
+                chose:false,
+                color:'#5B2C68',
+                label:'15',
+                lbx:"1274",
+                lby:"380"
+            },{
+                lb:'16号线',
+                chose:false,
+                color:'#76A32E',
+                label:'16',
+                lbx:"500",
+                lby:"300"
+            },{
+                lb:'17号线',
+                chose:false,
+                color:'#00a9a9',
+                label:'17',
+                lbx:"1255",
+                lby:"1050"
+            },{
+                lb:'19号线',
+                chose:false,
+                color:'#d6abc1',
+                label:'19',
+                lbx:"800",
+                lby:"790"
+            },{
+                lb:'房山线',
+                chose:false,
+                color:'#E46022',
+                label:'95',
+                lbx:"390",
+                lby:"1100"
+            },{
+                lb:'昌平线',
+                chose:false,
+                color:'#DE82B2',
+                label:'94',
+                lbx:"770",
+                lby:"300"
+            },{
+                lb:'亦庄线',
+                chose:false,
+                color:'#E40077',
+                label:'96',
+                lbx:"1225",
+                lby:"1050"
+            },{
+                lb:'燕房线',
+                chose:false,
+                color:'#E46022',
+                label:'92',
+                lbx:"390",
+                lby:"1100"
+            },{
+                lb:'S1线',
+                chose:false,
+                color:'#B35A20',
+                label:'91',
+                lbx:"370",
+                lby:"800"
+            },{
+                lb:'西郊线',
+                chose:false,
+                color:'#E50619',
+                label:'89',
+                lbx:"380",
+                lby:"560"
+            },{
+                lb:'首都机场线',
+                chose:false,
+                color:'#A29BBB',
+                label:'98',
+                lbx:"1360",
+                lby:"530"
+            },{
+                lb:'大兴机场线',
+                chose:false,
+                color:'#004A9F',
+                label:'88',
+                lbx:"860",
+                lby:"1200"
+            },{
+                lb:'亦庄T1线',
+                chose:false,
+                color:'#e5061b',
+                label:'79',
+                lbx:"1100",
+                lby:"1100"
+            }],
+            alarm:false
         }
     },
     created () {
@@ -257,6 +444,11 @@ export default {
                 self.tableData[index].name = res.graph[index]
             }
         })
+
+        this.$api.get('/api/ntms/query/stationControl/' + self.realtimeFormat()).then(res => {             
+            console.log(res);
+        })
+
     },
     mounted () {
         tctSubway = new tct_subway({
@@ -276,6 +468,11 @@ export default {
         setInterval(() => {
             this.time = formatDate(new Date())
         },1000);
+
+        $('.szk').click(function(){
+            alert(1111)
+        })
+
 
         tctSubway.listener('loaded', function() {
             // tctSubway.showLine(self.value);
@@ -306,12 +503,14 @@ export default {
 
             // tctSubway.addFlyLine(tctSubway.getPosition('西直门'),[tctSubway.getPosition('积水潭'),tctSubway.getPosition('东四十条')],1)
         })
+        window.handleClickFun= this.handleClickFun;
+        window.handleClickZKFun= this.handleClickZKFun;
     },
     methods:{
         realtimeFormat(){
             var time = new Date()
             // return (time.getHours() - 2) * 3600 + time.getMinutes() * 60 + time.getSeconds()
-            return 3 * 3600 + time.getMinutes() * 60 + time.getSeconds()
+            return 6 * 3600 + time.getMinutes() * 60 + time.getSeconds()
         },
         formatTooltip(val){
             //2h 120m 7200s
@@ -337,7 +536,7 @@ export default {
                 } 
                 return t
             }
-            return secTotime(parseInt(this.timeZone * (val / 100)));
+            return secTotime(parseInt(this.timeZone * (val / 100)) + startTime);
         },
         hot(){
             var self = this
@@ -353,42 +552,86 @@ export default {
             }
         },
         full(){
+            var self = this
             this.clearAll()
             if(this.fullload){
                 tctSubway.openFullLoad(true)
-                tctSubway.showLess()
+                tctSubway.showLess2()
 
-                this.$api.get('/api/ntms/query/train/' + this.realtimeFormat()).then(res => { 
-                    for (let index = 0; index < res.trains.length; index++) {
-                        if(res.trains[index].position.split('-').length > 1){
-                            tctSubway.loadRateMultiply(
-                                tctSubway.codeStation(res.trains[index].position.split('-')[0]),
-                                tctSubway.codeStation(res.trains[index].position.split('-')[1]),
-                                res.trains[index].loadRate,                                
-                            )
+                function getFull(){
+                    self.$api.get('/api/ntms/query/train/' + self.realtimeFormat()).then(res => { 
+                        for (let index = 0; index < res.trains.length; index++) {
+                            if(res.trains[index].position.split('-').length > 1){
+                                tctSubway.loadRateMultiply(
+                                    tctSubway.codeStation(res.trains[index].position.split('-')[0]),
+                                    tctSubway.codeStation(res.trains[index].position.split('-')[1]),
+                                    res.trains[index].loadRate,                                
+                                )
+                            }
                         }
-                    }
-                })
-
-
+                    })
+                    fullRealt = setTimeout(getFull,30000)
+                }
+                getFull()
+            }else{
+                tctSubway.resetMultiply()
+                clearTimeout(fullRealt)
             }
         },
         passengerflow(){
             this.clearAll()
+            var self = this
             if(this.passenger){
-                $('#normal').css('opacity','0.4')
-                tctSubway.stopNormail(tctSubway.getPosition('西直门'),1)
-                tctSubway.stopNormail(tctSubway.getPosition('东直门'),0)
-                tctSubway.stopNormail(tctSubway.getPosition('天安门东'),2)
-                tctSubway.stopNormail(tctSubway.getPosition('白石桥南'),3)
-
-                tctSubway.drewAlarm(tctSubway.getPosition('北海北'),1)
-                tctSubway.drewAlarm(tctSubway.getPosition('前门'),2)
-                tctSubway.drewAlarm(tctSubway.getPosition('南礼士路'),3)
-
+                $('#normal,#stationPoint').css('opacity','0.2')
                 tctSubway.showLess()
                 this.clusterWatch()
                 $('.passenger').show()
+                
+                function getPassenger(){
+                        self.$api.get('/api/ntms/query/station/' + self.realtimeFormat()).then(res => { 
+                            $('#Passengerflow').empty()
+                            var lv = 0
+                            for (let index = 0; index < res.stations.length; index++) {
+                                if(res.stations[index].loadRate < 30){
+                                    lv = 0
+                                }else if(res.stations[index].loadRate >= 30 && res.stations[index].loadRate < 60){
+                                    lv = 1
+                                }else if(res.stations[index].loadRate >= 60 && res.stations[index].loadRate < 90){
+                                    lv = 2
+                                }else if(res.stations[index].loadRate >= 90){
+                                    lv = 3
+                                }
+                                if(tctSubway.codeStation(res.stations[index].stationID).name){
+                                    tctSubway.stopNormail(tctSubway.getPosition(tctSubway.codeStation(res.stations[index].stationID).name),lv)
+                                }
+                            }
+                            self.$api.get('/api/ntms/query/stationControl/' + self.realtimeFormat()).then(res => { 
+                                
+                                for (let index = 0; index < res.length; index++) {
+                                    for (let i = 0; i < res[index].controlList.length; i++) {
+                                        tctSubway.drewAlarm(tctSubway.getPosition(tctSubway.codeStation(res[index].stationCode).name),res[index].controlList[i])
+                                    }
+                                }
+                            })
+                        })
+                    passengerMain = setTimeout(getPassenger,60000)
+                }
+                getPassenger()
+            }else{
+                $('#Passengerflow').empty()
+                clearTimeout(passengerMain)
+            }
+        },
+        stationAlarm(){
+            this.clearAll()
+            if(this.alarm){
+                $('#normal,#stationPoint').css('opacity','0.2')
+                tctSubway.showLess()
+                this.clusterWatch()
+                $('.alarm').show()
+                tctSubway.drewStationAlarm(tctSubway.getPosition('西直门'),14)
+            }else{
+                this.clearAll()
             }
         },
         clusterWatch(){
@@ -405,53 +648,114 @@ export default {
 
         },
         historySimulation(time){
-            //use time get data,then drewRunning
 
-            // tctSubway.drewRunning(
-            //     tctSubway.codeStation(),
-            //     tctSubway.codeStation(),
-            //     .ciCode,
-            //     .sectionPercent,
-            //     .arriveSeconds
-            // )
-            var num = 0
-            var self = this
-            var startTime = this.value2[0].getHours() * 3600 + this.value2[0].getMinutes() * 60 + this.value2[0].getSeconds()
-            var endTime = this.value2[1].getHours() * 3600 + this.value2[1].getMinutes() * 60 + this.value2[1].getSeconds()
+            tctSubway.openFullLoad(true)
+            $('.time').show()
+            $('.wirenetwork .fullLoadBtn').hide()
+            $('#fullLoad,#stationPoint').css('opacity','0.4')
+
+            startTime = this.value2[0].getHours() * 3600 + this.value2[0].getMinutes() * 60 + this.value2[0].getSeconds()
+            endTime = this.value2[1].getHours() * 3600 + this.value2[1].getMinutes() * 60 + this.value2[1].getSeconds()
 
             this.historyTime = 0
             this.timeZone = endTime - startTime
             this.historyState = 1
             
-            $('.time').show()
+            $('.time').show()            
 
-            console.log(this.speed);
+            this.step = 100 / this.timeZone * this.speed
 
-            function history() {
-                self.historyTime++
-                historyOut = setTimeout(history,self.timeZone * 10 / self.speed)
-            }
-            clearTimeout(historyOut)
-            setTimeout(history,self.timeZone * 10 / self.speed)
+            this.HistoryComply()
         },
         pauseHistory(){
             tctSubway.pause()
             this.historyState = 2
+            clearTimeout(historyOut)
         },
         unpauseHistory(){
+            var self = this
             tctSubway.unpause()
             this.historyState = 1
+            this.HistoryComply()
+        },
+        HistoryComply(){
+            var self = this
+            function history() {
+                historyNum++
+                self.historyTime += self.step
+                
+                self.goneTime = self.formatTooltip(self.historyTime)
+                const hisTime = startTime + self.speed * historyNum
+                historyOut = setTimeout(history,1000)
+
+                // if(historyNum % 5 == 0 || historyNum == 1){
+                var tmpNumber = 0
+                self.$api.get('/api/ntms/query/train/' + hisTime).then(res => { 
+                    $('#alarm,#stop').empty()
+                    for (let index = 0; index < res.trains.length; index++) {
+                        if(res.trains[index].position.split('-').length > 1){
+                            //测试截取片段
+                            // if(tmpNumber > 10) return false
+                            //测试截取片段
+                            // console.log(res.trains[index]);
+                            tctSubway.drewRunning(
+                                tctSubway.codeStation(res.trains[index].position.split('-')[0]),
+                                tctSubway.codeStation(res.trains[index].position.split('-')[1]),
+                                '' + res.trains[index].line + res.trains[index].tripNo,
+                                res.trains[index].locRate,
+                                res.trains[index].arriveSeconds,
+                                res.trains[index].direction,                                    
+                            )
+                        }else{
+                            if(tmpNumber == 0){
+                                tctSubway.clearStop()
+                            }
+                            tctSubway.drewStop(
+                                tctSubway.codeStation(res.trains[index].position),
+                                '' + res.trains[index].line + res.trains[index].tripNo,
+                                res.trains[index].line,
+                            )
+                            tmpNumber++
+                        }
+                    }
+                })
+                // }
+
+
+            }
+            history()
         },
         resetHistoryState(){
+            historyNum = 0
             this.historyState = 0
+            this.historyTime = 0
+            this.goneTime = ''
+            $('#alarm,#stop').empty()
+            clearTimeout(historyOut)
         },
         changeTime(){
-            console.log(this.historyTime);
+            console.log(this.historyTime/this.step+startTime);
+            $('#alarm,#stop').empty()
+            var time = this.historyTime / this.step + startTime
+            this.$api.get('/api/ntms/query/train/' + time).then(res => { 
+                for (let index = 0; index < res.trains.length; index++) {
+                    if(res.trains[index].position.split('-').length > 1){
+                        tctSubway.drewRunning(
+                            tctSubway.codeStation(res.trains[index].position.split('-')[0]),
+                            tctSubway.codeStation(res.trains[index].position.split('-')[1]),
+                            res.trains[index].tripNo,
+                            res.trains[index].locRate,
+                            res.trains[index].arriveSeconds,
+                            res.trains[index].direction,                                    
+                        )
+                    }
+                }
+            })
         },
         realtimeSimulation(){
             this.clearAll()
             var self = this
-            realtimeNum = 0
+            // realtimeNum = 0
             
             if(this.realtime){
                 
@@ -463,49 +767,50 @@ export default {
                 $('.time').show()
                 $('.wirenetwork .fullLoadBtn').hide()
             
-                $('#fullLoad').css('opacity','0.4')
+                $('#fullLoad,#stationPoint').css('opacity','0.4')
 
                 function getDateSim(){
-                    // for (let index = 0; index < RealTime[realtimeNum].trainInfoList.length; index++) {
-                    //     tctSubway.drewRunning(
-                    //         tctSubway.codeStation(RealTime[realtimeNum].trainInfoList[index].sectionCode.split('-')[0]),
-                    //         tctSubway.codeStation(RealTime[realtimeNum].trainInfoList[index].sectionCode.split('-')[1]),
-                    //         RealTime[realtimeNum].trainInfoList[index].ciCode,
-                    //         RealTime[realtimeNum].trainInfoList[index].sectionPercent,
-                    //         RealTime[realtimeNum].trainInfoList[index].arriveSeconds
-                    //     )
-                    //     self.clusterWatch()
-                    // }
-                    
                     var tmpNumber = 0
+                    
                     self.$api.get('/api/ntms/query/train/' + self.realtimeFormat()).then(res => { 
+                        $('#alarm,#stop').empty()
                         for (let index = 0; index < res.trains.length; index++) {
                             if(res.trains[index].position.split('-').length > 1){
-                                
-
                                 //测试截取片段
-                                // if(tmpNumber > 0) return false
+                                // if(tmpNumber > 10) return false
                                 //测试截取片段
-                                console.log(res.trains[index]);
+                                // console.log(res.trains[index]);
                                 tctSubway.drewRunning(
                                     tctSubway.codeStation(res.trains[index].position.split('-')[0]),
                                     tctSubway.codeStation(res.trains[index].position.split('-')[1]),
-                                    res.trains[index].tripNo,
+                                    '' + res.trains[index].line + res.trains[index].tripNo,
                                     res.trains[index].locRate,
                                     res.trains[index].arriveSeconds,
                                     res.trains[index].direction,                                    
                                 )
+                            }else{
+                                if(tmpNumber == 0){
+                                    tctSubway.clearStop()
+                                }
+                                tctSubway.drewStop(
+                                    tctSubway.codeStation(res.trains[index].position),
+                                    '' + res.trains[index].line + res.trains[index].tripNo,
+                                    res.trains[index].line,
+                                )
                                 tmpNumber++
                             }
                         }
+                        self.clearCluster()
+                        
                     })
 
-                    realtimeNum++
-                    if(realtimeNum < RealTime.length){
-                        realtimeOut = setTimeout(getDateSim,10000)
-                    }else{
-                        console.log('结束仿真');
-                    }
+                    // realtimeNum++
+                    // if(realtimeNum < RealTime.length){
+                    //     realtimeOut = setTimeout(getDateSim,10000)
+                    // }else{
+                    //     console.log('结束仿真');
+                    // }
+                    realtimeOut = setTimeout(getDateSim,10000)
                 }
                 getDateSim()
             }else{
@@ -533,7 +838,7 @@ export default {
                     num++
                 }
             }
-            if(num == 4){
+            if(num == 7){
                 getTrue()
             }else{
                 for (const key in this.tmp) {
@@ -558,14 +863,17 @@ export default {
                     self.tmp.lineState = true
                 }else if(self.lateState){
                     self.tmp.lateState = true
+                }else if(self.alarm){
+                    self.tmp.alarm = true
                 }
             }
 
             $('#HeatMap').empty()
             $('.heatmap').hide()
 
-            $('#normal').css('opacity','1')
+            $('#normal,#stationPoint').css('opacity','1')
             $('#Passengerflow').empty()
+            $('#stop').empty()
             $('.passenger').hide()
 
             $('#fullLoad').css('opacity','1')
@@ -576,13 +884,33 @@ export default {
             $('.lateState').show()
             
             $('.time').hide()
+            $('#alarMain').empty()
+            $('.alarm').hide()
             
             tctSubway.openFullLoad(false)
 
             tctSubway.showNormal()
 
             clearTimeout(realtimeOut)
+
+            tctSubway.resetMultiply()
             
+            historyNum = 0
+            this.historyState = 0
+            this.historyTime = 0
+            this.goneTime = ''
+            clearTimeout(historyOut)
+            
+        },
+        clearCluster(){
+            var num = 0
+            for (let index = 0; index < this.li.length; index++) {
+                if(this.li[index].chose){
+                    console.log(this.li[index]);
+                    $('#subway .cluster').hide()
+                    $('#subway .cluster.' + this.li[index].label).show()
+                }
+            }
         },
         sim(){
             
@@ -606,12 +934,48 @@ export default {
                 
                 }
             })
+        },
+        handleClickFun(info){
+            this.$confirm('点击确定将带您进入 ' + (info.stationName ? info.stationName : info.sdata) + ' 站相关页面', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '正在跳转...'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '用户取消操作!'
+                });          
+            });
+        },
+        handleClickZKFun(info){
+            this.zkDialog = true
+        },
+        choseLineInLegend(item){
+            if(item.chose){
+                $('#subway .cluster').show()
+                $('#subway').removeClass('clusterTrue')
+                tctSubway._resize()
+            }else{
+                for (let index = 0; index < this.li.length; index++) {
+                    this.li[index].chose = false
+                }
+                $('#subway').addClass('clusterTrue')
+                $('#subway .cluster').hide()
+                $('#subway .cluster.' + item.label).show()
+                tctSubway._getCenterLine(item)
+            }
+            item.chose = !item.chose
         }
     }
 }
 </script>
 <style scoped>
-.wirenetwork{padding: 10px;background:#000;height:calc(100vh - 50px);overflow: hidden;}
+.wirenetwork{padding: 10px;background:#000;height:calc(100vh - 60px);overflow: hidden;position: relative;}
 /* #subway{width: 100%;height:calc(100vh - 76px);} */
 .Line{width:100%;height:100%;z-index: 2;}
 #subway{width: 3000px;height:3000px;}
@@ -624,12 +988,12 @@ export default {
 .heatmap{position: fixed;right: 10px;bottom:10px;width: 50px;height: 100px;background-image:linear-gradient(rgb(255 0 0),rgb(255 254 0),rgb(9 255 0),rgb(0 201 255));;text-align: center;font-weight: bold;display: none;}
 .heatmap .down{position: absolute;bottom: 0;left: 50%;transform: translate(-50%,0);}
 
-.passenger,.lineState{position: fixed;right: 20px;top:80px;color: #fff;display: none;}
-.passenger li,.lineState li{height: 26px;line-height: 26px;text-align: center;margin-bottom: 5px;}
-.passenger .title_p,.lineState .title_p{font-weight: bold;}
-.passenger li span,.lineState li span{width: 60px;display: inline-block;float: left;height: 26px;line-height: 26px;}
+.passenger,.lineState,.alarm{position: fixed;right: 20px;top:80px;color: #fff;display: none;}
+.passenger li,.lineState li,.alarm li{height: 26px;line-height: 26px;text-align: center;margin-bottom: 5px;}
+.passenger .title_p,.lineState .title_p,.alarm .title_p{font-weight: bold;}
+.passenger li span,.lineState li span,.alarm li span{width: 60px;display: inline-block;float: left;height: 26px;line-height: 26px;}
 .passenger li span i{width: 20px;height: 20px;border: 4px solid #fff;border-radius: 10px;display: inline-block;}
-.passenger li span img{width: 20px;height: 26px;}
+.passenger li span img,.alarm li span img{width: 20px;height: 26px;}
 .passenger li span .lv1{border-color:#56fcf0}
 .passenger li span .lv2{border-color:#facb10}
 .passenger li span .lv3{border-color:#f56911}
@@ -649,5 +1013,27 @@ export default {
 .history{position: absolute;bottom: 20px;z-index: 3;width: 80%;color: #fff;left: 50%;transform: translate(-50%,0);}
 .history:after{width: 100%;height: 100%;content: '';display: block;position: absolute;left:-20px;top: -10px;z-index: 1;background: #000;opacity: 0.6;border-radius: 8px;padding: 10px;box-sizing: content-box;border: 2px solid #fff;}
 .history i{display: inline-block;width: 38px;height: 38px;font-size: 38px;cursor: pointer;float: left;vertical-align: middle;position: relative;z-index: 2;}
-.history .el-slider{width: calc(100% - 80px);float: left;vertical-align: middle;margin-left:20px;z-index: 2;position: relative;}
+.history .el-slider{width: calc(100% - 130px);float: right;vertical-align: middle;margin-right:15px;z-index: 2;position: relative;}
+.history strong{height: 38px;line-height: 38px;display: inline-block;float: left;margin-left: 10px;color: #fff;position: relative;z-index: 2;}
+
+.wirenetElement{padding: 10px 0 0 0;}
+.wirenetElement .el-range-editor.el-input__inner{width: 200px;vertical-align: middle;}
+.wirenetElement .el-select{width: 80px;vertical-align: middle;}
+
+.left_new .leftBtn,.legend .leftBtn{width: 2em;display: block; cursor: pointer;padding: 6px 4px;background: #1f2d3d;box-sizing: content-box;text-align: center;border:1px solid #fff;position: absolute;top: 1px;height: 28px;left:10px;border-radius: 4px;animation: all linear .3s;}
+.left_new .openleftBtn{left: auto;border: none;right: 2px;}
+
+.wirenetwork .legend{position: absolute;right: 20px;bottom: 20px;min-height: 40px;}
+.wirenetwork .legend .el-card{margin: 0;}
+.wirenetwork .legend ul{width: 524px;font-size: 14px;}
+.wirenetwork .legend ul li{display: inline-block;width:100px;cursor: pointer;line-height: 22px;vertical-align: middle;padding: 0 0 0 4px;user-select:none;}
+.wirenetwork .legend ul li:hover,.wirenetwork .legend ul .active{background: #546b88;}
+.wirenetwork .legend ul li i{display: inline-block;width: 8px;height: 8px;vertical-align: middle;margin: 0 4px 0 0;}
+.legend .leftBtn{width: 2em;top:0;left:auto;right:2px;bottom: 10px;}
+.legend .leftBtn i{font-size: 14px;color: #fff;}
+.legend .leftBtn.openleftBtn{border: none;top:1px}
+.leftBtn:hover{background: #273a50;}
+
+.szk{width: 100%;}
+
 </style>
