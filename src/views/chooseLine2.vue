@@ -123,6 +123,12 @@ export default {
                     c_time: "2021/04/08",
                     change_time: "2021/04/08",
                 },
+                {
+                    index: 4,
+                    name: "北京轨道交通19号线",
+                    c_time: "2022/11/01",
+                    change_time: "2022/11/01",
+                },
             ],
             loading: false,
         };
@@ -195,8 +201,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.jump()
-            }).catch(() => {
-                      
+            }).catch(() => {   
             });
         },
         formatter(row, column) {
