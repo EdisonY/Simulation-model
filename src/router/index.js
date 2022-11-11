@@ -225,37 +225,41 @@ export const constantRoutes = [{
         name: '线网模型',
         meta: { title: '线网模型', icon: 'example' },
         children: [{
-            path: 'wirenetwork',
-            name: '线网仿真',
-            component: () =>
-                import ('@/views/wirenetwork'),
-            meta: { title: '线网仿真', type: true }
-        }, {
-            path: 'marshalling',
-            name: '线网集群',
-            hidden: true,
-            component: () =>
-                import ('@/views/marshalling'),
-            meta: { title: '线网集群', type: true }
-        }, {
-            path: 'linepassenger',
-            name: '线网客流设置',
-            component: () =>
-                import ('@/views/linepassenger'),
-            meta: { title: '线网客流设置', type: true }
-        }, {
-            path: 'wireset',
-            name: '线网运行图设置',
-            component: () =>
-                import ('@/views/wireset'),
-            meta: { title: '线网运行图设置', type: true }
-        }, {
-            path: 'networkindicators',
-            name: '线网指标查看',
-            component: () =>
-                import ('@/views/networkindicators'),
-            meta: { title: '线网指标查看', type: true }
-        }]
+                path: 'wirenetwork',
+                name: '线网仿真',
+                component: () =>
+                    import ('@/views/wirenetwork'),
+                meta: { title: '线网仿真', type: true }
+            }, {
+                path: 'marshalling',
+                name: '线网集群',
+                hidden: true,
+                component: () =>
+                    import ('@/views/marshalling'),
+                meta: { title: '线网集群', type: true }
+            },
+            //  {
+            //     path: 'linepassenger',
+            //     name: '线网客流设置',
+            //     component: () =>
+            //         import ('@/views/linepassenger'),
+            //     meta: { title: '线网客流设置', type: true }
+            // },
+            //  {
+            //     path: 'wireset',
+            //     name: '线网运行图设置',
+            //     component: () =>
+            //         import ('@/views/wireset'),
+            //     meta: { title: '线网运行图设置', type: true }
+            // }, 
+            {
+                path: 'networkindicators',
+                name: '线网指标查看',
+                component: () =>
+                    import ('@/views/networkindicators'),
+                meta: { title: '线网指标查看', type: true }
+            }
+        ]
     },
     // {
     //     path: '/history',
