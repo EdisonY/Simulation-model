@@ -346,6 +346,7 @@ export default {
   name: "Rungrap",
   data() {
     return {
+      caculateFlag: false, //开行方案计算标志
       buttonText: "启动",
       runGraphOrPassengerGraph: false, //客流方式
       graphID: this.getDefaultGraphID(),
@@ -935,8 +936,6 @@ export default {
         item.endTime = ee;
       }
     });
-
-    
   },
   mounted() {
     // this.sendPackage("line-info");
@@ -952,7 +951,7 @@ export default {
      */
     getServerState() {
       let lineName = this.$refs.grap.currentLine;
-       3; //查询运行状态
+      3; //查询运行状态
       let param = this.ws.getPackage(137, {
         lineName: lineName,
         operaType: 3,
@@ -1227,7 +1226,7 @@ export default {
       //802回调
       if (res.msgType == 802) {
         console.log("receive 802 data");
-        this.$message({ type: "success", message: "收到开始方案数据" });
+        this.$message({ type: "success", message: "收到开始方案数据,计算完成" });
         if (res.data.length > 0) {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
@@ -1371,6 +1370,12 @@ export default {
       this.$refs.grap.importRungraph();
     },
     startStop() {
+      if (this.caculateFlag) {
+        this.$message({
+          type: "warning",
+          message: "开行方案计算中,请在开行方案计算完成后重试",
+        });
+      }
       this.$refs.grap.startStop();
     },
     drawAllData() {
@@ -1384,6 +1389,11 @@ export default {
      * 铺画开行方案702接口
      */
     drawgraph() {
+      if(this.caculateFlag)
+      {
+        this.$message({type:"warning",message:"开行方案计算中，请稍后重试"});
+        return;
+      }
       var tempData = [];
 
       this.tableData4.forEach((item) => {
@@ -1431,7 +1441,8 @@ export default {
       console.log(tempData2);
       var tepdata = this.ws.getPackage(702, tempData2);
       this.ws.sendSock(tepdata);
-      this.$message({ type: "success", message: "数据已发送请等待" });
+      this.caculateFlag=true;
+      this.$message({ type: "success", message: "数据已发送请等待开行方案计算" });
     },
     /**
      * 设置图号默认值
