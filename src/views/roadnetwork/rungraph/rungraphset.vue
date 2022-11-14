@@ -1227,6 +1227,7 @@ export default {
       if (res.msgType == 802) {
         console.log("receive 802 data");
         this.$message({ type: "success", message: "收到开始方案数据,计算完成" });
+        this.caculateFlag=false;
         if (res.data.length > 0) {
           // console.log('802进程')
           this.$refs.grap.clearChartData();
