@@ -158,17 +158,19 @@ export const constantRoutes = [{
                 meta: { title: '站场监控', }
             }, {
                 path: 'report',
-                name: '仿真结果-应急',
+                name: '仿真结果',
                 component: () =>
                     import ('@/views/report'),
                 meta: { title: '仿真结果-应急', }
-            }, {
-                path: 'reportnormal',
-                name: '仿真结果-正常',
-                component: () =>
-                    import ('@/views/roadnetwork/indicator/index1'),
-                meta: { title: '仿真结果-正常', }
-            }, {
+            },
+            // {
+            //     path: 'reportnormal',
+            //     name: '仿真结果-正常',
+            //     component: () =>
+            //         import ('@/views/roadnetwork/indicator/index1'),
+            //     meta: { title: '仿真结果-正常', }
+            // }, 
+            {
                 path: 'fault',
                 name: '故障设置',
                 component: () =>

@@ -162,13 +162,13 @@ export default {
             });
             sendSock(wsdata);
         },
-        jump() {
-            console.log(this.curName);
-            window.sessionStorage.setItem("currentLine", this.curName);
-            this.$store.commit("setCurrentLine", this.curName);
-            this.$router.push({ path: "emergency/trainrun" || "emergency/trainrun" });
-            // this.$router.push({ path: "line" || "line" });
-        },
+        // jump() {
+        //     console.log(this.curName);
+        //     window.sessionStorage.setItem("currentLine", this.curName);
+        //     this.$store.commit("setCurrentLine", this.curName);
+        //     this.$router.push({ path: "emergency/trainrun" || "emergency/trainrun" });
+        //     // this.$router.push({ path: "line" || "line" });
+        // },
         wsCallbackOK(res) {
             console.log(this.$router);
             console.log(`callback ${res.msgType}`);
@@ -351,6 +351,13 @@ export default {
         jump(data) {
             window.sessionStorage.setItem("currentLine", data.name);
             this.$store.commit("setCurrentLine", data.name);
+            let wsdata = getPackage(129, {
+                operationType: 4,//4-线路选择
+                oldLineName: "",
+                newLineName: data.name,
+            });
+            console.log('---选择线路'+data.name+"---")
+            sendSock(wsdata);
             this.$router.push({ path: "emergency/trainrun" || "emergency/trainrun" });
         },
     },
