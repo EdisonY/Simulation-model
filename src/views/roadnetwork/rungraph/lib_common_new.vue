@@ -1113,12 +1113,26 @@ export default {
     importRungraph() {
       $("#rungraphSelector").click();
     },
-    startStop() {
-      let param = getPackage(137, {
+    /**
+     * 启动仿真
+     * @param {*} fucFlag 1-137接口  2-147接口（接口内容一致，仅编号不同）
+     */
+    startStop(fucFlag) {
+      var param;
+      if(fucFlag==1)
+      {
+        param = getPackage(137, {
         lineName: this.currentLine,
         operaType: this.isRunning ? 2 : 1,
       });
       console.log("send 137 package");
+      }else{
+        param = getPackage(147, {
+        lineName: this.currentLine,
+        operaType: this.isRunning ? 2 : 1,
+      });
+      console.log("send 147 package");
+      }
       sendSock(param);
     },
     selectFileFinish(evt) {

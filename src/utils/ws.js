@@ -6,7 +6,7 @@ var lock = 0
 var time = 0
 var text = ''
 var wsuri = 'ws://172.51.216.52:25703';
-// var wsuri = 'ws://172.29.0.196:25703';
+// var wsuri = 'ws://172.29.0.196:25703'; //平西府配置
 
 let ack_topic = false;
 

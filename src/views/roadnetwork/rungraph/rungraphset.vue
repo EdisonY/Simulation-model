@@ -6,7 +6,7 @@
       <el-tabs type="border-card" style="margin: 10px 0 0 10px">
         <el-tab-pane label="选择运行图">
           <el-button type="primary" size="small" @click="importRungraph">上传</el-button>
-          <el-button type="success" size="small" @click="startStop">{{
+          <el-button type="primary" size="small" @click="startStop(1)">{{
             buttonText
           }}</el-button>
 
@@ -30,13 +30,13 @@
             <el-button type="primary" size="small" @click="addTable()"
               >添加条数</el-button
             >
-            <el-button type="primary" size="small" @click="drawgraph" style="width: 80px"
+            <el-button type="success" size="small" @click="drawgraph" style="width: 80px"
               >提交设置</el-button
             >
             <el-button
-              type="success"
+              type="primary"
               size="small"
-              @click="startStop"
+              @click="startStop(2)"
               style="width: 80px"
               >{{ buttonText }}</el-button
             >
@@ -408,19 +408,19 @@ export default {
       tableData3: [
         {
           date: "PR2205",
-          name: "王小虎",
+          name: "",
         },
         {
           date: "TS2205",
-          name: "张三",
+          name: "",
         },
         {
           date: "PR2002",
-          name: "王小虎",
+          name: "",
         },
         {
           date: "TS2002",
-          name: "作者",
+          name: "",
         },
       ],
       tableData1: [
@@ -880,6 +880,77 @@ export default {
       tmp: [],
       stations: JSON.parse(localStorage.getItem("stations")),
       tmpRoute: JSON.parse(localStorage.getItem("tmpRoute")),
+      tmpRouteOption:[
+        {
+        name:"北京轨道交通燕房线",
+        opt:[
+                {
+                    value: 0,
+                    label: "燕山-阎村东",
+                    startStation: 2105,
+                    endStation: 2104,
+                },
+                {
+                    value: 1,
+                    label: "阎村-阎村东",
+                    startStation: 2104,
+                    endStation: 2104,
+                },
+                {
+                    value: 2,
+                    label: "燕山-星城",
+                    startStation: 2105,
+                    endStation: 2103,
+                },
+            ]   
+      },
+      {
+        name:"北京轨道交通燕房线场段",
+        opt:[
+                {
+                    value: 0,
+                    label: "燕山-阎村东",
+                    startStation: 2105,
+                    endStation: 2104,
+                },
+                {
+                    value: 1,
+                    label: "阎村-阎村东",
+                    startStation: 2104,
+                    endStation: 2104,
+                },
+                {
+                    value: 2,
+                    label: "燕山-星城",
+                    startStation: 2105,
+                    endStation: 2103,
+                },
+            ]   
+      },
+      {
+        name:"北京轨道交通19号线",
+        opt:[
+                {
+                    value: 0,
+                    label: "新宫-牡丹园",
+                    startStation: 2105,
+                    endStation: 2104,
+                },
+                {
+                    value: 1,
+                    label: "新宫-太平桥",
+                    startStation: 2104,
+                    endStation: 2104,
+                },
+                {
+                    value: 2,
+                    label: "平安里-牡丹园",
+                    startStation: 2105,
+                    endStation: 2103,
+                },
+            ]
+      },
+    ]
     };
   },
   components: {
@@ -912,7 +983,15 @@ export default {
     this.rungrapData.multiply = this.$route.meta.type;
     // this.rungrapData.multiply = false;
     let currentLine = sessionStorage.getItem("currentLine");
-
+    //更新交路选项
+    let tmpOpt=this.tmpRouteOption.find((item)=>{
+      return item.name==currentLine
+    })
+    if(tmpOpt)
+    {
+      this.tmpRoute=tmpOpt.opt;
+    }
+    //更新线路车站
     console.log(currentLine);
     this.rungrapData.station = getStations(currentLine);
     console.log(this.rungrapData);
@@ -1370,14 +1449,18 @@ export default {
     importRungraph() {
       this.$refs.grap.importRungraph();
     },
-    startStop() {
+    /**
+     * 启动仿真
+     * @param {*} funcFlag 1-137 2-147 
+     */
+    startStop(funcFlag) {
       if (this.caculateFlag) {
         this.$message({
           type: "warning",
           message: "开行方案计算中,请在开行方案计算完成后重试",
         });
       }
-      this.$refs.grap.startStop();
+      this.$refs.grap.startStop(funcFlag);
     },
     drawAllData() {
       this.$refs.grap.drawAllData();
